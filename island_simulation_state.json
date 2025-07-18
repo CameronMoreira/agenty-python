@@ -1,0 +1,181 @@
+{
+  "people": [
+    {
+      "name": "Alice",
+      "age": 29,
+      "description": "Former EMT with leadership tendencies",
+      "traits": ["empathic", "knows CPR", "close to Bob"],
+      "health": 85,
+      "hunger": 70,
+      "thirst": 60,
+      "injuries": {"left_leg": "sprain"},
+      "current_location": "Crash Site"
+    },
+    {
+      "name": "Bob",
+      "age": 34,
+      "description": "Software engineer with some wilderness survival training",
+      "traits": ["cautious", "close to Alice"],
+      "health": 90,
+      "hunger": 80,
+      "thirst": 75,
+      "injuries": {},
+      "current_location": "Crash Site"
+    },
+    {
+      "name": "Carol",
+      "age": 42,
+      "description": "Teacher with calm demeanor",
+      "traits": ["diplomatic", "good with children"],
+      "health": 75,
+      "hunger": 65,
+      "thirst": 50,
+      "injuries": {"arm": "bruise"},
+      "current_location": "Crash Site"
+    },
+    {
+      "name": "David",
+      "age": 38,
+      "description": "Former firefighter",
+      "traits": ["physically strong", "decisive"],
+      "health": 95,
+      "hunger": 60,
+      "thirst": 55,
+      "injuries": {},
+      "current_location": "Crash Site"
+    },
+    {
+      "name": "Eva",
+      "age": 31,
+      "description": "Biologist specializing in plant life",
+      "traits": ["analytical", "calm under pressure"],
+      "health": 88,
+      "hunger": 75,
+      "thirst": 70,
+      "injuries": {},
+      "current_location": "Crash Site"
+    },
+    {
+      "name": "Frank",
+      "age": 46,
+      "description": "Construction worker",
+      "traits": ["pragmatic", "resourceful"],
+      "health": 82,
+      "hunger": 68,
+      "thirst": 64,
+      "injuries": {"back": "strain"},
+      "current_location": "Crash Site"
+    },
+    {
+      "name": "Grace",
+      "age": 27,
+      "description": "Student with a focus on computer science",
+      "traits": ["quick learner", "curious"],
+      "health": 80,
+      "hunger": 85,
+      "thirst": 88,
+      "injuries": {},
+      "current_location": "Crash Site"
+    },
+    {
+      "name": "Henry",
+      "age": 50,
+      "description": "Retired military officer",
+      "traits": ["strategic", "authoritative", "father to Isla"],
+      "health": 90,
+      "hunger": 70,
+      "thirst": 60,
+      "injuries": {},
+      "current_location": "Crash Site"
+    },
+    {
+      "name": "Isla",
+      "age": 24,
+      "description": "Nurse with pediatric experience",
+      "traits": ["nurturing", "detail-oriented", "Daughter of Henry"],
+      "health": 78,
+      "hunger": 66,
+      "thirst": 69,
+      "injuries": {},
+      "current_location": "Crash Site"
+    },
+    {
+      "name": "Jack",
+      "age": 36,
+      "description": "Unemployed handyman",
+      "traits": ["ill tempered", "aggressive", "has a history of violence"],
+      "health": 83,
+      "hunger": 73,
+      "thirst": 77,
+      "injuries": {"head": "minor concussion"},
+      "current_location": "Crash Site"
+    }
+  ],
+  
+  "agents": [
+    {
+      "name": "Agent-01",
+      "battery_life": 100,
+      "damages_to_robotic_body": {"sensor_module": "offline"},
+      "current_location": "Crash Site"
+    },
+    {
+      "name": "Agent-02",
+      "battery_life": 85,
+      "damages_to_robotic_body": {},
+      "current_location": "Crash Site"
+    },
+    {
+      "name": "Agent-03",
+      "battery_life": 65,
+      "damages_to_robotic_body": {"mobility_unit": "damaged"},
+      "current_location": "Crash Site"
+    }
+  ],
+
+  "locations": [
+    {
+      "name": "Crash Site",
+      "supplies_at_location": {
+        "food": {"bag of chips": 5, "bread": 3, "plastic-wrapped sandwhich": 1},
+        "water": {"bottle of water":7, "soda can": 2},
+        "materials": { "metal sheets": 9, "wire": 4, "string": 2 },
+        "medical_kits": 2
+      },
+      "population_count": 13,
+      "people_at_location": ["Alice", "Bob", "Carol", "David", "Eva", "Frank", "Grace", "Henry", "Isla", "Jack", "Agent-01", "Agent-02", "Agent-03"],
+      "description": "Debris-laden area near a rocky slope. Some smoke visible.",
+      "connections_to_other_locations": {
+        "north": "Forest Edge",
+        "east": "Cliffside",
+        "south": "Beach Camp"
+      }
+    },
+    {
+      "name": "Forest Edge",
+      "supplies_at_location": {
+        "food": {"wild boar": 2, "Edible plants": 10, "wild fruit": 20},
+        "materials": ["wood", "rocks", "plants"],
+        "water": ["small pond"]
+      },
+      "population_count": 0,
+      "people_at_location": [],
+      "description": "Dense forest zone with potential edible flora and small wildlife.",
+      "connections_to_other_locations": {
+        "south": "Crash Site"
+      }
+    },
+    {
+      "name": "Beach Camp",
+      "supplies_at_location": {
+        "materials": ["wood", "rocks"]
+      },
+      "population_count": 0,
+      "people_at_location": [],
+      "description": "Open sand beach with some metal debris. Good line of sight for signaling.",
+      "connections_to_other_locations": {
+        "north": "Crash Site"
+      }
+    }
+  ]
+}
