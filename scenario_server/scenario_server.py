@@ -82,7 +82,7 @@ def simulate_one_step(actions: list[AgentAction]):
 
     agent_narrations = {}
     for agent_name in REGISTERED_AGENTS:
-        agent_narrations[agent_name] = narrate_agent_state(general_state_narrated, agent_name)
+        agent_narrations[agent_name] = {"narration": narrate_agent_state(general_state_narrated, agent_name, )}# todo get agent location
 
     # fifth, send narration to agents
     for agent_name in REGISTERED_AGENTS:

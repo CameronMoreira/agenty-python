@@ -16,6 +16,10 @@ class MessageRequest(BaseModel):
     from_agent: str
 
 
+class ScenarioNarration(BaseModel):
+    narration: str
+
+
 class ApiResponse(BaseModel):
     response: str
     status: str = "queued"
@@ -36,6 +40,18 @@ async def send_to_agent(request: MessageRequest):
         response="Your message has been sent to the agent and will be processed in the conversation.",
         status="sent"
     )
+
+
+@app.post("/scenario/roundnarration")
+async def round_narration(request: ScenarioNarration):
+    """
+    API endpoint for sending round narration to the agent
+    The message is added to the conversation queue
+    """
+    formatted_message = f"[Your surroundings & What has happened recently]: {request.narration}"  # todo how do we phrase this?
+    add_to_message_queue(formatted_message)
+
+    return "Your round narration has been sent to the agent and will be processed in the conversation."
 
 
 def start_uvicorn_app(host: str, port: int):
