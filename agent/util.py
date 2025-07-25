@@ -10,6 +10,9 @@ from llm import run_inference
 GROUP_CHAT_API_URL = os.getenv("GROUP_CHAT_API_URL") or "http://127.0.0.1:5000"
 GROUP_CHAT_MESSAGES_ENDPOINT = GROUP_CHAT_API_URL + "/messages"
 
+ROBOT_EXTERNALS_URL = os.getenv("ROBOT_EXTERNALS_URL") or "http://127.0.0.1:8085"
+REGISTER_EXTERNALS_ENDPOINT = ROBOT_EXTERNALS_URL + "/register"
+
 WORK_LOG_BASE_URL = os.getenv("WORK_LOG_BASE_URL") or "http://127.0.0.1:8082"
 GROUP_WORK_LOG_SUMMARIES_ENDPOINT = WORK_LOG_BASE_URL + "/summaries"
 LAST_SUMMARY_TIMESTAMP = None
@@ -170,3 +173,16 @@ def generate_restart_summary(llm_client, conversation, tools):
 def get_agent_turn_delay_in_ms(number_of_agents: int = 1, ms_per_additional_agent: int = 2000) -> int:
     """Get the agent's turn delay in milliseconds based on the number of agents in the team."""
     return (number_of_agents - 1) * ms_per_additional_agent
+
+
+def register_agent(agent_name: str, agent_base_url: str):
+    """Register the agent with its external systems."""
+    try:
+        response = requests.post(REGISTER_EXTERNALS_ENDPOINT,
+                                 json={"agent": agent_name, "base_url": agent_base_url})
+        if response.status_code == 200:
+            print(f"\033[92mAgent {agent_name} successfully registered\033[0m")
+        else:
+            print(f"\033[91mFailed to register agent {agent_name}: {response.status_code}\033[0m")
+    except Exception as e:
+        print(f"\033[91mError registering agent {agent_name}: {str(e)}\033[0m")

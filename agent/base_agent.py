@@ -10,7 +10,7 @@ from context_handling import (set_conversation_context, load_conversation,
 from llm import run_inference
 from tools_utils import get_tool_list, execute_tool, deal_with_tool_results
 from util import get_user_message, get_new_messages_from_group_chat, get_new_summaries, log_error, \
-    generate_restart_summary, save_conv_and_restart
+    generate_restart_summary, save_conv_and_restart, register_agent
 
 
 def get_new_message(is_team_mode: bool, consecutive_tool_count: list, read_user_input: bool) -> dict | None:
@@ -46,10 +46,11 @@ def get_new_message(is_team_mode: bool, consecutive_tool_count: list, read_user_
 
 
 class Agent:
-    def __init__(self, agent_name: str, llm_client, team_mode: bool, turn_delay=0):
+    def __init__(self, agent_name: str, llm_client, team_mode: bool, base_url: str, turn_delay=0):
         self.llm_client = llm_client
         self.tools = get_tool_list(team_mode)
         self.is_team_mode = team_mode
+        self.base_url = base_url
         self.read_user_input = not team_mode  # initialise to True if not in team mode
         # Initialize counter for tracking consecutive tool calls without human interaction
         self.consecutive_tool_count = 0
@@ -106,6 +107,9 @@ class Agent:
             log_error(error_msg)
 
     def run(self):
+        # register with the robot's external systems
+        register_agent(self.name, self.base_url)
+
         # Try to load saved conversation context
         conversation = load_conversation()
 

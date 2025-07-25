@@ -59,10 +59,11 @@ def start_uvicorn_app(host: str, port: int):
     uvicorn.run(app, host=host, port=port)
 
 
-def start_api(agent_config: AgentConfig | None = None):
+def start_api(agent_config: AgentConfig | None = None) -> str:
     """Start the API server in the background"""
     host = agent_config.host if agent_config else "127.0.0.1"
     port = agent_config.port if agent_config else 8081
     api_thread = threading.Thread(target=start_uvicorn_app, args=(host, port), daemon=True)
     api_thread.start()
     print(f"\033[92mAPI server has been started and is available at {host}:{port}/\033[0m")
+    return f"${host}:{port}"

@@ -31,10 +31,10 @@ def main():
     atexit.register(cleanup_context)
 
     try:
-        start_api(team_config.get_current_agent())
+        base_url = start_api(team_config.get_current_agent())
         agent_name = get_current_agent_name()
 
-        agent = Agent(agent_name, anthropic_client, team_mode, turn_delay=get_agent_turn_delay_in_ms(number_of_agents))
+        agent = Agent(agent_name, anthropic_client, team_mode, turn_delay=get_agent_turn_delay_in_ms(number_of_agents), base_url=base_url)
         print(f"\033[92mStarting Agent named {agent_name}.\033[0m")
         agent.run()
     except Exception as e:

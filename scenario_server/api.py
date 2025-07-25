@@ -39,7 +39,7 @@ def start_uvicorn_app(host: str, port: int):
 def start_api():
     """Start the API server in the background"""
     host = "127.0.0.1"  # todo make this configurable
-    port = 8000
+    port = 8085
     api_thread = threading.Thread(target=start_uvicorn_app, args=(host, port), daemon=True)
     api_thread.start()
     print(f"\033[92mAPI server has been started and is available at {host}:{port}/\033[0m")
