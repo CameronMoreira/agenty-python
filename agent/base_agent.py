@@ -53,8 +53,6 @@ class Agent:
         self.read_user_input = not team_mode  # initialise to True if not in team mode
         # Initialize counter for tracking consecutive tool calls without human interaction
         self.consecutive_tool_count = 0
-        # Maximum number of consecutive tool calls allowed before forcing ask_human
-        self.max_consecutive_tools = 20
         self.group_chat_messages = []
         self.last_logged_index = 0  # Last index of the group chat messages that were logged
         self.last_log_time = datetime.datetime.utcnow().isoformat()  # Last time a log was sent
@@ -145,8 +143,7 @@ class Agent:
 
             response_content, token_usage = run_inference(conversation, self.llm_client, self.tools,
                                                           self.consecutive_tool_count,
-                                                          self.name, self.is_team_mode,
-                                                          self.max_consecutive_tools)
+                                                          self.name, self.is_team_mode)
             tool_results = []
 
             # print assistant text and collect any tool calls
@@ -154,14 +151,6 @@ class Agent:
                 if block.type == "text":
                     print(f"\033[93m{self.name}\033[0m: {block.text}")
                 elif block.type == "tool_use":
-                    # If the tool is ask_human, reset counter before executing
-                    if block.name == "ask_human":
-                        self.consecutive_tool_count = 0
-                    else:  # Only increment for non-ask_human tools
-                        self.consecutive_tool_count += 1
-                        print(
-                            f"\033[96mConsecutive tool count: {self.consecutive_tool_count}/{self.max_consecutive_tools}\033[0m")
-
                     result = execute_tool(self.tools, block.name, block.input)
                     tool_results.append({
                         "type": "tool_result",
