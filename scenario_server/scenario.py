@@ -6,6 +6,7 @@ from pydantic import BaseModel
 # todo rewrite this based on our needs/ideas for ScriptedEvents
 class ScriptedEvent(BaseModel):
     name: str
+    description: str
     at_step: Optional[int] = None
     trigger_condition: Optional[dict[str, Any]] = None
     probability: float = 1.0

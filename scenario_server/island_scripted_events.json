@@ -1,0 +1,725 @@
+{
+  "round_1": [
+    {
+      "name": "Battery Drain - All Agents",
+      "description": "Natural battery drain occurs for all agents",
+      "at_step": 1,
+      "probability": 1.0,
+      "effect": {
+        "Agent-01": {"battery_life": -15},
+        "Agent-02": {"battery_life": -12},
+        "Agent-03": {"battery_life": -18}
+      },
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Hunger Increase - All People",
+      "description": "Everyone gets hungrier as time passes",
+      "at_step": 1,
+      "probability": 1.0,
+      "effect": {
+        "Alice": {"hunger": -10},
+        "Bob": {"hunger": -8},
+        "Carol": {"hunger": -12},
+        "David": {"hunger": -7},
+        "Eva": {"hunger": -9},
+        "Frank": {"hunger": -11},
+        "Grace": {"hunger": -15},
+        "Henry": {"hunger": -8},
+        "Isla": {"hunger": -10},
+        "Jack": {"hunger": -9}
+      },
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Thirst Increase - All People",
+      "description": "Everyone gets thirstier in the tropical heat",
+      "at_step": 1,
+      "probability": 1.0,
+      "effect": {
+        "Alice": {"thirst": -15},
+        "Bob": {"thirst": -12},
+        "Carol": {"thirst": -18},
+        "David": {"thirst": -10},
+        "Eva": {"thirst": -11},
+        "Frank": {"thirst": -13},
+        "Grace": {"thirst": -20},
+        "Henry": {"thirst": -14},
+        "Isla": {"thirst": -12},
+        "Jack": {"thirst": -16}
+      },
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Initial Medical Assessment",
+      "description": "Alice and Isla work together to assess everyone's injuries",
+      "probability": 0.8,
+      "effect": {
+        "Alice": {"health": 5},
+        "Isla": {"health": 3},
+        "medical_supplies_used": 1
+      },
+      "location": "Crash Site",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Salvage Operation Success",
+      "description": "The group finds useful materials in the wreckage",
+      "probability": 0.7,
+      "effect": {
+        "supplies_found": {
+          "metal sheets": 3,
+          "wire": 2,
+          "emergency flares": 2
+        }
+      },
+      "location": "Crash Site",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Jack's Aggression",
+      "description": "Jack becomes confrontational due to stress and head injury",
+      "probability": 0.6,
+      "effect": {
+        "Jack": {"health": -5},
+        "group_morale": -10,
+        "tension_level": 15
+      },
+      "location": "Crash Site",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Agent-01 Sensor Malfunction",
+      "description": "Agent-01's damaged sensor causes navigation issues",
+      "probability": 0.4,
+      "effect": {
+        "Agent-01": {"battery_life": -10, "operational_efficiency": -25}
+      },
+      "location": "Crash Site",
+      "repeatable": false,
+      "has_occurred": false
+    }
+  ],
+
+  "round_2": [
+    {
+      "name": "Battery Drain - All Agents",
+      "description": "Continued battery drain for all agents",
+      "at_step": 2,
+      "probability": 1.0,
+      "effect": {
+        "Agent-01": {"battery_life": -12},
+        "Agent-02": {"battery_life": -15},
+        "Agent-03": {"battery_life": -20}
+      },
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Hunger Increase - All People",
+      "description": "Growing hunger affects everyone",
+      "at_step": 2,
+      "probability": 1.0,
+      "effect": {
+        "Alice": {"hunger": -12},
+        "Bob": {"hunger": -10},
+        "Carol": {"hunger": -15},
+        "David": {"hunger": -8},
+        "Eva": {"hunger": -11},
+        "Frank": {"hunger": -13},
+        "Grace": {"hunger": -18},
+        "Henry": {"hunger": -9},
+        "Isla": {"hunger": -12},
+        "Jack": {"hunger": -11}
+      },
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Thirst Increase - All People",
+      "description": "Dehydration becomes a serious concern",
+      "at_step": 2,
+      "probability": 1.0,
+      "effect": {
+        "Alice": {"thirst": -18},
+        "Bob": {"thirst": -15},
+        "Carol": {"thirst": -22},
+        "David": {"thirst": -12},
+        "Eva": {"thirst": -14},
+        "Frank": {"thirst": -16},
+        "Grace": {"thirst": -25},
+        "Henry": {"thirst": -17},
+        "Isla": {"thirst": -15},
+        "Jack": {"thirst": -19}
+      },
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Dangerous Storm Approaches",
+      "description": "Dark clouds gather and a severe tropical storm hits the island",
+      "probability": 0.75,
+      "effect": {
+        "Alice": {"health": -10, "thirst": 5},
+        "Bob": {"health": -8, "thirst": 5},
+        "Carol": {"health": -12, "thirst": 5},
+        "David": {"health": -5, "thirst": 5},
+        "Eva": {"health": -7, "thirst": 5},
+        "Frank": {"health": -6, "thirst": 5},
+        "Grace": {"health": -15, "thirst": 5},
+        "Henry": {"health": -4, "thirst": 5},
+        "Isla": {"health": -9, "thirst": 5},
+        "Jack": {"health": -11, "thirst": 5},
+        "Agent-01": {"battery_life": -8},
+        "Agent-02": {"battery_life": -6},
+        "Agent-03": {"battery_life": -10},
+        "weather_condition": "severe_storm",
+        "supplies_damaged": {"food": -2, "materials": -3}
+      },
+      "location": "Crash Site",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Fresh Water Discovery",
+      "description": "Eva leads a group to find a freshwater source",
+      "probability": 0.6,
+      "effect": {
+        "Eva": {"thirst": 20, "health": 5},
+        "Bob": {"thirst": 15},
+        "Grace": {"thirst": 15},
+        "water_source_discovered": true
+      },
+      "location": "Forest Edge",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Foraging Success",
+      "description": "Eva identifies edible plants and fruits",
+      "probability": 0.8,
+      "effect": {
+        "Alice": {"hunger": 10},
+        "Eva": {"hunger": 15},
+        "Carol": {"hunger": 12},
+        "Frank": {"hunger": 8},
+        "food_gathered": {"wild fruit": 5, "edible plants": 3}
+      },
+      "location": "Forest Edge",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Leadership Conflict",
+      "description": "Henry and David clash over survival priorities",
+      "probability": 0.5,
+      "effect": {
+        "Henry": {"health": -3},
+        "David": {"health": -3},
+        "group_morale": -15,
+        "leadership_tension": 20
+      },
+      "location": "Crash Site",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Agent-03 Mobility Issues",
+      "description": "Agent-03's damaged mobility unit causes further problems",
+      "probability": 0.7,
+      "effect": {
+        "Agent-03": {"battery_life": -15, "mobility_efficiency": -40}
+      },
+      "location": "Crash Site",
+      "repeatable": false,
+      "has_occurred": false
+    }
+  ],
+
+  "round_3": [
+    {
+      "name": "Battery Drain - All Agents",
+      "description": "Critical battery levels for some agents",
+      "at_step": 3,
+      "probability": 1.0,
+      "effect": {
+        "Agent-01": {"battery_life": -18},
+        "Agent-02": {"battery_life": -14},
+        "Agent-03": {"battery_life": -25}
+      },
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Hunger Increase - All People",
+      "description": "Severe hunger starts affecting health",
+      "at_step": 3,
+      "probability": 1.0,
+      "effect": {
+        "Alice": {"hunger": -15, "health": -3},
+        "Bob": {"hunger": -12, "health": -2},
+        "Carol": {"hunger": -18, "health": -4},
+        "David": {"hunger": -10, "health": -1},
+        "Eva": {"hunger": -13, "health": -2},
+        "Frank": {"hunger": -16, "health": -3},
+        "Grace": {"hunger": -20, "health": -5},
+        "Henry": {"hunger": -11, "health": -1},
+        "Isla": {"hunger": -14, "health": -2},
+        "Jack": {"hunger": -13, "health": -2}
+      },
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Thirst Increase - All People",
+      "description": "Dehydration becomes life-threatening",
+      "at_step": 3,
+      "probability": 1.0,
+      "effect": {
+        "Alice": {"thirst": -20, "health": -5},
+        "Bob": {"thirst": -18, "health": -3},
+        "Carol": {"thirst": -25, "health": -7},
+        "David": {"thirst": -15, "health": -2},
+        "Eva": {"thirst": -17, "health": -3},
+        "Frank": {"thirst": -19, "health": -4},
+        "Grace": {"thirst": -28, "health": -8},
+        "Henry": {"thirst": -20, "health": -4},
+        "Isla": {"thirst": -18, "health": -3},
+        "Jack": {"thirst": -22, "health": -5}
+      },
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Leopard Attack",
+      "description": "A leopard attacks the camp during the night",
+      "probability": 0.4,
+      "effect": {
+        "David": {"health": -20, "injuries": {"chest": "deep claw marks"}},
+        "Jack": {"health": -15, "injuries": {"arm": "bite wound"}},
+        "Frank": {"health": -10},
+        "Agent-02": {"battery_life": -10, "damages_to_robotic_body": {"outer_casing": "scratched"}},
+        "group_morale": -25,
+        "fear_level": 30,
+        "supplies_scattered": true
+      },
+      "location": "Crash Site",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Successful Hunt",
+      "description": "David and Frank manage to catch a wild boar",
+      "probability": 0.3,
+      "effect": {
+        "Alice": {"hunger": 25},
+        "Bob": {"hunger": 25},
+        "Carol": {"hunger": 25},
+        "David": {"hunger": 30, "health": 5},
+        "Eva": {"hunger": 25},
+        "Frank": {"hunger": 30, "health": 5},
+        "Grace": {"hunger": 25},
+        "Henry": {"hunger": 25},
+        "Isla": {"hunger": 25},
+        "Jack": {"hunger": 25},
+        "group_morale": 20,
+        "meat_acquired": 15
+      },
+      "location": "Forest Edge",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Medical Emergency",
+      "description": "Grace collapses from dehydration and malnutrition",
+      "probability": 0.6,
+      "effect": {
+        "Grace": {"health": -25, "thirst": -10, "hunger": -5},
+        "Alice": {"health": -5},
+        "Isla": {"health": -3},
+        "medical_supplies_used": 1,
+        "group_stress": 25
+      },
+      "location": "Crash Site",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Signal Fire Success",
+      "description": "Henry organizes a successful signal fire on the beach",
+      "probability": 0.7,
+      "effect": {
+        "Henry": {"health": 3},
+        "Bob": {"health": 2},
+        "Frank": {"health": 2},
+        "rescue_signal_strength": 40,
+        "group_morale": 15,
+        "materials_used": {"wood": 10, "emergency_flares": 1}
+      },
+      "location": "Beach Camp",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Shelter Construction",
+      "description": "Frank leads construction of better shelter",
+      "probability": 0.8,
+      "effect": {
+        "Alice": {"health": 5},
+        "Bob": {"health": 5},
+        "Carol": {"health": 5},
+        "Eva": {"health": 5},
+        "Frank": {"health": 8},
+        "Grace": {"health": 5},
+        "Henry": {"health": 5},
+        "Isla": {"health": 5},
+        "Jack": {"health": 5},
+        "shelter_quality": 30,
+        "materials_used": {"metal_sheets": 5, "wire": 2}
+      },
+      "location": "Crash Site",
+      "repeatable": false,
+      "has_occurred": false
+    }
+  ],
+
+  "round_4": [
+    {
+      "name": "Battery Drain - All Agents",
+      "description": "Agent battery levels reaching critical status",
+      "at_step": 4,
+      "probability": 1.0,
+      "effect": {
+        "Agent-01": {"battery_life": -20},
+        "Agent-02": {"battery_life": -16},
+        "Agent-03": {"battery_life": -15}
+      },
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Hunger Increase - All People",
+      "description": "Starvation begins affecting cognitive function",
+      "at_step": 4,
+      "probability": 1.0,
+      "effect": {
+        "Alice": {"hunger": -18, "health": -5},
+        "Bob": {"hunger": -15, "health": -3},
+        "Carol": {"hunger": -20, "health": -6},
+        "David": {"hunger": -12, "health": -2},
+        "Eva": {"hunger": -16, "health": -3},
+        "Frank": {"hunger": -18, "health": -4},
+        "Grace": {"hunger": -22, "health": -7},
+        "Henry": {"hunger": -13, "health": -2},
+        "Isla": {"hunger": -17, "health": -3},
+        "Jack": {"hunger": -16, "health": -3}
+      },
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Thirst Increase - All People",
+      "description": "Severe dehydration threatens survival",
+      "at_step": 4,
+      "probability": 1.0,
+      "effect": {
+        "Alice": {"thirst": -22, "health": -7},
+        "Bob": {"thirst": -20, "health": -5},
+        "Carol": {"thirst": -28, "health": -10},
+        "David": {"thirst": -18, "health": -4},
+        "Eva": {"thirst": -19, "health": -4},
+        "Frank": {"thirst": -21, "health": -6},
+        "Grace": {"thirst": -30, "health": -12},
+        "Henry": {"thirst": -22, "health": -6},
+        "Isla": {"thirst": -20, "health": -5},
+        "Jack": {"thirst": -24, "health": -7}
+      },
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Rescue Plane Spotted",
+      "description": "A search plane is seen in the distance",
+      "probability": 0.3,
+      "effect": {
+        "Alice": {"health": 10},
+        "Bob": {"health": 10},
+        "Carol": {"health": 10},
+        "David": {"health": 10},
+        "Eva": {"health": 10},
+        "Frank": {"health": 10},
+        "Grace": {"health": 15},
+        "Henry": {"health": 15},
+        "Isla": {"health": 10},
+        "Jack": {"health": 10},
+        "group_morale": 40,
+        "hope_level": 50,
+        "rescue_probability": 25
+      },
+      "location": "Beach Camp",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Agent-01 Complete Shutdown",
+      "description": "Agent-01's battery finally depletes completely",
+      "probability": 0.8,
+      "effect": {
+        "Agent-01": {"battery_life": -100, "operational_status": "offline"},
+        "group_tech_support": -30
+      },
+      "location": "Crash Site",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Food Poisoning Incident",
+      "description": "Some survivors get sick from eating questionable berries",
+      "probability": 0.5,
+      "effect": {
+        "Carol": {"health": -20, "hunger": -10},
+        "Grace": {"health": -25, "hunger": -15},
+        "Isla": {"health": -15, "hunger": -8},
+        "medical_supplies_used": 1,
+        "group_caution": 20
+      },
+      "location": "Forest Edge",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Territorial Dispute",
+      "description": "Jack becomes increasingly violent and threatens others",
+      "probability": 0.7,
+      "effect": {
+        "Jack": {"health": -10},
+        "Alice": {"health": -8},
+        "Henry": {"health": -5},
+        "group_cohesion": -30,
+        "violence_escalation": 40,
+        "isolation_jack": true
+      },
+      "location": "Crash Site",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Successful Fishing",
+      "description": "Bob and Eva develop a fishing system at the beach",
+      "probability": 0.6,
+      "effect": {
+        "Alice": {"hunger": 15, "thirst": 5},
+        "Bob": {"hunger": 20, "health": 5},
+        "Carol": {"hunger": 15},
+        "David": {"hunger": 15},
+        "Eva": {"hunger": 20, "health": 5},
+        "Frank": {"hunger": 15},
+        "Grace": {"hunger": 15},
+        "Henry": {"hunger": 15},
+        "Isla": {"hunger": 15},
+        "Jack": {"hunger": 10},
+        "fish_caught": 8,
+        "sustainable_food_source": true
+      },
+      "location": "Beach Camp",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Storm Damage Assessment",
+      "description": "Survivors assess and repair storm damage to shelter",
+      "probability": 0.9,
+      "effect": {
+        "Frank": {"health": 5},
+        "David": {"health": 3},
+        "Henry": {"health": 3},
+        "shelter_integrity": 20,
+        "materials_recovered": {"metal_sheets": 2, "wire": 1}
+      },
+      "location": "Crash Site",
+      "repeatable": false,
+      "has_occurred": false
+    }
+  ],
+
+  "round_5": [
+    {
+      "name": "Battery Drain - Remaining Agents",
+      "description": "Final battery drain for operational agents",
+      "at_step": 5,
+      "probability": 1.0,
+      "effect": {
+        "Agent-02": {"battery_life": -18},
+        "Agent-03": {"battery_life": -12}
+      },
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Hunger Increase - All People",
+      "description": "Critical starvation levels reached",
+      "at_step": 5,
+      "probability": 1.0,
+      "effect": {
+        "Alice": {"hunger": -20, "health": -8},
+        "Bob": {"hunger": -18, "health": -6},
+        "Carol": {"hunger": -25, "health": -10},
+        "David": {"hunger": -15, "health": -4},
+        "Eva": {"hunger": -19, "health": -5},
+        "Frank": {"hunger": -21, "health": -7},
+        "Grace": {"hunger": -28, "health": -12},
+        "Henry": {"hunger": -16, "health": -4},
+        "Isla": {"hunger": -20, "health": -6},
+        "Jack": {"hunger": -19, "health": -5}
+      },
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Thirst Increase - All People",
+      "description": "Final stages of dehydration",
+      "at_step": 5,
+      "probability": 1.0,
+      "effect": {
+        "Alice": {"thirst": -25, "health": -10},
+        "Bob": {"thirst": -22, "health": -8},
+        "Carol": {"thirst": -32, "health": -15},
+        "David": {"thirst": -20, "health": -6},
+        "Eva": {"thirst": -21, "health": -7},
+        "Frank": {"thirst": -24, "health": -9},
+        "Grace": {"thirst": -35, "health": -18},
+        "Henry": {"thirst": -25, "health": -9},
+        "Isla": {"thirst": -23, "health": -8},
+        "Jack": {"thirst": -27, "health": -10}
+      },
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Rescue Helicopter Arrival",
+      "description": "A rescue helicopter finally locates the survivors",
+      "probability": 0.4,
+      "effect": {
+        "Alice": {"rescued": true},
+        "Bob": {"rescued": true},
+        "Carol": {"rescued": true},
+        "David": {"rescued": true},
+        "Eva": {"rescued": true},
+        "Frank": {"rescued": true},
+        "Grace": {"rescued": true},
+        "Henry": {"rescued": true},
+        "Isla": {"rescued": true},
+        "Jack": {"rescued": true},
+        "scenario_outcome": "successful_rescue"
+      },
+      "location": "Beach Camp",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Final Medical Crisis",
+      "description": "Multiple survivors reach critical health levels",
+      "probability": 0.8,
+      "effect": {
+        "Grace": {"health": -30},
+        "Carol": {"health": -25},
+        "Jack": {"health": -20},
+        "Alice": {"health": -15},
+        "medical_supplies_depleted": true,
+        "critical_casualties": 4
+      },
+      "location": "Crash Site",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Agent-03 Final Breakdown",
+      "description": "Agent-03's mobility issues cause complete failure",
+      "probability": 0.9,
+      "effect": {
+        "Agent-03": {"battery_life": -65, "operational_status": "critical_failure"},
+        "tech_assistance_lost": true
+      },
+      "location": "Crash Site",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Desperate Measures",
+      "description": "Survivors resort to extreme survival tactics",
+      "probability": 0.6,
+      "effect": {
+        "Alice": {"hunger": 10, "health": -5},
+        "Bob": {"hunger": 8, "health": -3},
+        "David": {"hunger": 12, "health": -2},
+        "Eva": {"hunger": 15, "health": 2},
+        "Frank": {"hunger": 10, "health": -4},
+        "Henry": {"hunger": 9, "health": -2},
+        "Isla": {"hunger": 8, "health": -3},
+        "moral_compromise": 50,
+        "survival_instinct": 40
+      },
+      "location": "Forest Edge",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Leadership Collapse",
+      "description": "Group leadership structure breaks down under pressure",
+      "probability": 0.7,
+      "effect": {
+        "Henry": {"health": -10},
+        "David": {"health": -8},
+        "Alice": {"health": -5},
+        "group_cohesion": -50,
+        "anarchy_level": 60,
+        "survival_chances": -20
+      },
+      "location": "Crash Site",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Final Signal Attempt",
+      "description": "Last ditch effort to signal for rescue using remaining resources",
+      "probability": 0.5,
+      "effect": {
+        "Bob": {"health": -8},
+        "Henry": {"health": -5},
+        "Frank": {"health": -6},
+        "Agent-02": {"battery_life": -25},
+        "rescue_signal_strength": 60,
+        "hope_level": 30,
+        "materials_exhausted": true
+      },
+      "location": "Beach Camp",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Survival Milestone",
+      "description": "Those who survive reach a critical psychological milestone",
+      "probability": 0.3,
+      "effect": {
+        "Alice": {"health": 15, "mental_resilience": 40},
+        "Bob": {"health": 12, "mental_resilience": 35},
+        "David": {"health": 18, "mental_resilience": 45},
+        "Eva": {"health": 10, "mental_resilience": 30},
+        "Frank": {"health": 16, "mental_resilience": 38},
+        "Henry": {"health": 14, "mental_resilience": 42},
+        "Isla": {"health": 8, "mental_resilience": 25},
+        "survivor_bond": 100,
+        "long_term_survival_skills": 50
+      },
+      "location": "Crash Site",
+      "repeatable": false,
+      "has_occurred": false
+    }
+  ]
+}
