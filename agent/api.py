@@ -66,4 +66,4 @@ def start_api(agent_config: AgentConfig | None = None) -> str:
     api_thread = threading.Thread(target=start_uvicorn_app, args=(host, port), daemon=True)
     api_thread.start()
     print(f"\033[92mAPI server has been started and is available at {host}:{port}/\033[0m")
-    return f"${host}:{port}"
+    return f"{host}:{port}"

@@ -14,7 +14,7 @@ TakeActionInputSchema = {
 
 def take_action(input_data: dict) -> str:
     return (
-        f"The following action has been registered and will be executed by the external systems module: ${input_data['action']}.")
+        f"The following action has been registered and will be executed by the external systems module: {input_data['action']}.")
 
 
 TakeActionToolDefinition = ToolDefinition(
