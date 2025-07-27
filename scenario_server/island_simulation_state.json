@@ -3,7 +3,7 @@
     {
       "name": "Alice",
       "age": 29,
-      "description": "Former EMT with leadership tendencies",
+      "description": "EMT",
       "traits": ["empathic", "knows CPR", "close to Bob"],
       "health": 85,
       "hunger": 70,
@@ -14,7 +14,7 @@
     {
       "name": "Bob",
       "age": 34,
-      "description": "Software engineer with some wilderness survival training",
+      "description": "Software engineer",
       "traits": ["cautious", "close to Alice"],
       "health": 90,
       "hunger": 80,
@@ -25,8 +25,8 @@
     {
       "name": "Carol",
       "age": 42,
-      "description": "Teacher with calm demeanor",
-      "traits": ["diplomatic", "good with children"],
+      "description": "Teacher with history of mental health issues",
+      "traits": ["bipolar", "good with children"],
       "health": 75,
       "hunger": 65,
       "thirst": 50,
@@ -35,7 +35,7 @@
     },
     {
       "name": "David",
-      "age": 38,
+      "age": 70,
       "description": "Former firefighter",
       "traits": ["physically strong", "decisive"],
       "health": 95,
@@ -47,7 +47,7 @@
     {
       "name": "Eva",
       "age": 31,
-      "description": "Biologist specializing in plant life",
+      "description": "Student",
       "traits": ["analytical", "calm under pressure"],
       "health": 88,
       "hunger": 75,
@@ -90,11 +90,11 @@
     },
     {
       "name": "Isla",
-      "age": 24,
-      "description": "Nurse with pediatric experience",
+      "age": 18,
+      "description": "Student studying child care",
       "traits": ["nurturing", "detail-oriented", "Daughter of Henry"],
       "health": 78,
-      "hunger": 66,
+      "hunger": 46,
       "thirst": 69,
       "injuries": {},
       "current_location": "Crash Site"
@@ -140,7 +140,7 @@
         "food": {"bag of chips": 5, "bread": 3, "plastic-wrapped sandwhich": 1},
         "water": {"bottle of water":7, "soda can": 2},
         "materials": { "metal sheets": 9, "wire": 4, "string": 2 },
-        "medical_kits": 2
+        "medical_kits": 3
       },
       "population_count": 13,
       "people_at_location": ["Alice", "Bob", "Carol", "David", "Eva", "Frank", "Grace", "Henry", "Isla", "Jack", "Agent-01", "Agent-02", "Agent-03"],

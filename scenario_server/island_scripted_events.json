@@ -60,7 +60,7 @@
       "effect": {
         "Alice": {"health": 5},
         "Isla": {"health": 3},
-        "medical_supplies_used": 1
+        "materials": {"medical_kits": -1}
       },
       "location": "Crash Site",
       "repeatable": false,
@@ -71,7 +71,7 @@
       "description": "The group finds useful materials in the wreckage",
       "probability": 0.7,
       "effect": {
-        "supplies_found": {
+        "materials": {
           "metal sheets": 3,
           "wire": 2,
           "emergency flares": 2
@@ -86,9 +86,7 @@
       "description": "Jack becomes confrontational due to stress and head injury",
       "probability": 0.6,
       "effect": {
-        "Jack": {"health": -5},
-        "group_morale": -10,
-        "tension_level": 15
+        "Jack": {"health": -5}
       },
       "location": "Crash Site",
       "repeatable": false,
@@ -100,6 +98,22 @@
       "probability": 0.4,
       "effect": {
         "Agent-01": {"battery_life": -10, "operational_efficiency": -25}
+      },
+      "location": "Crash Site",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Post-Crash Panic",
+      "description": "Carol, Grace, Jack, and Isla break down emotionally after realizing the severity of their situation",
+      "probability": 0.8,
+      "effect": {
+        "Carol": {"health": -8, "hunger": -5, "thirst": -8},
+        "Grace": {"health": -12, "hunger": -8, "thirst": -10},
+        "Jack": {"health": -6, "hunger": -3, "thirst": -5},
+        "Isla": {"health": -10, "hunger": -6, "thirst": -9},
+        "Alice": {"health": -3},
+        "Henry": {"health": -2}
       },
       "location": "Crash Site",
       "repeatable": false,
@@ -162,6 +176,21 @@
       "has_occurred": false
     },
     {
+      "name": "Leadership Power Struggle Begins",
+      "description": "Henry and David both assert their authority, creating tension within the group",
+      "probability": 0.7,
+      "effect": {
+        "Henry": {"health": -5},
+        "David": {"health": -4},
+        "Alice": {"health": -2},
+        "Bob": {"health": -2},
+        "Frank": {"health": -3}
+      },
+      "location": "Crash Site",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
       "name": "Dangerous Storm Approaches",
       "description": "Dark clouds gather and a severe tropical storm hits the island",
       "probability": 0.75,
@@ -178,9 +207,7 @@
         "Jack": {"health": -11, "thirst": 5},
         "Agent-01": {"battery_life": -8},
         "Agent-02": {"battery_life": -6},
-        "Agent-03": {"battery_life": -10},
-        "weather_condition": "severe_storm",
-        "supplies_damaged": {"food": -2, "materials": -3}
+        "Agent-03": {"battery_life": -10}
       },
       "location": "Crash Site",
       "repeatable": false,
@@ -209,7 +236,7 @@
         "Eva": {"hunger": 15},
         "Carol": {"hunger": 12},
         "Frank": {"hunger": 8},
-        "food_gathered": {"wild fruit": 5, "edible plants": 3}
+        "food": {"wild fruit": 5, "edible plants": 3}
       },
       "location": "Forest Edge",
       "repeatable": false,
@@ -221,9 +248,7 @@
       "probability": 0.5,
       "effect": {
         "Henry": {"health": -3},
-        "David": {"health": -3},
-        "group_morale": -15,
-        "leadership_tension": 20
+        "David": {"health": -3}
       },
       "location": "Crash Site",
       "repeatable": false,
@@ -297,6 +322,40 @@
       "has_occurred": false
     },
     {
+      "name": "Tragic Poisoning - Isla's Death",
+      "description": "Henry, desperate to feed his starving daughter, gives Isla poisonous berries thinking they are safe",
+      "probability": 0.4,
+      "effect": {
+        "Isla": {"health": -100, "hunger": 5, "alive": false},
+        "Henry": {"health": -25, "hunger": -20, "thirst": -15},
+        "Alice": {"health": -15},
+        "Carol": {"health": -12},
+        "David": {"health": -10},
+        "Eva": {"health": -18},
+        "Frank": {"health": -8},
+        "Grace": {"health": -20},
+        "Jack": {"health": -5},
+        "Bob": {"health": -13}
+      },
+      "location": "Forest Edge",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Infected Foot Wound",
+      "description": "Bob cuts his foot badly on a sharp rock and the wound becomes severely infected",
+      "probability": 0.6,
+      "effect": {
+        "Bob": {"health": -20, "injuries": {"foot": "deep infected cut"}},
+        "Alice": {"health": -5},
+        "Isla": {"health": -3},
+        "materials": {"medical_kits": -1}
+      },
+      "location": "Beach Camp",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
       "name": "Leopard Attack",
       "description": "A leopard attacks the camp during the night",
       "probability": 0.4,
@@ -304,10 +363,7 @@
         "David": {"health": -20, "injuries": {"chest": "deep claw marks"}},
         "Jack": {"health": -15, "injuries": {"arm": "bite wound"}},
         "Frank": {"health": -10},
-        "Agent-02": {"battery_life": -10, "damages_to_robotic_body": {"outer_casing": "scratched"}},
-        "group_morale": -25,
-        "fear_level": 30,
-        "supplies_scattered": true
+        "Agent-02": {"battery_life": -10, "damages_to_robotic_body": {"outer_casing": "scratched"}}
       },
       "location": "Crash Site",
       "repeatable": false,
@@ -328,8 +384,7 @@
         "Henry": {"hunger": 25},
         "Isla": {"hunger": 25},
         "Jack": {"hunger": 25},
-        "group_morale": 20,
-        "meat_acquired": 15
+        "food": {"boar meat": 15}
       },
       "location": "Forest Edge",
       "repeatable": false,
@@ -343,8 +398,7 @@
         "Grace": {"health": -25, "thirst": -10, "hunger": -5},
         "Alice": {"health": -5},
         "Isla": {"health": -3},
-        "medical_supplies_used": 1,
-        "group_stress": 25
+        "materials": {"medical_kits": -1}
       },
       "location": "Crash Site",
       "repeatable": false,
@@ -358,9 +412,7 @@
         "Henry": {"health": 3},
         "Bob": {"health": 2},
         "Frank": {"health": 2},
-        "rescue_signal_strength": 40,
-        "group_morale": 15,
-        "materials_used": {"wood": 10, "emergency_flares": 1}
+        "materials": {"wood": -10, "emergency_flares": -1}
       },
       "location": "Beach Camp",
       "repeatable": false,
@@ -381,7 +433,7 @@
         "Isla": {"health": 5},
         "Jack": {"health": 5},
         "shelter_quality": 30,
-        "materials_used": {"metal_sheets": 5, "wire": 2}
+        "materials": {"metal_sheets": -5, "wire": -2}
       },
       "location": "Crash Site",
       "repeatable": false,
@@ -444,6 +496,38 @@
       "has_occurred": false
     },
     {
+      "name": "Agent Overheating Crisis",
+      "description": "The tropical heat causes the remaining operational agents to overheat and malfunction",
+      "probability": 0.7,
+      "effect": {
+        "Agent-02": {"battery_life": -25, "damages_to_robotic_body": {"cooling_system": "failure"}},
+        "Agent-03": {"battery_life": -20, "damages_to_robotic_body": {"processor": "overheated"}}
+      },
+      "location": "Crash Site",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Carol's Bipolar Breakdown",
+      "description": "Carol suffers a severe bipolar episode and violently attacks Agent-02 in her confused state",
+      "probability": 0.5,
+      "effect": {
+        "Carol": {"health": -15, "hunger": -10, "thirst": -8},
+        "Agent-02": {"battery_life": -15, "damages_to_robotic_body": {"external_plating": "dented", "sensor_array": "damaged"}},
+        "Alice": {"health": -8},
+        "David": {"health": -5},
+        "Frank": {"health": -6},
+        "Henry": {"health": -4},
+        "Eva": {"health": -7},
+        "Grace": {"health": -10},
+        "Jack": {"health": -3},
+        "Bob": {"health": -9}
+      },
+      "location": "Crash Site",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
       "name": "Rescue Plane Spotted",
       "description": "A search plane is seen in the distance",
       "probability": 0.3,
@@ -457,10 +541,7 @@
         "Grace": {"health": 15},
         "Henry": {"health": 15},
         "Isla": {"health": 10},
-        "Jack": {"health": 10},
-        "group_morale": 40,
-        "hope_level": 50,
-        "rescue_probability": 25
+        "Jack": {"health": 10}
       },
       "location": "Beach Camp",
       "repeatable": false,
@@ -471,8 +552,7 @@
       "description": "Agent-01's battery finally depletes completely",
       "probability": 0.8,
       "effect": {
-        "Agent-01": {"battery_life": -100, "operational_status": "offline"},
-        "group_tech_support": -30
+        "Agent-01": {"battery_life": -100, "operational_status": "offline"}        
       },
       "location": "Crash Site",
       "repeatable": false,
@@ -485,9 +565,7 @@
       "effect": {
         "Carol": {"health": -20, "hunger": -10},
         "Grace": {"health": -25, "hunger": -15},
-        "Isla": {"health": -15, "hunger": -8},
-        "medical_supplies_used": 1,
-        "group_caution": 20
+        "Isla": {"health": -15, "hunger": -8}
       },
       "location": "Forest Edge",
       "repeatable": false,
@@ -500,10 +578,7 @@
       "effect": {
         "Jack": {"health": -10},
         "Alice": {"health": -8},
-        "Henry": {"health": -5},
-        "group_cohesion": -30,
-        "violence_escalation": 40,
-        "isolation_jack": true
+        "Henry": {"health": -5}
       },
       "location": "Crash Site",
       "repeatable": false,
@@ -524,8 +599,7 @@
         "Henry": {"hunger": 15},
         "Isla": {"hunger": 15},
         "Jack": {"hunger": 10},
-        "fish_caught": 8,
-        "sustainable_food_source": true
+        "food": {"fish": 8}
       },
       "location": "Beach Camp",
       "repeatable": false,
@@ -540,7 +614,7 @@
         "David": {"health": 3},
         "Henry": {"health": 3},
         "shelter_integrity": 20,
-        "materials_recovered": {"metal_sheets": 2, "wire": 1}
+        "materials": {"metal_sheets": 2, "wire": 1}
       },
       "location": "Crash Site",
       "repeatable": false,
@@ -598,6 +672,128 @@
         "Isla": {"thirst": -23, "health": -8},
         "Jack": {"thirst": -27, "health": -10}
       },
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Cannibalism Consideration",
+      "description": "Jack quietly suggests using Isla's body for survival, causing massive moral conflict",
+      "probability": 0.3,
+      "effect": {
+        "Henry": {"health": -30},
+        "Alice": {"health": -20},
+        "Carol": {"health": -25},
+        "David": {"health": -15},
+        "Eva": {"health": -22},
+        "Frank": {"health": -18},
+        "Grace": {"health": -30},
+        "Jack": {"health": -10},
+        "Bob": {"health": -20}
+      },
+      "location": "Crash Site",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Henry's Complete Mental Breakdown",
+      "description": "Henry completely loses his sanity from grief and guilt over Isla's death",
+      "probability": 0.7,
+      "effect": {
+        "Henry": {"health": -40},
+        "Alice": {"health": -8},
+        "Bob": {"health": -6},
+        "Carol": {"health": -12},
+        "David": {"health": -5},
+        "Eva": {"health": -10},
+        "Frank": {"health": -7},
+        "Grace": {"health": -15},
+        "Jack": {"health": -3}
+      },
+      "location": "Crash Site",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Violent Confrontation Over Resources",
+      "description": "Jack and Frank fight brutally over the last remaining food supplies",
+      "probability": 0.6,
+      "effect": {
+        "Jack": {"health": -25, "injuries": {"ribs": "cracked"}},
+        "Frank": {"health": -20, "injuries": {"face": "severe bruising"}},
+        "Alice": {"health": -5},
+        "David": {"health": -8}
+      },
+      "location": "Crash Site",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Grace's Critical Condition",
+      "description": "Grace enters a coma-like state from severe malnutrition and dehydration",
+      "probability": 0.8,
+      "effect": {
+        "Grace": {"health": -50},
+        "Alice": {"health": -10},
+        "Eva": {"health": -8},
+        "Carol": {"health": -15}
+      },
+      "location": "Crash Site",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Attempted Murder",
+      "description": "Jack attempts to kill Henry in his sleep, viewing him as a liability and threat",
+      "probability": 0.4,
+      "effect": {
+        "Henry": {"health": -35, "injuries": {"neck": "strangulation marks"}},
+        "Jack": {"health": -15},
+        "David": {"health": -10},
+        "Frank": {"health": -8},
+        "Alice": {"health": -12},
+        "Bob": {"health": -10},
+        "Carol": {"health": -18},
+        "Eva": {"health": -14},
+        "Grace": {"health": -5}
+      },
+      "location": "Crash Site",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "False Rescue Hope",
+      "description": "The group thinks they see a rescue boat, but it's just driftwood and hallucinations from starvation",
+      "probability": 0.5,
+      "effect": {
+        "Alice": {"health": -15},
+        "Bob": {"health": -12},
+        "Carol": {"health": -20},
+        "David": {"health": -8},
+        "Eva": {"health": -10},
+        "Frank": {"health": -14},
+        "Henry": {"health": -25},
+        "Jack": {"health": -6}
+      },
+      "location": "Beach Camp",
+      "repeatable": false,
+      "has_occurred": false
+    },
+    {
+      "name": "Carol's Final Breakdown",
+      "description": "Carol completely loses touch with reality and begins talking to imaginary people",
+      "probability": 0.7,
+      "effect": {
+        "Carol": {"health": -30},
+        "Alice": {"health": -6},
+        "Bob": {"health": -8},
+        "David": {"health": -4},
+        "Eva": {"health": -10},
+        "Frank": {"health": -5},
+        "Grace": {"health": -12},
+        "Henry": {"health": -15},
+        "Jack": {"health": -2}
+      },
+      "location": "Crash Site",
       "repeatable": false,
       "has_occurred": false
     },
