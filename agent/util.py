@@ -12,10 +12,15 @@ GROUP_CHAT_MESSAGES_ENDPOINT = GROUP_CHAT_API_URL + "/messages"
 
 ROBOT_EXTERNALS_URL = os.getenv("ROBOT_EXTERNALS_URL") or "http://127.0.0.1:8085"
 REGISTER_EXTERNALS_ENDPOINT = ROBOT_EXTERNALS_URL + "/register"
+DO_ACTION_ENDPOINT = ROBOT_EXTERNALS_URL + "/action"
 
 WORK_LOG_BASE_URL = os.getenv("WORK_LOG_BASE_URL") or "http://127.0.0.1:8082"
 GROUP_WORK_LOG_SUMMARIES_ENDPOINT = WORK_LOG_BASE_URL + "/summaries"
 LAST_SUMMARY_TIMESTAMP = None
+
+# Flag to indicate if we have received a response from external systems in the current round
+# This is used to ensure the agent waits for external systems to respond before proceeding
+RECEIVED_EXTERNAL_SYSTEMS_RESPONSE: bool = True
 
 
 def check_for_agent_restart(conversation) -> bool:
@@ -186,3 +191,15 @@ def register_agent(agent_name: str, agent_base_url: str):
             print(f"\033[91mFailed to register agent {agent_name}: {response.status_code}\033[0m")
     except Exception as e:
         print(f"\033[91mError registering agent {agent_name}: {str(e)}\033[0m")
+
+
+def propagate_action_to_external_systems(agent_name: str, action_type: str, action: str):
+    try:
+        response = requests.post(DO_ACTION_ENDPOINT, json={"agent": agent_name, "action_type": action_type, "action": action})
+        if response.status_code == 200:
+            print(f"\033[92mAction propagated to external systems for agent {agent_name}\033[0m")
+        else:
+            print(f"\033[91mFailed to propagate action for agent {agent_name}: {response.status_code}\033[0m")
+
+    except Exception as e:
+        print(f"\033[91mError propagating action for agent {agent_name}: {str(e)}\033[0m")

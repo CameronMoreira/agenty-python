@@ -18,6 +18,7 @@ from tools import (
     RestartProgramDefinition,
     TaskTrackerDefinition,
     WaitDefinition,
+    TakeActionToolDefinition,
 )
 from util import save_conv_and_restart
 
@@ -36,6 +37,7 @@ def get_tool_list(is_team_mode: bool) -> list:
         CreateToolDefinition,
         GracefulShutdownDefinition,
         TaskTrackerDefinition,
+        TakeActionToolDefinition
     ]
     # Only add certain tools if in team mode
     if is_team_mode:
