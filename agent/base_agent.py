@@ -1,48 +1,29 @@
 #!/usr/bin/env python3
 import datetime
-import sys
 import time
 import traceback
 
 from agent_work_log import send_work_log
 from context_handling import (set_conversation_context, load_conversation,
-                                    get_all_from_message_queue, add_to_message_queue)
+                              get_all_from_message_queue, add_to_message_queue)
 from llm import run_inference
 from tools_utils import get_tool_list, execute_tool, deal_with_tool_results
-from util import get_user_message, get_new_messages_from_group_chat, get_new_summaries, log_error, \
-    generate_restart_summary, save_conv_and_restart, register_agent
+from util import get_new_messages_from_group_chat, get_new_summaries, log_error, \
+    generate_restart_summary, save_conv_and_restart, register_agent, propagate_action_to_external_systems
 
 
 def get_new_message(is_team_mode: bool, consecutive_tool_count: list, read_user_input: bool) -> dict | None:
-    if is_team_mode:
-        # check message queue for new messages
-        messages: list[str] = get_all_from_message_queue()
+    # check message queue for new messages
+    messages: list[str] = get_all_from_message_queue()
 
-        if len(messages) > 0:
-            consecutive_tool_count[0] = 0
-            all_messages: str = ""
-            for message in messages:
-                all_messages += message + "\n"
-            return {"role": "user", "content": all_messages}
+    if len(messages) > 0:
+        consecutive_tool_count[0] = 0
+        all_messages: str = ""
+        for message in messages:
+            all_messages += message + "\n"
+        return {"role": "user", "content": all_messages}
 
-        return {"role": "user", "content": "[Automated Message] There are currently no new messages. Please wait."}
-    else:
-        if read_user_input:
-            # prompt for user
-            try:
-                print(f"\033[94mYou\033[0m: ", end="", flush=True)
-                user_input, ok = get_user_message()
-            except KeyboardInterrupt:
-                # Let the atexit handler take care of deleting the context file
-                print("\nExiting program.")
-                sys.exit(0)
-            if not ok:
-                pass
-            # Reset consecutive tool count when user provides input
-            consecutive_tool_count[0] = 0
-            return {"role": "user", "content": user_input}
-
-    return None
+    return {"role": "user", "content": "[Automated Message] There are currently no new messages. Please wait."}
 
 
 class Agent:
@@ -131,13 +112,14 @@ class Agent:
         # Set the global conversation context reference
         set_conversation_context(conversation)
 
+        # main agent loop; every loop is one "step"
         while True:
+            # todo get initial narration from scenario server
+            # todo wait for new narration from scenario server before executing next turn
+
 
             if self.is_team_mode:
-                # Check for new group messages at each cycle
                 self.check_group_messages()
-                # Check for new summaries at each cycle
-                # self.check_new_summaries()
 
             tool_count_object = [self.consecutive_tool_count]
             message = get_new_message(self.is_team_mode, tool_count_object, self.read_user_input)
@@ -150,12 +132,20 @@ class Agent:
                                                           self.name, self.is_team_mode)
             tool_results = []
 
+            action_type: str = "nothing"
+            action = "nothing"
+
             # print assistant text and collect any tool calls
             for block in response_content:
                 if block.type == "text":
                     print(f"\033[93m{self.name}\033[0m: {block.text}")
+                    action = f"internal thought: {block.text}"
+                    action_type = "internal thought"
                 elif block.type == "tool_use":
-                    result = execute_tool(self.tools, block.name, block.input)
+                    tool_name = block.name
+                    action_type = f"tool call: {tool_name}"
+                    action = f"tool call: {tool_name} with input {block.input}"
+                    result = execute_tool(self.tools, tool_name, block.input)
                     tool_results.append({
                         "type": "tool_result",
                         "tool_use_id": block.id,
@@ -187,13 +177,15 @@ class Agent:
                 self.read_user_input = False
                 deal_with_tool_results(tool_results, conversation)
             else:
-                self.read_user_input = not self.is_team_mode
+                self.read_user_input = False  # we do not want to read user input ever
 
             # Count a step
             # self.steps_since_last_log += 1
 
             # Check if a work log should be sent
             # self.check_and_send_work_log(conversation)
+
+            propagate_action_to_external_systems(self.name, action_type, action)
 
             # Check if we need to restart due to token limit
             if token_usage >= self.token_limit:
