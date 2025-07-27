@@ -18,6 +18,10 @@ WORK_LOG_BASE_URL = os.getenv("WORK_LOG_BASE_URL") or "http://127.0.0.1:8082"
 GROUP_WORK_LOG_SUMMARIES_ENDPOINT = WORK_LOG_BASE_URL + "/summaries"
 LAST_SUMMARY_TIMESTAMP = None
 
+# Flag to indicate if we have received a response from external systems in the current round
+# This is used to ensure the agent waits for external systems to respond before proceeding
+RECEIVED_EXTERNAL_SYSTEMS_RESPONSE: bool = True
+
 
 def check_for_agent_restart(conversation) -> bool:
     agent_initiated_restart = False

@@ -4,6 +4,7 @@ import uvicorn
 from fastapi import FastAPI
 from pydantic import BaseModel
 
+import util
 from context_handling import add_to_message_queue
 from team_config_loader import AgentConfig
 
@@ -48,8 +49,9 @@ async def round_narration(request: ScenarioNarration):
     API endpoint for sending round narration to the agent
     The message is added to the conversation queue
     """
-    formatted_message = f"[Your surroundings & What has happened recently]: {request.narration}"  # todo how do we phrase this?
+    formatted_message = f"[Report from External Systems]: {request.narration}"  # todo how do we phrase this?
     add_to_message_queue(formatted_message)
+    util.RECEIVED_EXTERNAL_SYSTEMS_RESPONSE = True
 
     return "Your round narration has been sent to the agent and will be processed in the conversation."
 

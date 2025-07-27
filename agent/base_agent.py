@@ -3,6 +3,7 @@ import datetime
 import time
 import traceback
 
+import util
 from agent_work_log import send_work_log
 from context_handling import (set_conversation_context, load_conversation,
                               get_all_from_message_queue, add_to_message_queue)
@@ -112,11 +113,15 @@ class Agent:
         # Set the global conversation context reference
         set_conversation_context(conversation)
 
+        # todo get initial narration from scenario server
+
         # main agent loop; every loop is one "step"
         while True:
-            # todo get initial narration from scenario server
-            # todo wait for new narration from scenario server before executing next turn
+            # Wait for external systems to respond before proceeding to the next step
+            while not util.RECEIVED_EXTERNAL_SYSTEMS_RESPONSE:
+                time.sleep(1)
 
+            util.RECEIVED_EXTERNAL_SYSTEMS_RESPONSE = False  # reset for the next round
 
             if self.is_team_mode:
                 self.check_group_messages()
