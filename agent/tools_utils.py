@@ -2,7 +2,6 @@ import json
 import os
 import sys
 
-from agent.tools.take_action_tool import TakeActionToolDefinition
 from tools import (
     SendGroupMessageDefinition,
     SendAgentMessageDefinition,
@@ -19,6 +18,7 @@ from tools import (
     RestartProgramDefinition,
     TaskTrackerDefinition,
     WaitDefinition,
+    TakeActionToolDefinition,
 )
 from util import save_conv_and_restart
 
