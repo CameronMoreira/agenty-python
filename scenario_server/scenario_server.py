@@ -89,6 +89,6 @@ def simulate_one_step(actions: list[AgentAction]):
     # fifth, send narration to agents
     for agent_name in REGISTERED_AGENTS:
         agent_url = REGISTERED_AGENTS[
-                        agent_name].base_url + "/scenario/roundnarration"  # todo implement this for the agent
+                        agent_name].base_url + "/scenario/roundnarration"
         requests.post(agent_url, json=agent_narrations[agent_name])
     return
