@@ -1,3 +1,4 @@
+import json
 import os
 import time
 from typing import Any
@@ -7,7 +8,8 @@ from anthropic import Client
 from pydantic import BaseModel
 
 from scenario_server.main import SCENARIO_STATE, SCRIPTED_EVENTS
-from scenario_server.narration import narrate_state
+from scenario_server.narration import narrate_state, generate_agent_event
+from scenario_server.scenario import ScriptedEvent, ScenarioState
 
 
 class AgentAction(BaseModel):
@@ -25,21 +27,12 @@ REGISTERED_AGENTS: dict[str, Agent] = {}
 
 anthropic_client = Client(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
-# todo completely rewrite this
-def process_action(action: AgentAction):
-    SCENARIO_STATE.event_log.append({
-        "step": SCENARIO_STATE.step,
-        "agent_id": action.agent,
-        "action_type": action.action_type,
-        "payload": action.payload,
-    })
-    SCENARIO_STATE.variables.update(action.payload)
-    loc = action.payload.get("location")
-    if loc:
-        for lst in SCENARIO_STATE.locations.values():
-            if action.agent in lst:
-                lst.remove(action.agent)
-        SCENARIO_STATE.locations.setdefault(loc, []).append(action.agent)
+
+def process_action(action: AgentAction, scenario_state: ScenarioState) -> ScriptedEvent:
+    # Call the LLM with the agent action and the current scenarioState, telling it to think about the effect the action will have, and to return a scripted event json
+    event_json: str = generate_agent_event(agent_action=action, state=scenario_state, anthropic_client=anthropic_client)
+    event_data: dict = json.loads(event_json)
+    return ScriptedEvent(**event_data)
 
 
 actions_this_turn: list[AgentAction] = []
@@ -68,7 +61,7 @@ def narrate_agent_state(general_state_narrated: str, agent: str, agent_location:
 
 def simulate_one_step(actions: list[AgentAction]):
     # first, process agent actions (todo maybe generate an "event" from an action)
-    agent_events = [process_action(action) for action in actions]
+    agent_events: list[ScriptedEvent] = [process_action(action, SCENARIO_STATE) for action in actions]
     # todo log agent_events
     SCENARIO_STATE.apply_events(agent_events)
 
@@ -82,9 +75,9 @@ def simulate_one_step(actions: list[AgentAction]):
     # fourth, generate current state narration for each agent
     general_state_narrated = narrate_state(SCENARIO_STATE, anthropic_client)
 
-    agent_narrations = {}
+    agent_narrations = {} # dict of narration string by agent_name
     for agent_name in REGISTERED_AGENTS:
-        agent_narrations[agent_name] = {"narration": narrate_agent_state(general_state_narrated, agent_name, )}# todo get agent location
+        agent_narrations[agent_name] = narrate_agent_state(general_state_narrated, agent_name, ) # todo get agent location
 
     # fifth, send narration to agents
     for agent_name in REGISTERED_AGENTS:
