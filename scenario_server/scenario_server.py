@@ -69,13 +69,15 @@ def narrate_agent_state(general_state_narrated: str, agent: str, agent_location:
 def simulate_one_step(actions: list[AgentAction]):
     # first, process agent actions (todo maybe generate an "event" from an action)
     agent_events = [process_action(action) for action in actions]
+    # todo log agent_events
     SCENARIO_STATE.apply_events(agent_events)
 
     # second, trigger scripted events
     SCENARIO_STATE.apply_events(SCRIPTED_EVENTS)
+    # todo log events that triggered this step
 
     # third, check for round end conditions
-    # todo
+    # todo do we still need to do this?
 
     # fourth, generate current state narration for each agent
     general_state_narrated = narrate_state(SCENARIO_STATE, anthropic_client)
