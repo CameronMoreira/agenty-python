@@ -1,10 +1,11 @@
-from scenario_server.scenario import ScenarioState
+from scenario_server.scenario import ScenarioState, ScriptedEvent
 from scenario_server.scenario_server import AgentAction
 
 
 # Here we take the current scenario state and generate a narrative description to be sent to each of the agents.
 def narrate_state(
         state: ScenarioState,
+        events_this_round: list[ScriptedEvent],
         anthropic_client,
         model: str = "claude-sonnet-4-20250514",
         max_tokens: int = 5000,
@@ -12,10 +13,11 @@ def narrate_state(
     """
     Uses Anthropic API to produce a narrative of the current scenario state.
     """
-    # todo add the events from the last round here
     prompt = {"role": "user",
               "content": f"Please provide a concise, vivid narrative of the following simulation state:\n" +
-                         f"{state.model_dump_json()}\n"}
+                         f"{state.model_dump_json()}\n"
+                         f"Mention especially the following events that occurred in the last round:\n" +
+                         "\n".join([event.model_dump_json() for event in events_this_round])}
 
     response = anthropic_client.messages.create(
         model=model,

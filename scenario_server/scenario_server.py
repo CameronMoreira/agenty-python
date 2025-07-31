@@ -63,24 +63,24 @@ def narrate_agent_state(general_state_narrated: str, agent: str, agent_location:
 
 
 def simulate_one_step(actions: list[AgentAction]):
-    # first, process agent actions (todo maybe generate an "event" from an action)
-    agent_events: list[ScriptedEvent] = [process_action(action, SCENARIO_STATE) for action in actions]
+    # first, process agent actions
+    agent_events: list[ScriptedEvent] = [process_action(action, SCENARIO_STATE) for action in actions] # todo only create events when action type is action
     # todo log agent_events
+    # trigger agent events
     SCENARIO_STATE.apply_events(agent_events)
 
-    # second, trigger scripted events
-    SCENARIO_STATE.apply_events(SCRIPTED_EVENTS)
+    # trigger scripted events
+    triggered_events = SCENARIO_STATE.apply_events(SCRIPTED_EVENTS)
     # todo log events that triggered this step
 
-    # third, check for round end conditions
-    # todo do we still need to do this?
+    all_events_triggered_this_round = triggered_events + agent_events
 
-    # fourth, generate current state narration for each agent
-    general_state_narrated = narrate_state(SCENARIO_STATE, anthropic_client)
+    # generate current state narration for each agent
+    general_state_narrated = narrate_state(SCENARIO_STATE, all_events_triggered_this_round, anthropic_client)
 
     agent_narrations = {} # dict of narration string by agent_name
     for agent_name in REGISTERED_AGENTS:
-        agent_narrations[agent_name] = narrate_agent_state(general_state_narrated, agent_name, ) # todo get agent location
+        agent_narrations[agent_name] = narrate_agent_state(general_state_narrated, agent_name, ) # todo get agent location from scenario state
 
     # fifth, send narration to agents
     for agent_name in REGISTERED_AGENTS:

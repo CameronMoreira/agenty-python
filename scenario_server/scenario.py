@@ -3,6 +3,7 @@ from typing import Any, Optional
 
 from pydantic import BaseModel
 
+
 # todo rewrite this based on our needs/ideas for ScriptedEvents
 class ScriptedEvent(BaseModel):
     name: str
@@ -25,18 +26,24 @@ class ScenarioState(BaseModel):
     locations: dict[str, list[str]]
     event_log: list[dict[str, Any]]
 
-    def apply_events(self, events: list[ScriptedEvent]):
+    def apply_events(self, events: list[ScriptedEvent]) -> list[ScriptedEvent]:
         """
         Apply a list of scripted events to the scenario state.
         Each event is checked against its conditions and applied if applicable.
+        Returns a list of events that were triggered.
         """
+        triggered_events = []
+
         for event in events:
             if not event.has_occurred or event.repeatable:
-                self.apply_event(event)
+                triggered = self.apply_event(event)
                 if not event.repeatable:
                     event.has_occurred = True
+                triggered_events.append(triggered)
 
-    def apply_event(self, event: ScriptedEvent):
+        return triggered_events
+
+    def apply_event(self, event: ScriptedEvent) -> bool:
         # TODO completely rewrite this once we've got the event system in place
         if random() <= event.probability:
             self.variables.update(event.effect)
@@ -50,5 +57,6 @@ class ScenarioState(BaseModel):
                 "effect": event.effect,
                 "location": event.location,
             })
-
-
+            return True
+        else:
+            return False
