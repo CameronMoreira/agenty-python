@@ -36,6 +36,7 @@ def process_action(action: AgentAction, scenario_state: ScenarioState) -> Script
 
 
 actions_this_turn: list[AgentAction] = []
+max_steps: int = 100 # todo make this configurable
 
 
 def main_loop():
@@ -50,7 +51,9 @@ def main_loop():
         else:
             simulate_one_step(actions_this_turn)
             actions_this_turn.clear()
-            # todo check for scenario end conditions
+            if SCENARIO_STATE.current_step == max_steps:
+                SCENARIO_STATE.running = False
+                print("Scenario has ended after reaching the maximum number of steps.")
 
 
 # takes the narrated general scenario state and the last action of the agent, as well as their location, and returns a narration for the agent
