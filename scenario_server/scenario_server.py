@@ -8,7 +8,7 @@ from anthropic import Client
 from pydantic import BaseModel
 
 from scenario_server.main import SCENARIO_STATE, SCRIPTED_EVENTS
-from scenario_server.narration import narrate_state, generate_agent_event
+from scenario_server.narration import narrate_state, generate_agent_event, narrate_agent_state
 from scenario_server.scenario import ScriptedEvent, ScenarioState
 
 
@@ -36,7 +36,7 @@ def process_action(action: AgentAction, scenario_state: ScenarioState) -> Script
 
 
 actions_this_turn: list[AgentAction] = []
-max_steps: int = 100 # todo make this configurable
+max_steps: int = 100  # todo make this configurable
 
 
 def main_loop():
@@ -56,15 +56,10 @@ def main_loop():
                 print("Scenario has ended after reaching the maximum number of steps.")
 
 
-# takes the narrated general scenario state and the last action of the agent, as well as their location, and returns a narration for the agent
-def narrate_agent_state(general_state_narrated: str, agent: str, agent_location: str) -> str:
-    # todo!
-    pass
-
-
 def simulate_one_step(actions: list[AgentAction]):
     # first, process agent actions
-    agent_events: list[ScriptedEvent] = [process_action(action, SCENARIO_STATE) for action in actions] # todo only create events when action type is action
+    agent_events: list[ScriptedEvent] = [process_action(action, SCENARIO_STATE) for action in
+                                         actions]  # todo only create events when action type is action
     # todo log agent_events
     # trigger agent events
     SCENARIO_STATE.apply_events(agent_events)
@@ -78,11 +73,14 @@ def simulate_one_step(actions: list[AgentAction]):
     # generate current state narration for each agent
     general_state_narrated = narrate_state(SCENARIO_STATE, all_events_triggered_this_round, anthropic_client)
 
-    agent_narrations = {} # dict of narration string by agent_name
+    agent_narrations = {}  # dict of narration string by agent_name
     for agent_name in REGISTERED_AGENTS:
-        agent_narrations[agent_name] = narrate_agent_state(general_state_narrated, agent_name, ) # todo get agent location from scenario state
+        agent_location = ""  # todo get agent location from scenario state
+        location_state = SCENARIO_STATE.locations.get(agent_location)
+        agent_narrations[agent_name] = narrate_agent_state(general_state_narrated, location_state, agent_name,
+                                                           agent_location, anthropic_client)
 
-    # fifth, send narration to agents
+        # fifth, send narration to agents
     for agent_name in REGISTERED_AGENTS:
         agent_url = REGISTERED_AGENTS[
                         agent_name].base_url + "/scenario/roundnarration"

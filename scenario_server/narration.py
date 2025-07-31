@@ -27,6 +27,32 @@ def narrate_state(
     return response.content
 
 
+# takes the narrated general scenario state and the last action of the agent, as well as their location, and returns a narration for the agent
+def narrate_agent_state(general_state_narrated: str,
+                        location_state: dict,
+                        agent: str,
+                        agent_location: str,
+                        anthropic_client,
+                        model: str = "claude-sonnet-4-20250514",
+                        max_tokens: int = 5000) -> str:
+    prompt = {"role": "user",
+              "content": f"Please provide a concise, vivid narrative of the simulation state, specifically for agent {agent}," +
+                         f" who is currently in the following location: {agent_location}. " +
+                         f"Here is the current general simulation state, already narrated:\n" +
+                         f"{general_state_narrated}\n\n" +
+                         f"Here is the scenario state for the location that the agent is currently in ({agent_location}):\n" +
+                         "\n{location_state.model_dump_json()}\n\n" +
+                         "Please include any relevant details about the agent's surroundings, current situation, and any " +
+                         "actions they have taken recently, but make sure not to mention anything that the agent could not reasonably know."}
+
+    response = anthropic_client.messages.create(
+        model=model,
+        messages=[prompt],
+        max_tokens=max_tokens,
+    )
+    return response.content
+
+
 def generate_agent_event(
         agent_action: AgentAction,
         state: ScenarioState,
