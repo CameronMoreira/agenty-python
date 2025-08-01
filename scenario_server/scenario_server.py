@@ -72,6 +72,7 @@ def simulate_one_step(actions: list[AgentAction]):
 
     # generate current state narration for each agent
     general_state_narrated = narrate_state(SCENARIO_STATE, all_events_triggered_this_round, anthropic_client)
+    # todo potentially log the general state narration
 
     agent_narrations = {}  # dict of narration string by agent_name
     for agent_name in REGISTERED_AGENTS:
