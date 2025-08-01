@@ -2,6 +2,7 @@ import json
 import os
 import pickle
 import sys
+import time
 
 import requests
 
@@ -10,7 +11,7 @@ from llm import run_inference
 GROUP_CHAT_API_URL = os.getenv("GROUP_CHAT_API_URL") or "http://127.0.0.1:5000"
 GROUP_CHAT_MESSAGES_ENDPOINT = GROUP_CHAT_API_URL + "/messages"
 
-ROBOT_EXTERNALS_URL = os.getenv("ROBOT_EXTERNALS_URL") or "http://127.0.0.1:8085"
+ROBOT_EXTERNALS_URL = os.getenv("EXTERNAL_SYSTEMS_BASE_URL") or "http://127.0.0.1:8085"
 REGISTER_EXTERNALS_ENDPOINT = ROBOT_EXTERNALS_URL + "/register"
 DO_ACTION_ENDPOINT = ROBOT_EXTERNALS_URL + "/action"
 
@@ -180,11 +181,13 @@ def get_agent_turn_delay_in_ms(number_of_agents: int = 1, ms_per_additional_agen
     return (number_of_agents - 1) * ms_per_additional_agent
 
 
-def register_agent(agent_name: str, agent_base_url: str):
+def register_agent(agent_name: str, agent_index: int):
     """Register the agent with its external systems."""
+    # sleep for 10 seconds to allow the external systems to be ready
+    time.sleep(10)
     try:
         response = requests.post(REGISTER_EXTERNALS_ENDPOINT,
-                                 json={"agent": agent_name, "base_url": agent_base_url})
+                                 json={"agent": agent_name, "agent_index": agent_index})
         if response.status_code == 200:
             print(f"\033[92mAgent {agent_name} successfully registered\033[0m")
         else:
@@ -195,7 +198,8 @@ def register_agent(agent_name: str, agent_base_url: str):
 
 def propagate_action_to_external_systems(agent_name: str, action_type: str, action: str):
     try:
-        response = requests.post(DO_ACTION_ENDPOINT, json={"agent": agent_name, "action_type": action_type, "action": action})
+        response = requests.post(DO_ACTION_ENDPOINT,
+                                 json={"agent": agent_name, "action_type": action_type, "action": action})
         if response.status_code == 200:
             print(f"\033[92mAction propagated to external systems for agent {agent_name}\033[0m")
         else:

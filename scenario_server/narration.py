@@ -24,7 +24,7 @@ def narrate_state(
         messages=[prompt],
         max_tokens=max_tokens,
     )
-    return response.content
+    return response.content[0].text
 
 
 # takes the narrated general scenario state and the last action of the agent, as well as their location, and returns a narration for the agent
@@ -50,7 +50,7 @@ def narrate_agent_state(general_state_narrated: str,
         messages=[prompt],
         max_tokens=max_tokens,
     )
-    return response.content
+    return response.content[0].text
 
 
 def generate_agent_event(
@@ -83,4 +83,4 @@ def generate_agent_event(
         ],
         max_tokens=max_tokens,
     )
-    return response.content
+    return response.content[0].text

@@ -28,11 +28,12 @@ def get_new_message(is_team_mode: bool, consecutive_tool_count: list, read_user_
 
 
 class Agent:
-    def __init__(self, agent_name: str, llm_client, team_mode: bool, base_url: str, turn_delay=0):
+    def __init__(self, agent_name: str, llm_client, team_mode: bool, base_url: str, agent_index = 1, turn_delay=0):
         self.llm_client = llm_client
         self.tools = get_tool_list(team_mode)
         self.is_team_mode = team_mode
         self.base_url = base_url
+        self.agent_index = agent_index
         self.read_user_input = not team_mode  # initialise to True if not in team mode
         # Initialize counter for tracking consecutive tool calls without human interaction
         self.consecutive_tool_count = 0
@@ -90,7 +91,7 @@ class Agent:
 
     def run(self):
         # register with the robot's external systems
-        register_agent(self.name, self.base_url)
+        register_agent(self.name, self.agent_index)
 
         # Try to load saved conversation context
         conversation = load_conversation()
@@ -112,8 +113,6 @@ class Agent:
 
         # Set the global conversation context reference
         set_conversation_context(conversation)
-
-        # todo get initial narration from scenario server
 
         # main agent loop; every loop is one "step"
         while True:
@@ -138,7 +137,7 @@ class Agent:
             tool_results = []
 
             action_type: str = "nothing"
-            action = "nothing"
+            action: str = "nothing"
 
             # print assistant text and collect any tool calls
             for block in response_content:
@@ -153,7 +152,10 @@ class Agent:
                     # If the tool call is the "take action" tool, we deal with it separately
                     if tool_name == "take_action":
                         action_type = "action"
-                        action = block.input
+                        action = block.input["action"]
+
+                    print(f"\033[93m{self.name}\033[0m: Tool call: {tool_name} with input {block.input}")
+
                     result = execute_tool(self.tools, tool_name, block.input)
                     tool_results.append({
                         "type": "tool_result",

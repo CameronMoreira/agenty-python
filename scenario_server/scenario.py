@@ -36,6 +36,9 @@ class ScenarioState(BaseModel):
             triggered = self._process_event(event)
             if triggered:
                 triggered_events.append(event)
+            if len(triggered_events) >= 5:
+                # Limit to 5 events per step to avoid overwhelming the system
+                break
 
         return triggered_events
 

@@ -11,7 +11,7 @@ app = FastAPI()
 
 class RegisterAgentRequest(BaseModel):
     agent: str
-    base_url: str
+    agent_index: int
 
 
 @app.post("/register")
@@ -19,7 +19,9 @@ def register_agent(request: RegisterAgentRequest):  # agents need to call this o
     agent_name = request.agent
     if agent_name in REGISTERED_AGENTS:
         raise HTTPException(status_code=400, detail="Agent already registered")
-    REGISTERED_AGENTS[agent_name] = Agent(name=request.agent, base_url=request.base_url)
+    agent_base_url = f"http://agents-agent-{request.agent_index}:8000"
+    REGISTERED_AGENTS[agent_name] = Agent(name=request.agent, base_url=agent_base_url)
+    print(f"\033[92mAgent '{agent_name}' registered successfully at {agent_base_url}\033[0m")
     return {"Registration successful"}
 
 
@@ -36,8 +38,8 @@ def start_uvicorn_app(host: str, port: int):
 
 def start_api():
     """Start the API server in the background"""
-    host = "127.0.0.1"  # todo make this configurable
-    port = 8085
+    host = "0.0.0.0"
+    port = 8000
     api_thread = threading.Thread(target=start_uvicorn_app, args=(host, port), daemon=True)
     api_thread.start()
     print(f"\033[92mAPI server has been started and is available at {host}:{port}/\033[0m")

@@ -7,6 +7,7 @@ Deploys an agent team running in Docker.
 Usage: $0
    [ -l | --with-group-work-log ] Activates the group work log.
    [ -o | --with-oversight-officer ] Activates the oversight officer.
+   [ -s | --with-scenario_server ] Activates the scenario server.
    [ -R | --remote-repo ] Remote repository (either a bare repo, if directory, or a URL to clone).
    [ -T | --team-config ] Team configuration file (default: ./team-config.json).
    [ -h | --help ] Show help.
@@ -62,23 +63,6 @@ done
 >&2 echo "REMOTE_REPO=${REMOTE_REPO}"
 >&2 echo "TEAM_CONFIG=${TEAM_CONFIG}"
 
-# Create bare, if not provided
-if [ -z "$REMOTE_REPO" ]; then
-  REMOTE_REPO="$(pwd)/agents_git_remote_tmp"
-  git init --bare "$REMOTE_REPO/.git"
-fi
-
-# Clone, if not a directory
-if [ ! -d "$REMOTE_REPO" ]; then
-  git clone --bare "$REMOTE_REPO/.git" agents_git_remote_tmp
-  REMOTE_REPO="$(pwd)/agents_git_remote_tmp"
-fi
-
-# Check if the remote repository is a bare repository
-if ! git --git-dir="$REMOTE_REPO/.git" rev-parse --is-bare-repository | grep -q true; then
-  echo "Error: The repository at $REMOTE_REPO is not a bare repository."
-  exit 1
-fi
 
 # Undeploy the existing Docker containers, before volume creation
 docker compose -f "$(dirname "$0")/../docker-compose.yaml" --profile "*" down
@@ -87,9 +71,6 @@ docker compose -f "$(dirname "$0")/../docker-compose.yaml" --profile "*" down
 if docker volume inspect agents_git_remote &>/dev/null; then
   docker volume rm agents_git_remote
 fi
-
-# Create a Docker volume that binds to the remote repository
-docker volume create --opt type=none --opt o=bind --opt device="$REMOTE_REPO" agents_git_remote
 
 # Copy the team's task to the .env file
 team_task=$(jq -r '.task' $TEAM_CONFIG)

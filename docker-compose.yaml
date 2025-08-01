@@ -12,9 +12,9 @@ services:
       GROUP_CHAT_API_URL: http://group_chat:8000
       OVERSIGHT_API_BASE_URL: http://oversight_officer:8000
       WORK_LOG_BASE_URL: http://group_work_log:8000
+      EXTERNAL_SYSTEMS_BASE_URL: http://scenario_server:8000
     volumes:
       - ./team-config.json:/app/team-config.json:ro
-      - agents_git_remote:/remote:rw
 
   group_chat:
     build:
@@ -49,7 +49,3 @@ services:
     environment:
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
     profiles: [ scenario_server ]
-
-volumes:
-  agents_git_remote:
-    external: true
