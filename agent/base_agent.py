@@ -150,6 +150,10 @@ class Agent:
                     tool_name = block.name
                     action_type = f"tool call: {tool_name}"
                     action = f"tool call: {tool_name} with input {block.input}"
+                    # If the tool call is the "take action" tool, we deal with it separately
+                    if tool_name == "take_action":
+                        action_type = "action"
+                        action = block.input
                     result = execute_tool(self.tools, tool_name, block.input)
                     tool_results.append({
                         "type": "tool_result",
