@@ -28,6 +28,10 @@ while [[ $# -gt 0 ]]; do
       PROFILES+=("oversight_officer")
       shift
       ;;
+    -s | --with-scenario-server)
+          PROFILES+=("scenario_server")
+          shift
+          ;;
     -R | --remote-repo)
       REMOTE_REPO=$2
       shift 2

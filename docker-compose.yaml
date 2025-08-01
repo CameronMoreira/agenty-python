@@ -6,6 +6,7 @@ services:
       dockerfile: docker/agent.Dockerfile
     depends_on:
       - group_chat
+      - scenario_server
     environment:
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
       GROUP_CHAT_API_URL: http://group_chat:8000
@@ -40,6 +41,14 @@ services:
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
       WORK_LOG_BASE_URL: http://group_work_log:8000
     profiles: [ oversight_officer ]
+
+  scenario_server:
+    build:
+      dockerfile: docker/scenario_server.Dockerfile
+    container_name: scenario_server
+    environment:
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+    profiles: [ scenario_server ]
 
 volumes:
   agents_git_remote:
