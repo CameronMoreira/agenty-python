@@ -100,5 +100,6 @@ The easiest way to interact with the system is to import the `insomnia_collectio
 
 The collection includes pre-configured requests for:
 -   Sending and retrieving messages from the `group_chat` service (only when activated via TEAM_MODE).
+-   Communicating directly with individual agents: by default, agents are accessible on ports 8081–8088 (e.g., the first agent is usually on 8081, the second on 8082, etc.). However, this may vary depending on your setup. You can always check the actual port assignments using `docker compose ps`.
 -   Sending direct messages to a specific agent for testing.
 -   Interacting with the `scenario_server` (when it is running) (not working yet).
