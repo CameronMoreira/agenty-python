@@ -171,6 +171,19 @@ class ScenarioState:
                     # Update global supplies variable
                     target = self.variables.setdefault(key, {})
                 for item, delta in change.items():
+                    # Handle case where target might be a list instead of dict
+                    if isinstance(target, list):
+                        # Convert list to dict with count 1 for each item
+                        target_dict = {}
+                        for existing_item in target:
+                            target_dict[existing_item] = target_dict.get(existing_item, 0) + 1
+                        target = target_dict
+                        # Update the original location with the new dict structure
+                        if location and location in self.locations:
+                            self.locations[location]['supplies_at_location'][key] = target
+                        else:
+                            self.variables[key] = target
+                    # Now target is guaranteed to be a dict
                     target[item] = target.get(item, 0) + delta
             # Generic global variable or flag
             else:
@@ -220,4 +233,4 @@ if __name__ == '__main__':
     # Output final state
     final = sim.to_dict()
     print('\n=== Final Scenario State ===')
-    print(json.dumps(final, indent=2))
+    #print(json.dumps(final, indent=2))
