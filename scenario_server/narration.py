@@ -67,7 +67,18 @@ def generate_agent_event(
             {
                 "role": "user",
                 "content": f"Given the action {agent_action.model_dump_json()} and the current scenario state {state.model_dump_json()}, " +
-                           f"generate a scripted event in JSON format. Make sure you think about the implications of the action and how it affects the scenario.",
+                           f"generate a scripted event in JSON format. Make sure you think about the implications of the action and how it affects the scenario."
+                           f"This is the structure for the scripted event:\n" +
+                           """class ScriptedEvent(BaseModel):
+                            name: str
+                            description: str
+                            effect: Optional[dict[str, Any]] = None
+                            location: Optional[str] = None
+                            at_step: Optional[int] = None
+                            repeatable: bool = False
+                            probability: float = 1.0  # Default to 100% if not specified
+                            trigger_condition: Optional[str] = None
+                            has_occurred: bool = False""",
             }
         ],
         max_tokens=max_tokens,
