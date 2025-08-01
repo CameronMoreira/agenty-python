@@ -5,7 +5,15 @@
       "name": "Claude",
       "host": "http://0.0.0.0",
       "port": 8081,
-      "isCurrentAgent": true
+      "isCurrentAgent": true,
+      "silentWait": true
+    },
+    {
+      "name": "Claude2",
+      "host": "http://0.0.0.0",
+      "port": 8082,
+      "isCurrentAgent": false,
+      "silentWait": true
     }
   ]
 }
