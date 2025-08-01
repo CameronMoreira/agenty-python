@@ -1,11 +1,6 @@
 from api import start_api
-from scenario import ScenarioState, ScriptedEvent
 from scenario_server_base import main_loop
 from util import save_scenario_to_file, load_scenario_from_file, load_scripted_events_from_file
-
-SCENARIO_STATE: ScenarioState = ScenarioState()
-
-SCRIPTED_EVENTS: list[ScriptedEvent] = []  # defaults get loaded from files
 
 
 def main():

@@ -1,29 +1,16 @@
 import json
 import os
 import time
-from typing import Any
 
 import requests
 from anthropic import Client
-from pydantic import BaseModel
 
-from main import SCENARIO_STATE, SCRIPTED_EVENTS
+from classes import SCENARIO_STATE, SCRIPTED_EVENTS, Agent, AgentAction
 from narration import narrate_state, generate_agent_event, narrate_agent_state
 from scenario import ScriptedEvent, ScenarioState
 
-
-class AgentAction(BaseModel):
-    agent: str
-    action_type: str
-    payload: dict[str, Any]
-
-
-class Agent(BaseModel):
-    name: str
-    base_url: str  # e.g. "http://localhost:8000"
-
-
 REGISTERED_AGENTS: dict[str, Agent] = {}
+EXPECTED_AGENTS: int = 2
 
 anthropic_client = Client(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
@@ -42,11 +29,16 @@ max_steps: int = 50  # todo make this configurable
 def main_loop():
     sleep_time_seconds = 3
     current_step = 0
+    while len(REGISTERED_AGENTS) < EXPECTED_AGENTS:
+        print(f"Waiting for all agents to register... ({len(REGISTERED_AGENTS)}/{EXPECTED_AGENTS})")
+        time.sleep(sleep_time_seconds)
 
+    SCENARIO_STATE.running = True
     while SCENARIO_STATE.running:
         # Wait for all agents to submit their actions
         if actions_this_turn.count != len(REGISTERED_AGENTS):
             # If not all agents have submitted actions, wait (after which we check again)
+            print(f"Waiting for all agents to submit actions... ({len(actions_this_turn)}/{len(REGISTERED_AGENTS)})")
             time.sleep(sleep_time_seconds)
             continue
         else:
@@ -60,6 +52,7 @@ def main_loop():
 
 
 def simulate_one_step(actions: list[AgentAction]):
+    print(f"Simulating step {SCENARIO_STATE.step} with actions from all agents...")
     # first, process agent actions
     agent_events: list[ScriptedEvent] = []
     for action in actions:

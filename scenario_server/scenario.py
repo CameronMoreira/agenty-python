@@ -23,6 +23,7 @@ class ScenarioState(BaseModel):
     variables: dict[str, Any] = {}
     event_log: list[dict[str, Any]] = []
     step: Optional[int] = None
+    running: bool = False
 
     def apply_events(self, events: list[ScriptedEvent]) -> list[ScriptedEvent]:
         """
