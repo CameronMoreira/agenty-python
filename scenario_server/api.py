@@ -4,8 +4,7 @@ import uvicorn
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
-from scenario_server.main import SCENARIO_STATE
-from scenario_server.scenario_server import REGISTERED_AGENTS, AgentAction, actions_this_turn, Agent
+from scenario_server_base import REGISTERED_AGENTS, AgentAction, actions_this_turn, Agent
 
 app = FastAPI()
 
@@ -21,7 +20,6 @@ def register_agent(request: RegisterAgentRequest):  # agents need to call this o
     if agent_name in REGISTERED_AGENTS:
         raise HTTPException(status_code=400, detail="Agent already registered")
     REGISTERED_AGENTS[agent_name] = Agent(name=request.agent, base_url=request.base_url)
-    SCENARIO_STATE.locations.setdefault("start", []).append(agent_name)
     return {"Registration successful"}
 
 

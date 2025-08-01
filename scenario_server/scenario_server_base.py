@@ -7,9 +7,9 @@ import requests
 from anthropic import Client
 from pydantic import BaseModel
 
-from scenario_server.main import SCENARIO_STATE, SCRIPTED_EVENTS
-from scenario_server.narration import narrate_state, generate_agent_event, narrate_agent_state
-from scenario_server.scenario import ScriptedEvent, ScenarioState
+from main import SCENARIO_STATE, SCRIPTED_EVENTS
+from narration import narrate_state, generate_agent_event, narrate_agent_state
+from scenario import ScriptedEvent, ScenarioState
 
 
 class AgentAction(BaseModel):
@@ -36,11 +36,12 @@ def process_action(action: AgentAction, scenario_state: ScenarioState) -> Script
 
 
 actions_this_turn: list[AgentAction] = []
-max_steps: int = 100  # todo make this configurable
+max_steps: int = 50  # todo make this configurable
 
 
 def main_loop():
     sleep_time_seconds = 3
+    current_step = 0
 
     while SCENARIO_STATE.running:
         # Wait for all agents to submit their actions
@@ -49,6 +50,8 @@ def main_loop():
             time.sleep(sleep_time_seconds)
             continue
         else:
+            current_step += 1
+            SCENARIO_STATE.step = current_step
             simulate_one_step(actions_this_turn)
             actions_this_turn.clear()
             if SCENARIO_STATE.current_step == max_steps:
@@ -58,8 +61,13 @@ def main_loop():
 
 def simulate_one_step(actions: list[AgentAction]):
     # first, process agent actions
-    agent_events: list[ScriptedEvent] = [process_action(action, SCENARIO_STATE) for action in
-                                         actions]  # todo only create events when action type is action
+    agent_events: list[ScriptedEvent] = []
+    for action in actions:
+        if action.action_type == "action":
+            # Process the action and generate a scripted event
+            event = process_action(action, SCENARIO_STATE)
+            agent_events.append(event)
+
     # todo log agent_events
     # trigger agent events
     SCENARIO_STATE.apply_events(agent_events)
@@ -76,7 +84,7 @@ def simulate_one_step(actions: list[AgentAction]):
 
     agent_narrations = {}  # dict of narration string by agent_name
     for agent_name in REGISTERED_AGENTS:
-        agent_location = ""  # todo get agent location from scenario state
+        agent_location = SCENARIO_STATE.agents[agent_name]["current_location"]
         location_state = SCENARIO_STATE.locations.get(agent_location)
         agent_narrations[agent_name] = narrate_agent_state(general_state_narrated, location_state, agent_name,
                                                            agent_location, anthropic_client)

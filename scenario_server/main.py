@@ -1,23 +1,19 @@
-from scenario_server.api import start_api
-from scenario_server.scenario import ScenarioState, ScriptedEvent
-from scenario_server.scenario_server import main_loop
-from scenario_server.util import load_defaults, save_scenario_to_file
+from api import start_api
+from scenario import ScenarioState, ScriptedEvent
+from scenario_server_base import main_loop
+from util import save_scenario_to_file, load_scenario_from_file, load_scripted_events_from_file
 
-SCENARIO_STATE = ScenarioState( # actual scenario gets loaded from file
-    step=0,
-    time=0.0,
-    variables={},
-    locations={},
-    event_log=[]
-)
+SCENARIO_STATE: ScenarioState = ScenarioState()
 
-SCRIPTED_EVENTS: list[ScriptedEvent] = [] # defaults get loaded from files
+SCRIPTED_EVENTS: list[ScriptedEvent] = []  # defaults get loaded from files
 
 
 def main():
+    global SCENARIO_STATE, SCRIPTED_EVENTS
     # Initialize the scenario state and scripted events
     print("Loading scenario data from files...")
-    load_defaults(SCENARIO_STATE, SCRIPTED_EVENTS)
+    SCENARIO_STATE = load_scenario_from_file()
+    SCRIPTED_EVENTS = load_scripted_events_from_file()
     print("Loading finished, starting server...")
     start_api()  # Start the API server in a background thread
 

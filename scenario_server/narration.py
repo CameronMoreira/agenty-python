@@ -1,5 +1,5 @@
-from scenario_server.scenario import ScenarioState, ScriptedEvent
-from scenario_server.scenario_server import AgentAction
+from scenario import ScenarioState, ScriptedEvent
+from scenario_server_base import AgentAction
 
 
 # Here we take the current scenario state and generate a narrative description to be sent to each of the agents.

@@ -1,7 +1,7 @@
 import json
 import time
 
-from scenario_server.scenario import ScriptedEvent, ScenarioState
+from scenario import ScriptedEvent, ScenarioState
 
 
 def save_scenario_to_file(scenario_state: ScenarioState, scripted_events: list) -> None:
@@ -16,30 +16,31 @@ def save_scenario_to_file(scenario_state: ScenarioState, scripted_events: list) 
         json.dump([event.model_dump() for event in scripted_events], f, indent=4)
 
 
-def load_defaults(scenario_state: ScenarioState, scripted_events: list[ScriptedEvent]) -> None:
+def load_scenario_from_file(file_path: str = "island_simulation_state.json") -> ScenarioState:
     """
     Load initial variables and scripted events from JSON files.
     Expect two files in project root:
-      - initial_state.json
-      - scripted_events.json
+      - island_simulation_state.json
+      - island_scripted_events.json
     """
-    import json
-    # Load initial variables and locations
-    try:
-        with open("initial_state.json", "r") as f:
-            init = json.load(f)
-        scenario_state.variables = init.get("variables", {})
-        scenario_state.locations = init.get("locations", {})
-        scenario_state.step = init.get("step", scenario_state.step)
-        scenario_state.time = init.get("time", scenario_state.time)
-    except FileNotFoundError:
-        print("initial_state.json not found, using defaults")
+    # Load initial simulation state from a JSON file.
+    scenario_state = ScenarioState()
 
-    # Load scripted events
-    try:
-        with open("scripted_events.json", "r") as f:
-            events = json.load(f)
-        for ev in events:
-            scripted_events.append(ScriptedEvent(**ev))
-    except FileNotFoundError:
-        print("scripted_events.json not found, using hardcoded defaults")
+    with open(file_path) as f:
+        data = json.load(f)
+    # Index people and agents by name for quick lookup
+    scenario_state.people = {p['name']: p for p in data.get('people', [])}
+    scenario_state.agents = {a['name']: a for a in data.get('agents', [])}
+    # Index locations by name
+    scenario_state.locations = {loc['name']: loc for loc in data.get('locations', [])}
+    return scenario_state
+
+def load_scripted_events_from_file(file_path: str = "island_scripted_events.json") -> list[ScriptedEvent]:
+    # Load scripted events from a JSON file and organize them by step.
+    with open(file_path) as f:
+        data = json.load(f)
+
+    # Get all events from the scripted_events array
+    all_events = data.get('scripted_events', [])
+    scripted_events = [ScriptedEvent(**event) for event in all_events]
+    return scripted_events

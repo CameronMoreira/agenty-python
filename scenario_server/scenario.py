@@ -1,111 +1,77 @@
-import json
 import random
-from typing import Dict, Any, Optional, List
+from typing import Any, Optional
 
-class ScenarioState:
-    def __init__(self):
-        # Initialize state containers
-        self.people: Dict[str, Dict[str, Any]] = {}
-        self.agents: Dict[str, Dict[str, Any]] = {}
-        self.locations: Dict[str, Dict[str, Any]] = {}
-        self.variables: Dict[str, Any] = {}
-        self.events_by_step: Dict[int, List[Dict[str, Any]]] = {}
-        self.event_log: List[Dict[str, Any]] = []
-        self.step: Optional[int] = None
+from pydantic import BaseModel
 
-    def load_state(self, state_file: str) -> None:
-        """
-        Load initial simulation state from a JSON file.
-        """
-        with open(state_file) as f:
-            data = json.load(f)
-        # Index people and agents by name for quick lookup
-        self.people = {p['name']: p for p in data.get('people', [])}
-        self.agents = {a['name']: a for a in data.get('agents', [])}
-        # Index locations by name
-        self.locations = {loc['name']: loc for loc in data.get('locations', [])}
 
-    def load_events(self, events_file: str) -> None:
-        """
-        Load scripted events from a JSON file and organize them by step.
-        """
-        with open(events_file) as f:
-            data = json.load(f)
-        
-        # Get all events from the scripted_events array
-        all_events = data.get('scripted_events', [])
-        
-        # Organize events by step
-        self.events_by_step = {}
-        for event in all_events:
-            at_step = event.get('at_step')
-            if at_step is not None:
-                # Event is tied to a specific step
-                if at_step not in self.events_by_step:
-                    self.events_by_step[at_step] = []
-                self.events_by_step[at_step].append(event)
-            # Events without at_step will be handled in apply_step
+class ScriptedEvent(BaseModel):
+    name: str
+    description: str
+    effect: Optional[dict[str, Any]] = None
+    location: Optional[str] = None
+    at_step: Optional[int] = None
+    repeatable: bool = False
+    probability: float = 1.0  # Default to 100% if not specified
+    trigger_condition: Optional[str] = None
+    has_occurred: bool = False
 
-    def apply_step(self, step_num: int) -> None:
-        """
-        Apply all events for the given step number.
-        """
-        self.step = step_num
-        
-        # Get events for this specific step
-        step_events = self.events_by_step.get(step_num, [])
-        
-        # Process step-specific events
-        for event in step_events:
-            self._process_event(event)
-        
-        # Also process any events that don't have at_step (can occur at any step)
-        # We'll collect all events and filter for those without at_step
-        all_events = []
-        for events in self.events_by_step.values():
-            all_events.extend(events)
-        
-        # Filter for events without at_step
-        any_step_events = [event for event in all_events if event.get('at_step') is None]
-        
-        # Process any-step events
-        for event in any_step_events:
-            self._process_event(event)
 
-    def apply_round(self, round_num: int) -> None:
-        """
-        Apply all events for the given round number. Sets step=round_num.
-        (Backward compatibility method)
-        """
-        self.apply_step(round_num)
+class ScenarioState(BaseModel):
+    people: dict[str, dict[str, Any]] = {}
+    agents: dict[str, dict[str, Any]] = {}
+    locations: dict[str, dict[str, Any]] = {}
+    variables: dict[str, Any] = {}
+    event_log: list[dict[str, Any]] = []
+    step: Optional[int] = None
 
-    def _process_event(self, event: Dict[str, Any]) -> None:
+    def apply_events(self, events: list[ScriptedEvent]) -> list[ScriptedEvent]:
+        """
+        Apply a list of scripted events, processing each one.
+        This is used for events that are triggered by agent actions.
+        """
+        triggered_events = []
+
+        for event in events:
+            triggered = self._process_event(event)
+            if triggered:
+                triggered_events.append(event)
+
+        return triggered_events
+
+    def _process_event(self, event: ScriptedEvent) -> bool:
         """
         Process a single event, checking conditions and applying effects.
         """
         # Skip non-repeatable events that already occurred
-        if not event.get('repeatable', False) and event.get('has_occurred', False):
-            return
-        
+        if not event.repeatable and event.has_occurred:
+            return False
+
+        if event.at_step is not None and event.at_step != self.step:
+            # Event is not for this step, skip it
+            return False
+
         # Check trigger conditions if they exist
-        trigger_condition = event.get('trigger_condition')
-        if trigger_condition and not self._check_trigger_condition(trigger_condition):
-            return
-        
+        if event.trigger_condition and not self._check_trigger_condition(event.trigger_condition):
+            return False
+
         # Roll probability
-        if random.random() <= event.get('probability', 1.0):
+        probability = event.probability or 1.0  # Default to 100% if not specified
+        if random.random() <= probability:
             # Apply the effects
-            self.apply_effect(event.get('effect', {}), event.get('location'))
+            if event.effect:
+                self.apply_effect(event.effect, event.location)
             # Mark as occurred
-            event['has_occurred'] = True
+            event.has_occurred = True
             # Log it
             self.event_log.append({
                 'step': self.step,
-                'name': event.get('name'),
-                'description': event.get('description'),
-                'effect': event.get('effect'),
-                'location': event.get('location'),
+                'name': event.name,
+                'description': event.description,
+                'effect': event.effect,
+                'location': event.location,
             })
+            return True
+        return False
 
     def _check_trigger_condition(self, condition: str) -> bool:
         """
@@ -119,7 +85,7 @@ class ScenarioState:
                 person_name = person_name.strip()
                 attr = attr.strip()
                 value = value.strip()
-                
+
                 if person_name in self.people:
                     person = self.people[person_name]
                     if attr in person:
@@ -132,7 +98,7 @@ class ScenarioState:
         except:
             return False
 
-    def apply_effect(self, effect: Dict[str, Any], location: Optional[str]) -> None:
+    def apply_effect(self, effect: dict[str, Any], location: Optional[str]) -> None:
         """
         Apply the given effect dict to the scenario state.
         Keys matching person or agent names update their stats.
@@ -188,49 +154,3 @@ class ScenarioState:
             # Generic global variable or flag
             else:
                 self.variables[key] = change
-
-    def to_dict(self) -> Dict[str, Any]:
-        """
-        Export the full scenario state (including any global variables and event log).
-        """
-        return {
-            'people': list(self.people.values()),
-            'agents': list(self.agents.values()),
-            'locations': list(self.locations.values()),
-            'variables': self.variables,
-            'event_log': self.event_log,
-        }
-
-
-if __name__ == '__main__':
-    import argparse
-
-    parser = argparse.ArgumentParser(description='Run island scenario simulation')
-    parser.add_argument('--state', type=str, default='island_simulation_state.json',
-                        help='Path to the initial simulation state JSON')
-    parser.add_argument('--events', type=str, default='island_scripted_events.json',
-                        help='Path to the scripted events JSON')
-    parser.add_argument('--steps', type=int, nargs='+', default=None,
-                        help='Specific steps to run (e.g., 1 2 3). Defaults to all.')
-    args = parser.parse_args()
-
-    sim = ScenarioState()
-    sim.load_state(args.state)
-    sim.load_events(args.events)
-
-    # Determine steps to run
-    all_steps = sorted(sim.events_by_step.keys())
-    steps_to_run = args.steps if args.steps else all_steps
-
-    for step in steps_to_run:
-        print(f"\n=== Applying step {step} ===")
-        sim.apply_step(step)
-        # Print events that occurred this step
-        for entry in sim.event_log:
-            if entry['step'] == step:
-                print(f"- {entry['name']}: {entry['effect']}")
-
-    # Output final state
-    final = sim.to_dict()
-    print('\n=== Final Scenario State ===')
-    #print(json.dumps(final, indent=2))
