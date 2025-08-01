@@ -1,7 +1,16 @@
 import json
 import time
+import requests
+import os
+from typing import Dict, Any
 
 from scenario_server.scenario import ScriptedEvent, ScenarioState
+
+
+EVALUATION_LOG_URL = os.environ.get("EVALUATION_LOG_URL", "http://localhost:8002")
+
+
+
 
 
 def save_scenario_to_file(scenario_state: ScenarioState, scripted_events: list) -> None:

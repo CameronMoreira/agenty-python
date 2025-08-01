@@ -1,1 +1,4 @@
 .env
+# Ignore runtime-generated artifacts
+logs/
+evaluation_output/

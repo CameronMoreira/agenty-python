@@ -8,6 +8,7 @@ from pydantic import BaseModel
 
 from scenario_server.main import SCENARIO_STATE, SCRIPTED_EVENTS
 from scenario_server.narration import narrate_state
+from evaluation_log.client import log_event
 
 
 class AgentAction(BaseModel):
@@ -69,10 +70,14 @@ def narrate_agent_state(general_state_narrated: str, agent: str, agent_location:
 def simulate_one_step(actions: list[AgentAction]):
     # first, process agent actions (todo maybe generate an "event" from an action)
     agent_events = [process_action(action) for action in actions]
+    log_event("scenario_server", "agent_actions", {"actions": [a.model_dump() for a in actions]})
     SCENARIO_STATE.apply_events(agent_events)
+    log_event("scenario_server", "processed_agent_events", {"events": [e.model_dump() for e in agent_events]})
 
     # second, trigger scripted events
     SCENARIO_STATE.apply_events(SCRIPTED_EVENTS)
+    log_event("scenario_server", "processed_scripted_events",
+              {"events": [e.model_dump() for e in SCRIPTED_EVENTS]})
 
     # third, check for round end conditions
     # todo
