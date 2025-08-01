@@ -2,9 +2,11 @@
 import datetime
 import time
 import traceback
+import uuid
 
 import util
 from agent_work_log import send_work_log
+from evaluation_log.client import log_event
 from context_handling import (set_conversation_context, load_conversation,
                               get_all_from_message_queue, add_to_message_queue)
 from llm import run_inference
@@ -48,6 +50,9 @@ class Agent:
         self.log_every_n_steps = 10  # Default: Send log every 10 steps
 
         self.token_limit: int = 50_000
+        self.conversation_id = str(uuid.uuid4())
+        self.turn_id = 0
+        self.run_condition = "multi-agent" if team_mode else "single-agent"
 
     def check_and_send_work_log(self, conversation):
         """Checks if a work log should be sent and sends it if necessary."""
@@ -117,6 +122,7 @@ class Agent:
 
         # main agent loop; every loop is one "step"
         while True:
+            self.turn_id += 1
             # Wait for external systems to respond before proceeding to the next step
             while not util.RECEIVED_EXTERNAL_SYSTEMS_RESPONSE:
                 time.sleep(1)
@@ -131,6 +137,15 @@ class Agent:
             self.consecutive_tool_count = tool_count_object[0]
             if message is not None:
                 conversation.append(message)
+                log_event(
+                    source="user",
+                    log_type="user_message",
+                    payload={"content": message["content"]},
+                    agent_name=self.name,
+                    conversation_id=self.conversation_id,
+                    turn_id=self.turn_id,
+                    run_condition=self.run_condition
+                )
 
             response_content, token_usage = run_inference(conversation, self.llm_client, self.tools,
                                                           self.consecutive_tool_count,
@@ -146,16 +161,19 @@ class Agent:
                     print(f"\033[93m{self.name}\033[0m: {block.text}")
                     action = f"internal thought: {block.text}"
                     action_type = "internal thought"
+                    log_event("agent", "assistant_message", {"text": block.text}, self.name, conversation_id=self.conversation_id, turn_id=self.turn_id, run_condition=self.run_condition)
                 elif block.type == "tool_use":
                     tool_name = block.name
                     action_type = f"tool call: {tool_name}"
                     action = f"tool call: {tool_name} with input {block.input}"
                     result = execute_tool(self.tools, tool_name, block.input)
+                    log_event("agent", "tool_call", {"tool_name": tool_name, "tool_input": block.input}, self.name, conversation_id=self.conversation_id, turn_id=self.turn_id, run_condition=self.run_condition)
                     tool_results.append({
                         "type": "tool_result",
                         "tool_use_id": block.id,
                         "content": result
                     })
+                    log_event("agent", "tool_result", {"tool_name": tool_name, "tool_output": result}, self.name, conversation_id=self.conversation_id, turn_id=self.turn_id, run_condition=self.run_condition)
 
             # 2) First, append the assistant's own message (including its tool_use blocks!)
             conversation.append({
