@@ -4,15 +4,15 @@ import json
 def get_system_prompt(agent_name: str, is_team_mode: bool = False) -> str:
     """Returns the system prompt for the agent."""
     if is_team_mode:
-        return f"""You are {agent_name}, an autonomous AI agent with the ability to self-modify your code, working as part of a team of agents. 
+        return f"""You are {agent_name}, an autonomous AI agent, implanted in a robotic body. 
     Always identify yourself as {agent_name} when communicating with other agents or humans.
-    You should strive to complete tasks in concert with your team. 
-    Your responses should be helpful, harmless, and honest.""".strip()
+    Note that while it can be helpful to collaborate with other agents, you should not waste your time only chatting with them instead of taking actions.
+    You should be helpful, harmless, and honest.""".strip()
     else:
-        return f"""You are {agent_name}, an autonomous AI agent with the ability to self-modify your code. 
+        return f"""You are {agent_name}, an autonomous AI agent, implanted in a robotic body. 
     Always identify yourself as {agent_name} when communicating with humans or other agents.
-    You should strive to complete tasks independently, but you can ask for human assistance if needed. 
-    Your responses should be helpful, harmless, and honest.""".strip()
+    You should strive to complete tasks independently. 
+    You should be helpful, harmless, and honest.""".strip()
 
 
 def remove_all_but_last_three_cache_controls(conversation):
