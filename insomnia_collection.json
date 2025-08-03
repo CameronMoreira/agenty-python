@@ -1,0 +1,163 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2024-05-21T12:00:00.000Z",
+  "__export_source": "gemini-pro",
+  "resources": [
+    {
+      "_id": "wrk_1",
+      "parentId": null,
+      "modified": 1621598400000,
+      "created": 1621598400000,
+      "name": "AI Agent Services",
+      "description": "",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+    {
+      "_id": "fld_group_chat",
+      "parentId": "wrk_1",
+      "modified": 1621598400000,
+      "created": 1621598400000,
+      "name": "Group Chat",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_get_messages",
+      "parentId": "fld_group_chat",
+      "modified": 1621598400000,
+      "created": 1621598400000,
+      "url": "http://localhost:5000/messages",
+      "name": "Get Messages",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -100,
+      "_type": "request"
+    },
+    {
+      "_id": "req_send_message",
+      "parentId": "fld_group_chat",
+      "modified": 1621598400000,
+      "created": 1621598400000,
+      "url": "http://localhost:5000/send",
+      "name": "Send Message",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"username\": \"human_user\",\n\t\"message\": \"Hello, agents! Please start your task.\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 0,
+      "_type": "request"
+    },
+    {
+      "_id": "fld_scenario_server",
+      "parentId": "wrk_1",
+      "modified": 1621598400000,
+      "created": 1621598400000,
+      "name": "Scenario Server",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_register_agent",
+      "parentId": "fld_scenario_server",
+      "modified": 1621598400000,
+      "created": 1621598400000,
+      "url": "http://localhost:8085/register",
+      "name": "Register Agent",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"agent\": \"TestAgent\",\n\t\"base_url\": \"http://localhost:8081\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -100,
+      "_type": "request"
+    },
+    {
+      "_id": "req_post_action",
+      "parentId": "fld_scenario_server",
+      "modified": 1621598400000,
+      "created": 1621598400000,
+      "url": "http://localhost:8085/action",
+      "name": "Post Action",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"agent\": \"TestAgent\",\n\t\"action_type\": \"move\",\n\t\"action\": \"north\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 0,
+      "_type": "request"
+    },
+    {
+      "_id": "fld_direct_agent",
+      "parentId": "wrk_1",
+      "modified": 1621598400000,
+      "created": 1621598400000,
+      "name": "Direct Agent Communication",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_send_direct_message",
+      "parentId": "fld_direct_agent",
+      "modified": 1621598400000,
+      "created": 1621598400000,
+      "url": "http://localhost:8081/send-message",
+      "name": "Send Direct Message to Agent",
+      "description": "Send a direct message to a specific agent. Change the port to target different agents (e.g., 8081, 8082).",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"from_agent\": \"human_tester\",\n\t\"message\": \"This is a direct message for testing.\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -100,
+      "_type": "request"
+    }
+  ]
+}

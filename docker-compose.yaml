@@ -13,8 +13,15 @@ services:
       OVERSIGHT_API_BASE_URL: http://oversight_officer:8000
       WORK_LOG_BASE_URL: http://group_work_log:8000
       EXTERNAL_SYSTEMS_BASE_URL: http://scenario_server:8000
+      TEAM_MODE: "false"
+      # TODO: remove this once the scenario server is ready
+      DEV_MODE: "true"
+    ports:
+      - "8081-8088:8000"
     volumes:
       - ./team-config.json:/app/team-config.json:ro
+      - agents_git_remote:/remote:rw
+      - ./evaluation_output/logs:/app/evaluation_logs:rw
 
   group_chat:
     build:

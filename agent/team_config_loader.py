@@ -5,14 +5,15 @@ from typing import List, Optional
 
 
 class AgentConfig:
-    def __init__(self, name: str, host: str, port: int, is_current_agent: bool):
+    def __init__(self, name: str, host: str, port: int, is_current_agent: bool, silent_wait: bool):
         self.name = name
         self.host = host
         self.port = port
         self.is_current_agent = is_current_agent
+        self.silent_wait = silent_wait
 
     def __str__(self):
-        return f"AgentConfig(name={self.name}, host={self.host}, port={self.port}, is_current_agent={self.is_current_agent})"
+        return f"AgentConfig(name={self.name}, host={self.host}, port={self.port}, is_current_agent={self.is_current_agent}, silent_wait={self.silent_wait})"
 
 
 class TeamConfig:
@@ -64,6 +65,7 @@ def load_team_config(
 
         for agent_index, agent_data in enumerate(config_data.get('agents', [])):
             is_current_agent = agent_data.get('isCurrentAgent', False)
+            silent_wait = agent_data.get('silentWait', False)
 
             if docker_mode and docker_agent_index is not None:
                 # Override isCurrentAgent in Docker mode using the docker_agent_index
@@ -72,7 +74,9 @@ def load_team_config(
             host = agent_data.get('host', '127.0.0.1')
             if docker_mode and docker_host_base is not None:
                 # Override host in Docker mode using the docker_host_base for other agents
-                host = f"{docker_host_base}-{agent_index + 1}" if not is_current_agent else "0.0.0.0"
+                #host = f"{docker_host_base}-{agent_index + 1}" if not is_current_agent else "0.0.0.0"
+                # TODO: for DEV only, we should use 0.0.0.0 for all agents to test sending messages directly
+                host = "0.0.0.0"
 
             # Always use port 8000 for the current agent in Docker mode, otherwise use the specified port
             port = 8000 if docker_mode else agent_data.get('port', 8081)
@@ -82,6 +86,7 @@ def load_team_config(
                 name=agent_data.get('name', 'Claude'),
                 host=host,
                 port=port,
+                silent_wait=silent_wait,
             ))
 
         team_config = TeamConfig(agent_configs)

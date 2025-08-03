@@ -3,8 +3,10 @@ import os
 import pickle
 import sys
 import time
+from typing import Dict, Any
 
 import requests
+from datetime import datetime, timezone
 
 from llm import run_inference
 
@@ -19,10 +21,41 @@ WORK_LOG_BASE_URL = os.getenv("WORK_LOG_BASE_URL") or "http://127.0.0.1:8082"
 GROUP_WORK_LOG_SUMMARIES_ENDPOINT = WORK_LOG_BASE_URL + "/summaries"
 LAST_SUMMARY_TIMESTAMP = None
 
+EVALUATION_LOG_DIR = os.environ.get("EVALUATION_LOG_DIR", "/app/evaluation_logs")
+EVALUATION_LOG_FILE = os.path.join(EVALUATION_LOG_DIR, "evaluation_log.jsonl")
+
 # Flag to indicate if we have received a response from external systems in the current round
 # This is used to ensure the agent waits for external systems to respond before proceeding
 RECEIVED_EXTERNAL_SYSTEMS_RESPONSE: bool = True
 
+
+def log_event(source: str, log_type: str, payload: Dict[str, Any], agent_name: str = None,
+              metadata: Dict[str, Any] = None, conversation_id: str = None, turn_id: int = None,
+              run_condition: str = None):
+    """Saves a structured event to the evaluation log file."""
+    timestamp = datetime.now(timezone.utc).isoformat()
+    log_entry = {
+        "source": source,
+        "log_type": log_type,
+        "timestamp": timestamp,
+        "agent_name": agent_name,
+        "payload": payload,
+        "metadata": metadata,
+        "conversation_id": conversation_id,
+        "turn_id": turn_id,
+        "run_condition": run_condition,
+    }
+
+    try:
+        os.makedirs(EVALUATION_LOG_DIR, exist_ok=True)
+        with open(EVALUATION_LOG_FILE, "a") as f:
+            f.write(json.dumps(log_entry) + "\n")
+        return True
+    except IOError as e:
+        error_message = f"Error writing evaluation event to file: {e}"
+        log_error(error_message)
+        return False
+    
 
 def check_for_agent_restart(conversation) -> bool:
     agent_initiated_restart = False
