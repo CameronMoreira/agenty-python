@@ -33,6 +33,7 @@ def narrate_state(
 # takes the narrated general scenario state and the last action of the agent, as well as their location, and returns a narration for the agent
 def narrate_agent_state(general_state_narrated: str,
                         location_state: dict,
+                        events_this_round: list[ScriptedEvent],
                         agent: str,
                         agent_location: str,
                         anthropic_client,
@@ -45,8 +46,10 @@ def narrate_agent_state(general_state_narrated: str,
                          f"{general_state_narrated}\n\n" +
                          f"Here is the scenario state for the location that the agent is currently in ({agent_location}):\n" +
                          f"\n{location_state}\n\n" +
-                         "Please include any relevant details about the agent's surroundings, current situation, and any " +  # todo add recent events
-                         "actions they have taken recently, but make sure not to mention anything that the agent could not reasonably know."}
+                         "Please include any relevant details about the agent's surroundings, current situation, and any " +
+                         "actions they have taken recently, but make sure not to mention anything that the agent could not reasonably know." +
+                         f"Mention especially the following events that occurred in the last round:\n" +
+                         "\n".join([event.model_dump_json() for event in events_this_round])}
 
     response = anthropic_client.messages.create(
         model=model,

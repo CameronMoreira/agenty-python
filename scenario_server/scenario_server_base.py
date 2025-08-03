@@ -83,7 +83,8 @@ def simulate_one_step(actions: list[AgentAction]):
     for agent_name in REGISTERED_AGENTS:
         agent_location = SCENARIO_STATE.agents[agent_name]["current_location"]
         location_state = SCENARIO_STATE.locations.get(agent_location)
-        agent_narrations[agent_name] = narrate_agent_state(general_state_narrated, location_state, agent_name,
+        agent_narrations[agent_name] = narrate_agent_state(general_state_narrated, location_state,
+                                                           all_events_triggered_this_round, agent_name,
                                                            agent_location, anthropic_client)
         print(f"Agent narration generated for step {SCENARIO_STATE.step}: {agent_narrations[agent_name]}")
 
