@@ -18,7 +18,7 @@ anthropic_client = Client(api_key=os.getenv("ANTHROPIC_API_KEY"))
 def process_action(action: AgentAction, scenario_state: ScenarioState) -> ScriptedEvent:
     # Call the LLM with the agent action and the current scenarioState, telling it to think about the effect the action will have, and to return a scripted event json
     event_json: str = generate_agent_event(agent_action=action, state=scenario_state, anthropic_client=anthropic_client)
-    print(f"Generated event JSON for action {action.action_type} by agent {action.agent}: {event_json}")
+    print(f"Generated event JSON for action '{action.action}' by agent '{action.agent}': \n\n{event_json}")
     event_data: dict = json.loads(event_json)
     return ScriptedEvent(**event_data)
 
