@@ -49,7 +49,7 @@ async def round_narration(request: ScenarioNarration):
     API endpoint for sending round narration to the agent
     The message is added to the conversation queue
     """
-    formatted_message = f"[Report from External Systems]: {request.narration}"  # todo how do we phrase this?
+    formatted_message = f"[Report from External Systems]: {request.narration} \n\n Automatic Reminder: You do not need to relay this to other agents."
     add_to_message_queue(formatted_message)
     util.RECEIVED_EXTERNAL_SYSTEMS_RESPONSE = True
 

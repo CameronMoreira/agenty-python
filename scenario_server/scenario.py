@@ -12,7 +12,7 @@ class ScriptedEvent(BaseModel):
     at_step: Optional[int] = None
     repeatable: bool = False
     probability: float = 1.0  # Default to 100% if not specified
-    trigger_condition: Optional[str] = None
+    trigger_condition: Optional[str] = None # "Person.attribute = value" or "Person.attribute != value"
     has_occurred: bool = False
 
 
