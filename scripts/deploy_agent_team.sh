@@ -64,8 +64,42 @@ done
 >&2 echo "TEAM_CONFIG=${TEAM_CONFIG}"
 
 
+# Generate a unique run ID for this simulation
+RUN_ID="run_$(date +%Y%m%d_%H%M%S)_${RANDOM}"
+export RUN_ID
+echo "Generated unique run ID: ${RUN_ID}"
+
 # Undeploy the existing Docker containers, before volume creation
 docker compose -f "$(dirname "$0")/../docker-compose.yaml" --profile "*" down
+
+# Force remove the entire project to reset port assignment state
+>&2 echo "Removing entire agents project to reset port assignment..."
+docker compose -f "$(dirname "$0")/../docker-compose.yaml" --profile "*" down --remove-orphans --volumes >/dev/null 2>&1
+
+# Force remove any existing agent containers to ensure clean port assignment
+>&2 echo "Removing any existing agent containers..."
+docker ps -a --filter "name=agents-agent" --format "{{.ID}}" | xargs -r docker rm -f 2>/dev/null
+
+# Kill any processes using ports 8081-8088 to ensure they're available
+>&2 echo "Clearing ports 8081-8083..."
+for port in {8081..8083}; do
+  # Kill any host processes using the port (rare when running inside Docker but
+  # helpful when debugging locally)
+  if lsof -ti:$port >/dev/null 2>&1; then
+    lsof -ti:$port | xargs -r kill -9
+    >&2 echo "Killed host process using port $port"
+  fi
+  # Stop any docker containers that still expose the port (e.g., from a
+  # previous interrupted run) so that the upcoming compose can bind 8081/8082
+  container_ids=$(docker ps -q --filter "publish=$port")
+  if [ -n "$container_ids" ]; then
+    docker rm -f $container_ids >/dev/null 2>&1
+    >&2 echo "Removed Docker containers binding port $port"
+  fi
+done
+
+# Wait a moment for ports to be fully released
+sleep 2
 
 # Remove previous volume if it exists
 if docker volume inspect agents_git_remote &>/dev/null; then
@@ -73,7 +107,7 @@ if docker volume inspect agents_git_remote &>/dev/null; then
 fi
 
 # Copy the team's task to the .env file
-team_task=$(jq -r '.task' $TEAM_CONFIG)
+team_task=$(jq -r '(.task | gsub("\n"; " "))' $TEAM_CONFIG)
 if grep -q '^INITIAL_GROUP_CHAT_MESSAGE=' "$(dirname "$0")/../.env"; then
   sed -i '' "s|^INITIAL_GROUP_CHAT_MESSAGE=.*|INITIAL_GROUP_CHAT_MESSAGE=\"$team_task\"|" "$(dirname "$0")/../.env"
 else
@@ -87,6 +121,12 @@ if [ "$agent_count" -lt 2 ]; then
   exit 1
 fi
 
-# Launch the Docker containers with the specified profiles and agent count
+# Ensure we deploy exactly 2 agents for ports 8081 and 8082
+deploy_count=2
+if [ "$agent_count" -gt 2 ]; then
+  >&2 echo "Warning: Team config has $agent_count agents, but deploying only 2 for ports 8081 and 8082"
+fi
+
+# Launch the Docker containers with the specified profiles and exactly 2 agents
 docker compose -f "$(dirname "$0")/../docker-compose.yaml" $(printf -- '--profile %s ' "${PROFILES[@]}") up \
-  -d --scale agent=$agent_count --build --force-recreate
+  -d --scale agent=$deploy_count --build --force-recreate
