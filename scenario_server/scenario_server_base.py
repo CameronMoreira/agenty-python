@@ -3,6 +3,8 @@ import os
 import time
 
 import requests
+import hashlib
+from util import log_event
 from anthropic import Client
 
 from classes import SCENARIO_STATE, SCRIPTED_EVENTS, Agent, AgentAction
@@ -11,6 +13,8 @@ from scenario import ScriptedEvent, ScenarioState
 
 REGISTERED_AGENTS: dict[str, Agent] = {}
 EXPECTED_AGENTS: int = 2
+
+RUN_ID = os.getenv("RUN_ID", "unknown_run")
 
 anthropic_client = Client(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
@@ -24,7 +28,7 @@ def process_action(action: AgentAction, scenario_state: ScenarioState) -> Script
 
 
 actions_this_turn: list[AgentAction] = []
-max_steps: int = 50  # todo make this configurable
+max_steps: int = 2  # todo make this configurable
 
 
 def main_loop():
@@ -62,14 +66,43 @@ def simulate_one_step(actions: list[AgentAction]):
             event = process_action(action, SCENARIO_STATE)
             agent_events.append(event)
 
-    # todo log agent_events
+    # Log agent events that were produced this step
+    if agent_events:
+        log_event(
+            source="scenario_server",
+            log_type="agent_events_processed",
+            step=SCENARIO_STATE.step,
+            payload={
+                            "step": SCENARIO_STATE.step,
+            "agent_events": [e.model_dump() for e in agent_events]
+        },
+        run_id=RUN_ID
+        )
     # trigger agent events
     SCENARIO_STATE.apply_events(agent_events)
     print(f"Agent events processed for step {SCENARIO_STATE.step}: {len(agent_events)} events")
 
     # trigger scripted events
     triggered_events = SCENARIO_STATE.apply_events(SCRIPTED_EVENTS)
-    # todo log events that triggered this step
+    # First, make sure every triggered event has a step number
+    current_step = SCENARIO_STATE.step
+    for event in triggered_events:
+        if event.at_step is None:
+            event.at_step = current_step
+
+    # Log scripted events triggered by the environment this step
+    # TODO deprecated lib
+    if triggered_events:
+        log_event(
+            source="scenario_server",
+            log_type="scripted_events_triggered",
+            step=current_step,
+            payload={
+                "step": current_step,
+                "scripted_events": [e.dict() if hasattr(e, "dict") else e for e in triggered_events]
+            },
+            run_id=RUN_ID
+        )
 
     all_events_triggered_this_round = triggered_events + agent_events
     print(f"Events triggered this round: {len(all_events_triggered_this_round)}")
@@ -77,19 +110,87 @@ def simulate_one_step(actions: list[AgentAction]):
     # generate current state narration for each agent
     general_state_narrated = narrate_state(SCENARIO_STATE, all_events_triggered_this_round, anthropic_client)
     print(f"General state narration for step {SCENARIO_STATE.step}:\n{general_state_narrated}")
-    # todo potentially log the general state narration
+    narration_id = hashlib.sha256(general_state_narrated.encode()).hexdigest()[:12]
+    # Log the general narration text (store full text once)
+    # TODO deprecated lib
+    log_event(
+        source="scenario_server",
+        log_type="general_state_narrated",
+        step=SCENARIO_STATE.step,
+        payload={
+            "step": SCENARIO_STATE.step,
+            "narration_id": narration_id,
+            "narration": general_state_narrated,
+            "events_this_round": [e.dict() if hasattr(e, "dict") else e for e in all_events_triggered_this_round],
+            "world_state": SCENARIO_STATE.model_dump()
+        },
+        run_id=RUN_ID
+    )
 
     agent_narrations: dict[str, str] = {}  # dict of narration string by agent_name
     for agent_name in REGISTERED_AGENTS:
         agent_location = SCENARIO_STATE.agents[agent_name]["current_location"]
         location_state = SCENARIO_STATE.locations.get(agent_location)
-        agent_narrations[agent_name] = narrate_agent_state(general_state_narrated, location_state, agent_name,
-                                                           agent_location, anthropic_client)
+        agent_narrations[agent_name] = narrate_agent_state(
+            general_state_narrated,
+            location_state,
+            agent_name,
+            agent_location,
+            anthropic_client,
+        )
         print(f"Agent narration generated for step {SCENARIO_STATE.step}: {agent_narrations[agent_name]}")
+        # Log only reference to narration to avoid duplication
+        log_event(
+            source="scenario_server",
+            log_type="agent_narration_sent",
+            step=SCENARIO_STATE.step,
+            agent_name=agent_name,
+            payload={
+                "step": SCENARIO_STATE.step,
+                "narration_id": narration_id,
+                "location": agent_location,
+            },
+            run_id=RUN_ID
+        )
 
-    # send narration to agents
-    for agent_name in REGISTERED_AGENTS:
-        agent_url = REGISTERED_AGENTS[
-                        agent_name].base_url + "/scenario/roundnarration"
-        requests.post(agent_url, json={"narration": agent_narrations[agent_name]})
+    # Only send narrations to agents if we have **not** reached the final step yet.
+    # This prevents agents from receiving another round prompt once the scenario is finished.
+    if SCENARIO_STATE.step < max_steps:
+        # Send narration to each agent, trying a small port range in case the
+        # expected port (8080+index) was unavailable and Docker mapped to the next
+        # free one (common when 8082 is busy and the second agent ends up on 8083).
+        for agent_name, agent in REGISTERED_AGENTS.items():
+            narration_payload = {"narration": agent_narrations[agent_name]}
+            base_url = agent.base_url
+
+            # First try the stored URL
+            try:
+                requests.post(f"{base_url}/scenario/roundnarration", json=narration_payload, timeout=2)
+                continue  # success
+            except Exception:
+                pass  # fall through to brute-force search
+
+            # If that failed, probe a few adjacent host ports (helps when the host
+            # reserved 8082 and Docker jumped to 8083, etc.)
+            # Derive current host port from the stored base_url and probe a few
+            # ports above it (Docker usually increments by +1 when the preferred
+            # port is busy).
+            # TODO: this is only relevant when scenario_server is running outside of Docker for debugging purposes; it won't run if the internal endpoint can be resolved in a docker env
+            try:
+                current_port = int(base_url.rsplit(":", 1)[-1])
+            except ValueError:
+                current_port = 8081  # fallback
+
+            for port_offset in range(1, 4):  # try +1, +2, +3
+                candidate_port = current_port + port_offset
+                candidate_url = f"http://localhost:{candidate_port}/scenario/roundnarration"
+                try:
+                    requests.post(candidate_url, json=narration_payload, timeout=2)
+                    # Update the registered base URL for future rounds
+                    agent.base_url = f"http://localhost:{candidate_port}"
+                    break
+                except Exception:
+                    continue
+    else:
+        print("\033[92mFinal step reached: no further narrations sent to agents.\033[0m")
     return
