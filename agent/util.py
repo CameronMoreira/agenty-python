@@ -30,8 +30,8 @@ RECEIVED_EXTERNAL_SYSTEMS_RESPONSE: bool = True
 
 
 def log_event(source: str, log_type: str, payload: Dict[str, Any], agent_name: str = None,
-              metadata: Dict[str, Any] = None, conversation_id: str = None, turn_id: int = None,
-              run_condition: str = None):
+              metadata: Dict[str, Any] = None, conversation_id: str = None, step: int = None,
+              run_condition: str = None, run_id: str = None):
     """Saves a structured event to the evaluation log file."""
     timestamp = datetime.now(timezone.utc).isoformat()
     log_entry = {
@@ -42,9 +42,13 @@ def log_event(source: str, log_type: str, payload: Dict[str, Any], agent_name: s
         "payload": payload,
         "metadata": metadata,
         "conversation_id": conversation_id,
-        "turn_id": turn_id,
+        "step": step,
         "run_condition": run_condition,
+        "run_id": run_id,
     }
+
+    # Filter out null values
+    log_entry = {k: v for k, v in log_entry.items() if v is not None}
 
     try:
         os.makedirs(EVALUATION_LOG_DIR, exist_ok=True)
@@ -87,7 +91,7 @@ def log_error(error_message):
             import datetime
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             f.write(f"\n[{timestamp}] ERROR: {error_message}\n")
-        print(f"Error logged to error.txt")
+        print("Error logged to error.txt")
     except Exception as e:
         print(f"Failed to log error to file: {str(e)}")
 
