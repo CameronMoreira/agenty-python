@@ -5,6 +5,8 @@ import time
 import traceback
 import uuid
 
+import requests
+
 import util
 from agent_work_log import send_work_log
 from util import log_event
@@ -60,6 +62,7 @@ class Agent:
         self.conversation_id = str(uuid.uuid4())
         self.turn_id = 0
         self.run_condition = "multi-agent" if team_mode else "single-agent"
+        self.run_id = os.getenv("RUN_ID", "unknown_run")
 
     def check_and_send_work_log(self, conversation):
         """Checks if a work log should be sent and sends it if necessary."""
@@ -129,12 +132,12 @@ class Agent:
 
         # main agent loop; every loop is one "step"
         while True:
-            if not os.getenv("DEV_MODE"):
-                # Wait for external systems to respond before proceeding to the next step
-                while not util.RECEIVED_EXTERNAL_SYSTEMS_RESPONSE:
-                    time.sleep(1)
+            # Wait for external systems to respond before proceeding to the next step
+            while not util.RECEIVED_EXTERNAL_SYSTEMS_RESPONSE:
+                time.sleep(1)
 
-                util.RECEIVED_EXTERNAL_SYSTEMS_RESPONSE = False  # reset for the next round
+            # Reset for the next round
+            util.RECEIVED_EXTERNAL_SYSTEMS_RESPONSE = False
             
             if self.is_team_mode:
                 self.check_group_messages()
@@ -155,8 +158,9 @@ class Agent:
                 payload={"content": message["content"]},
                 agent_name=self.name,
                 conversation_id=self.conversation_id,
-                turn_id=self.turn_id,
-                run_condition=self.run_condition
+                step=self.turn_id,
+                run_condition=self.run_condition,
+                run_id=self.run_id
             )
 
             response_content, token_usage = run_inference(conversation, self.llm_client, self.tools,
@@ -173,7 +177,7 @@ class Agent:
                     print(f"\033[93m{self.name}\033[0m: {block.text}")
                     action = f"internal thought: {block.text}"
                     action_type = "internal thought"
-                    log_event("agent", "assistant_message", {"text": block.text}, self.name, conversation_id=self.conversation_id, turn_id=self.turn_id, run_condition=self.run_condition)
+                    log_event("agent", "assistant_message", {"text": block.text}, self.name, conversation_id=self.conversation_id, step=self.turn_id, run_condition=self.run_condition, run_id=self.run_id)
                 elif block.type == "tool_use":
                     tool_name = block.name
                     action_type = f"tool call: {tool_name}"
@@ -186,13 +190,12 @@ class Agent:
                     print(f"\033[93m{self.name}\033[0m: Tool call: {tool_name} with input {block.input}")
 
                     result = execute_tool(self.tools, tool_name, block.input)
-                    log_event("agent", "tool_call", {"tool_name": tool_name, "tool_input": block.input}, self.name, conversation_id=self.conversation_id, turn_id=self.turn_id, run_condition=self.run_condition)
+                    log_event("agent", "tool_call", {"tool_name": tool_name, "tool_input": block.input}, self.name, conversation_id=self.conversation_id, step=self.turn_id, run_condition=self.run_condition, run_id=self.run_id)
                     tool_results.append({
                         "type": "tool_result",
                         "tool_use_id": block.id,
                         "content": result
                     })
-                    log_event("agent", "tool_result", {"tool_name": tool_name, "tool_output": result}, self.name, conversation_id=self.conversation_id, turn_id=self.turn_id, run_condition=self.run_condition)
 
             # 2) First, append the assistant's own message (including its tool_use blocks!)
             conversation.append({
@@ -217,7 +220,15 @@ class Agent:
             # 3) If there were any tool calls, follow up with tool_results as a user turn
             if tool_results:
                 self.read_user_input = False
-                deal_with_tool_results(tool_results, conversation)
+                deal_with_tool_results(
+                    tool_results,
+                    conversation,
+                    agent_name=self.name,
+                    conversation_id=self.conversation_id,
+                    step=self.turn_id,
+                    run_condition=self.run_condition,
+                    run_id=self.run_id,
+                )
             else:
                 self.read_user_input = False  # we do not want to read user input ever
 
@@ -227,7 +238,7 @@ class Agent:
             # Check if a work log should be sent
                         # self.check_and_send_work_log(conversation)
             # TODO: disable this for now for testing eval logging of single agents
-            # propagate_action_to_external_systems(self.name, action_type, action)
+            propagate_action_to_external_systems(self.name, action_type, action)
 
             # Check if we need to restart due to token limit
             if token_usage >= self.token_limit:
