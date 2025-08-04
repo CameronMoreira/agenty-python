@@ -17,11 +17,16 @@ class AgentConfig:
 
 
 class TeamConfig:
-    def __init__(self, agents: List[AgentConfig]):
+    def __init__(self, agents: List[AgentConfig], task: str = ""):
         self.agents = agents
+        self.task = task  # The overarching task or scenario description
 
     def __str__(self):
-        return f"TeamConfig(agents={[str(agent) for agent in self.agents]})"
+        return f"TeamConfig(task={self.task[:30]}..., agents={[str(agent) for agent in self.agents]})"  # Truncate task for readability
+
+    def get_task(self) -> str:
+        """Returns the task or scenario description."""
+        return self.task
 
     def get_current_agent(self) -> Optional[AgentConfig]:
         """Returns the agent marked as current agent, or None if not found."""
@@ -63,6 +68,8 @@ def load_team_config(
         # Parse agent configurations
         agent_configs = []
 
+        task_description = config_data.get('task', "")
+
         for agent_index, agent_data in enumerate(config_data.get('agents', [])):
             is_current_agent = agent_data.get('isCurrentAgent', False)
             silent_wait = agent_data.get('silentWait', False)
@@ -89,7 +96,7 @@ def load_team_config(
                 silent_wait=silent_wait,
             ))
 
-        team_config = TeamConfig(agent_configs)
+        team_config = TeamConfig(agent_configs, task_description)
         print(f"Loaded team configuration: {team_config}")
         return team_config
 

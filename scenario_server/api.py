@@ -42,7 +42,11 @@ async def post_action(action: AgentAction):
     agent can shut down gracefully instead of queueing actions that will never
     be processed.
     """
-    if not SCENARIO_STATE.running:
+    # If the scenario has already ended, reject the action so agents can shut down.
+    # Note: We intentionally still accept actions while the scenario is *starting* (before
+    # SCENARIO_STATE.running becomes True) to avoid race-conditions where the first agent
+    # submits an action immediately after registering.
+    if SCENARIO_STATE.running is False and SCENARIO_STATE.step > 0:
         raise HTTPException(status_code=400, detail="Scenario has ended – no further actions accepted.")
 
     actions_this_turn.append(action)  # store the action for processing during main loop

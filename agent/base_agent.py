@@ -5,8 +5,6 @@ import time
 import traceback
 import uuid
 
-import requests
-
 import util
 from agent_work_log import send_work_log
 from util import log_event
@@ -16,6 +14,7 @@ from llm import run_inference
 from tools_utils import get_tool_list, execute_tool, deal_with_tool_results
 from util import get_new_messages_from_group_chat, get_new_summaries, log_error, \
     generate_restart_summary, save_conv_and_restart, register_agent, propagate_action_to_external_systems
+from team_config_loader import get_team_config
 
 
 def get_new_message(is_team_mode: bool, silent_wait: bool, consecutive_tool_count: list, read_user_input: bool) -> dict | None:
@@ -126,6 +125,13 @@ class Agent:
             self.read_user_input = False
         else:
             conversation = []
+            # In single-agent mode we won't receive an initial task via group chat. Inject it as the first
+            # message so the agent knows what to do.
+            if not self.is_team_mode:
+                task_description = get_team_config().get_task()
+                if task_description:
+                    # Use the message queue so it reaches the agent as a regular user instruction.
+                    add_to_message_queue(task_description)
 
         # Set the global conversation context reference
         set_conversation_context(conversation)

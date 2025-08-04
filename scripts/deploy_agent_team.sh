@@ -116,17 +116,25 @@ fi
 
 # Retrieve the agent count from the team configuration
 agent_count=$(jq '.agents | length' $TEAM_CONFIG)
-if [ "$agent_count" -lt 2 ]; then
-  echo "Error: At least 2 agents are required."
+# Make the count available to Docker Compose so that services (e.g., scenario_server)
+# can read it via the AGENT_COUNT environment variable.
+export AGENT_COUNT=$agent_count
+if [ "$agent_count" -lt 1 ]; then
+  echo "Error: At least 1 agent is required."
   exit 1
 fi
 
-# Ensure we deploy exactly 2 agents for ports 8081 and 8082
-deploy_count=2
-if [ "$agent_count" -gt 2 ]; then
-  >&2 echo "Warning: Team config has $agent_count agents, but deploying only 2 for ports 8081 and 8082"
+# Set the number of agents to deploy equal to the agent count in the team configuration
+# (This allows running a single-agent setup as well as multi-agent setups.)
+deploy_count=$agent_count
+
+# Warn the user if the agent count exceeds the number of statically
+# exposed host ports in docker-compose.yaml (currently 3 → 8081-8083).
+max_supported_agents=3
+if [ "$agent_count" -gt "$max_supported_agents" ]; then
+  >&2 echo "Warning: Team config has $agent_count agents, but docker-compose.yaml only maps $max_supported_agents ports (8081-8083). Only the first $max_supported_agents agents will be accessible on the host."
 fi
 
-# Launch the Docker containers with the specified profiles and exactly 2 agents
+# Launch the Docker containers with the specified profiles and the desired number of agents
 docker compose -f "$(dirname "$0")/../docker-compose.yaml" $(printf -- '--profile %s ' "${PROFILES[@]}") up \
   -d --scale agent=$deploy_count --build --force-recreate

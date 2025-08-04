@@ -12,7 +12,9 @@ from narration import narrate_state, generate_agent_event, narrate_agent_state
 from scenario import ScriptedEvent, ScenarioState
 
 REGISTERED_AGENTS: dict[str, Agent] = {}
-EXPECTED_AGENTS: int = 2
+# Determine how many agents are expected based on an environment variable.
+# Falls back to 2 for backwards-compatibility.
+EXPECTED_AGENTS: int = int(os.getenv("AGENT_COUNT", "2"))
 
 RUN_ID = os.getenv("RUN_ID", "unknown_run")
 
@@ -28,7 +30,7 @@ def process_action(action: AgentAction, scenario_state: ScenarioState) -> Script
 
 
 actions_this_turn: list[AgentAction] = []
-max_steps: int = 2  # todo make this configurable
+max_steps: int = 3  # todo make this configurable
 
 
 def main_loop():

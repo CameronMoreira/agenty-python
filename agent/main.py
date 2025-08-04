@@ -27,7 +27,7 @@ def main():
     # Set team mode to True only if multiple agents are defined in the configuration
     team_mode = False if not team_config or len(team_config.agents) <= 1 else True
     number_of_agents = len(team_config.agents) if team_mode else 1
-    current_agent_index = team_config.agents.index(team_config.get_current_agent()) + 1 if team_mode else 0
+    current_agent_index = team_config.agents.index(team_config.get_current_agent()) + 1
     print(f"Current agent index: {current_agent_index}")
 
     # Register cleanup function to run on exit

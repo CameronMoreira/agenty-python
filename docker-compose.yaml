@@ -55,6 +55,7 @@ services:
     environment:
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
       RUN_ID: ${RUN_ID:-dev}
+      AGENT_COUNT: ${AGENT_COUNT:-2}
     volumes:
       - ./evaluation_output/logs:/app/evaluation_logs:rw
     profiles: [ scenario_server ]
