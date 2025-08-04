@@ -24,13 +24,8 @@ def main():
     anthropic_client = anthropic.Anthropic()  # expects ANTHROPIC_API_KEY in env
 
     team_config = initialize_team_config(args.docker_mode, args.docker_agent_index, args.docker_host_base)
-    #TODO: probably better to make TEAM_MODE a parameter of the team_config instead of inject via docker env var
-    team_mode_str = os.getenv("TEAM_MODE")
-    if team_mode_str is not None:
-        team_mode = team_mode_str.lower() == 'true'
-    else:
-        # Fallback to default behavior if TEAM_MODE is not set
-        team_mode = not (not team_config or len(team_config.agents) <= 1)
+    # Set team mode to True only if multiple agents are defined in the configuration
+    team_mode = False if not team_config or len(team_config.agents) <= 1 else True
     number_of_agents = len(team_config.agents) if team_mode else 1
     current_agent_index = team_config.agents.index(team_config.get_current_agent()) + 1 if team_mode else 0
     print(f"Current agent index: {current_agent_index}")
