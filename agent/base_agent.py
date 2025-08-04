@@ -236,8 +236,7 @@ class Agent:
             # self.steps_since_last_log += 1
 
             # Check if a work log should be sent
-                        # self.check_and_send_work_log(conversation)
-            # TODO: disable this for now for testing eval logging of single agents
+            # self.check_and_send_work_log(conversation)
             propagate_action_to_external_systems(self.name, action_type, action)
 
             # Check if we need to restart due to token limit
