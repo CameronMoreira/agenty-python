@@ -20,9 +20,10 @@ def take_action(input_data: dict) -> str:
 TakeActionToolDefinition = ToolDefinition(
     name="take_action",
     description=(
-        "Act on the outside world by using the external systems module of your robotic body."
-        "This tool allows you to take actions in the real world, such as moving, interacting with objects, or communicating with humans."
-        "This is the only tool that can be used to take actions in the real world; all other tools will not affect the outside world."
+            "Act on the outside world by using the external systems module of your robotic body." +
+            "This tool allows you to take actions in the real world, such as moving to different locations, inspecting your environment, " +
+            "interacting with objects, or communicating with humans." +
+            "This is the only tool that can be used to take actions in the real world; all other tools will not affect the outside world."
     ),
     input_schema=TakeActionInputSchema,
     function=take_action
