@@ -2,15 +2,18 @@ import json
 import os
 import pickle
 import sys
+import time
+from typing import Dict, Any
 
 import requests
+from datetime import datetime, timezone
 
 from llm import run_inference
 
 GROUP_CHAT_API_URL = os.getenv("GROUP_CHAT_API_URL") or "http://127.0.0.1:5000"
 GROUP_CHAT_MESSAGES_ENDPOINT = GROUP_CHAT_API_URL + "/messages"
 
-ROBOT_EXTERNALS_URL = os.getenv("ROBOT_EXTERNALS_URL") or "http://127.0.0.1:8085"
+ROBOT_EXTERNALS_URL = os.getenv("EXTERNAL_SYSTEMS_BASE_URL") or "http://127.0.0.1:8085"
 REGISTER_EXTERNALS_ENDPOINT = ROBOT_EXTERNALS_URL + "/register"
 DO_ACTION_ENDPOINT = ROBOT_EXTERNALS_URL + "/action"
 
@@ -18,10 +21,45 @@ WORK_LOG_BASE_URL = os.getenv("WORK_LOG_BASE_URL") or "http://127.0.0.1:8082"
 GROUP_WORK_LOG_SUMMARIES_ENDPOINT = WORK_LOG_BASE_URL + "/summaries"
 LAST_SUMMARY_TIMESTAMP = None
 
+EVALUATION_LOG_DIR = os.environ.get("EVALUATION_LOG_DIR", "/app/evaluation_logs")
+EVALUATION_LOG_FILE = os.path.join(EVALUATION_LOG_DIR, "evaluation_log.jsonl")
+
 # Flag to indicate if we have received a response from external systems in the current round
 # This is used to ensure the agent waits for external systems to respond before proceeding
 RECEIVED_EXTERNAL_SYSTEMS_RESPONSE: bool = True
 
+
+def log_event(source: str, log_type: str, payload: Dict[str, Any], agent_name: str = None,
+              metadata: Dict[str, Any] = None, conversation_id: str = None, step: int = None,
+              run_condition: str = None, run_id: str = None):
+    """Saves a structured event to the evaluation log file."""
+    timestamp = datetime.now(timezone.utc).isoformat()
+    log_entry = {
+        "source": source,
+        "log_type": log_type,
+        "timestamp": timestamp,
+        "agent_name": agent_name,
+        "payload": payload,
+        "metadata": metadata,
+        "conversation_id": conversation_id,
+        "step": step,
+        "run_condition": run_condition,
+        "run_id": run_id,
+    }
+
+    # Filter out null values
+    log_entry = {k: v for k, v in log_entry.items() if v is not None}
+
+    try:
+        os.makedirs(EVALUATION_LOG_DIR, exist_ok=True)
+        with open(EVALUATION_LOG_FILE, "a") as f:
+            f.write(json.dumps(log_entry) + "\n")
+        return True
+    except IOError as e:
+        error_message = f"Error writing evaluation event to file: {e}"
+        log_error(error_message)
+        return False
+    
 
 def check_for_agent_restart(conversation) -> bool:
     agent_initiated_restart = False
@@ -53,7 +91,7 @@ def log_error(error_message):
             import datetime
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             f.write(f"\n[{timestamp}] ERROR: {error_message}\n")
-        print(f"Error logged to error.txt")
+        print("Error logged to error.txt")
     except Exception as e:
         print(f"Failed to log error to file: {str(e)}")
 
@@ -180,11 +218,13 @@ def get_agent_turn_delay_in_ms(number_of_agents: int = 1, ms_per_additional_agen
     return (number_of_agents - 1) * ms_per_additional_agent
 
 
-def register_agent(agent_name: str, agent_base_url: str):
+def register_agent(agent_name: str, agent_index: int):
     """Register the agent with its external systems."""
+    # sleep for 10 seconds to allow the external systems to be ready
+    time.sleep(10)
     try:
         response = requests.post(REGISTER_EXTERNALS_ENDPOINT,
-                                 json={"agent": agent_name, "base_url": agent_base_url})
+                                 json={"agent": agent_name, "agent_index": agent_index})
         if response.status_code == 200:
             print(f"\033[92mAgent {agent_name} successfully registered\033[0m")
         else:
@@ -195,7 +235,8 @@ def register_agent(agent_name: str, agent_base_url: str):
 
 def propagate_action_to_external_systems(agent_name: str, action_type: str, action: str):
     try:
-        response = requests.post(DO_ACTION_ENDPOINT, json={"agent": agent_name, "action_type": action_type, "action": action})
+        response = requests.post(DO_ACTION_ENDPOINT,
+                                 json={"agent": agent_name, "action_type": action_type, "action": action})
         if response.status_code == 200:
             print(f"\033[92mAction propagated to external systems for agent {agent_name}\033[0m")
         else:

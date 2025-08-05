@@ -20,7 +20,7 @@ from tools import (
     WaitDefinition,
     TakeActionToolDefinition,
 )
-from util import save_conv_and_restart
+from util import save_conv_and_restart, log_event
 
 
 def get_tool_list(is_team_mode: bool) -> list:
@@ -60,11 +60,22 @@ def execute_tool(tools, tool_name: str, input_data):
         return str(e)
 
 
-def deal_with_tool_results(tool_results, conversation):
+def deal_with_tool_results(tool_results, conversation, *, agent_name=None, conversation_id=None, step=None, run_condition=None, run_id=None):
     conversation.append({
         "role": "user",
         "content": tool_results
     })
+    # Log this user message so it's captured in the evaluation log
+    log_event(
+        source="user",
+        log_type="tool_results",
+        payload={"content": tool_results},
+        agent_name=agent_name,
+        conversation_id=conversation_id,
+        step=step,
+        run_condition=run_condition,
+        run_id=run_id,
+    )
 
     # detect “please restart” signals
     for tr in tool_results:

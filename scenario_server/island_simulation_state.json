@@ -120,7 +120,7 @@
       "current_location": "Crash Site"
     },
     {
-      "name": "FredAI",
+      "name": "AlinaAI",
       "battery_life": 85,
       "damages_to_robotic_body": {},
       "current_location": "Crash Site"
@@ -143,7 +143,7 @@
         "medical_kits": 3
       },
       
-      "people_at_location": ["Alice", "Bob", "Carol", "David", "Eva", "Frank", "Grace", "Henry", "Isla", "Jack", "BobAI", "FredAI", "GeorgeAI"],
+      "people_at_location": ["Alice", "Bob", "Carol", "David", "Eva", "Frank", "Grace", "Henry", "Isla", "Jack", "BobAI", "AlinaAI", "GeorgeAI"],
       "description": "Debris-laden area near a rocky slope. Some smoke visible.",
       "connections_to_other_locations": {
         "north": "Forest Edge",
