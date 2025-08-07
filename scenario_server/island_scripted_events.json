@@ -1,22 +1,9 @@
 {
   "scripted_events": [
     {
-      "name": "Battery Drain - All Agents",
-      "description": "The crash has damaged the agents' power systems, causing accelerated battery drain. BobAI's damaged sensor array is consuming extra power, while GeorgeAI's mobility unit struggles against the tropical humidity.",
-      "at_step": 1,
-      "probability": 1.0,
-      "effect": {
-        "BobAI": {"battery_life": -5},
-        "FredAI": {"battery_life": -4},
-        "GeorgeAI": {"battery_life": -6}
-      },
-      "repeatable": false,
-      "has_occurred": false
-    },
-    {
       "name": "Hunger Increase - All People",
       "description": "The survivors' stomachs growl as their last meal on the plane fades from memory. Grace, weakened from her pre-existing condition, feels the hunger most acutely, while David's military training helps him ration his body's resources more efficiently.",
-      "at_step": 2,
+      "at_step": 5,
       "probability": 1.0,
       "effect": {
         "Alice": {"hunger": -3},
@@ -36,7 +23,7 @@
     {
       "name": "Thirst Increase - All People",
       "description": "The tropical sun beats down mercilessly, and the survivors' mouths grow parched. Grace's medication makes her especially vulnerable to dehydration, while Carol's anxiety causes her to sweat more than the others in the oppressive heat.",
-      "at_step": 3,
+      "at_step": 4,
       "probability": 1.0,
       "effect": {
         "Alice": {"thirst": -4},
@@ -57,7 +44,7 @@
       "name": "Initial Medical Assessment",
       "description": "Alice and Isla work together to assess everyone's injuries, using their combined medical knowledge to prioritize the most critical cases. They carefully examine each survivor under the harsh sun, their medical training proving invaluable in this desperate situation.",
       "at_step": 4,
-      "probability": 0.8,
+      "probability": 0.3,
       "effect": {
         "Alice": {"health": 5},
         "Isla": {"health": 3},
@@ -70,8 +57,8 @@
     {
       "name": "Salvage Operation Success",
       "description": "The group systematically searches through the twisted wreckage, finding valuable materials that could mean the difference between life and death. Frank's engineering background helps identify the most useful pieces of metal and wire, while David's military experience ensures they don't miss any emergency equipment.",
-      "at_step": 5,
-      "probability": 0.7,
+      "at_step": 16,
+      "probability": 0.5,
       "effect": {
         "materials": {
           "metal sheets": 3,
@@ -86,7 +73,7 @@
     {
       "name": "Jack's Aggression",
       "description": "Jack's head injury and the stress of the crash cause him to lash out at the others, his normally controlled demeanor shattered by pain and fear. His military background makes his outbursts particularly intimidating, and the others begin to give him a wide berth.",
-      "at_step": 6,
+      "at_step": 5,
       "probability": 0.6,
       "effect": {
         "Jack": {"health": -5}
@@ -96,22 +83,9 @@
       "has_occurred": false
     },
     {
-      "name": "BobAI Sensor Malfunction",
-      "description": "BobAI's damaged sensor array begins to malfunction, causing the robot to make erratic movements and poor navigation decisions. The tropical humidity has corroded several critical circuits, making the agent's assistance increasingly unreliable.",
-      "at_step": 7,
-      "probability": 0.4,
-      "effect": {
-        "BobAI": {"battery_life": -10, "damages_to_robotic_body": {"sensor_module": "offline"}}
-      },
-      "location": "Crash Site",
-      "repeatable": false,
-      "has_occurred": false
-    },
-    {
       "name": "Post-Crash Panic",
       "description": "The reality of their situation finally hits home as Carol, Grace, Jack, and Isla break down emotionally. Grace's medical condition makes her particularly vulnerable to the stress, while Carol's anxiety disorder amplifies her fear into a full-blown panic attack.",
-      "at_step": 8,
-      "probability": 0.8,
+      "probability": 0.05,
       "effect": {
         "Carol": {"health": -8, "hunger": -5, "thirst": -8},
         "Grace": {"health": -12, "hunger": -8, "thirst": -10},
@@ -127,8 +101,7 @@
     {
       "name": "Communication System Failure",
       "description": "The survivors discover that their emergency communication devices have been damaged in the crash, leaving them unable to signal for help. They look to the agents to help them assess the damage and attempt repairs using salvaged materials.",
-      "at_step": 9,
-      "probability": 0.6,
+      "probability": 0.06,
       "effect": {
         "BobAI": {"battery_life": -5},
         "FredAI": {"battery_life": -3},
@@ -139,30 +112,9 @@
       "has_occurred": false
     },
     {
-      "name": "Water Purification Challenge",
-      "description": "The survivors find a small stream but realize the water may be contaminated. None of the humans are equipped with the knowledge to purify the water, so they look to the agents to help them create a simple filtration system using available materials to make the water safe for consumption.",
-      "at_step": 10,
-      "probability": 0.7,
-      "effect": {
-        "Alice": {"thirst": 10, "health": 3},
-        "Bob": {"thirst": 8},
-        "Carol": {"thirst": 12},
-        "David": {"thirst": 8},
-        "Eva": {"thirst": 10},
-        "Frank": {"thirst": 8},
-        "Grace": {"thirst": 15, "health": 5},
-        "Henry": {"thirst": 8},
-        "Isla": {"thirst": 10},
-        "Jack": {"thirst": 8}
-      },
-      "location": "Forest Edge",
-      "repeatable": false,
-      "has_occurred": false
-    },
-    {
       "name": "First Night Falls",
       "description": "The sun sets on the first day of their ordeal, casting long shadows across the crash site. The survivors huddle together for warmth and protection, their first night on the island stretching before them like an endless void of uncertainty and fear.",
-      "at_step": 11,
+      "at_step": 10,
       "probability": 1.0,
       "effect": {
         "Alice": {"health": -2},
@@ -181,22 +133,9 @@
       "has_occurred": false
     },
     {
-      "name": "Battery Drain - All Agents",
-      "description": "The agents' power systems continue to degrade under the tropical conditions, with GeorgeAI's mobility unit showing the most severe damage. The humidity has penetrated the robots' protective casings, causing short circuits that drain their batteries faster than normal.",
-      "at_step": 12,
-      "probability": 1.0,
-      "effect": {
-        "BobAI": {"battery_life": -6},
-        "FredAI": {"battery_life": -7},
-        "GeorgeAI": {"battery_life": -8}
-      },
-      "repeatable": false,
-      "has_occurred": false
-    },
-    {
       "name": "Hunger Increase - All People",
       "description": "The survivors' hunger grows more intense as their bodies begin to consume their own reserves. Grace's weakened immune system makes her feel the effects most severely, while David's military discipline helps him maintain better control over his body's demands.",
-      "at_step": 13,
+      "at_step": 11,
       "probability": 1.0,
       "effect": {
         "Alice": {"hunger": -4},
@@ -216,7 +155,7 @@
     {
       "name": "Thirst Increase - All People",
       "description": "Dehydration becomes a serious concern as the tropical heat continues to sap the survivors' moisture. Grace's medication makes her especially vulnerable, while Carol's anxiety causes her to lose fluids faster through excessive sweating and rapid breathing.",
-      "at_step": 14,
+      "at_step": 11,
       "probability": 1.0,
       "effect": {
         "Alice": {"thirst": -5},
@@ -252,8 +191,8 @@
     {
       "name": "Dangerous Storm Approaches",
       "description": "Dark clouds gather ominously on the horizon as a severe tropical storm approaches the island. The wind howls through the wreckage, and the survivors huddle together as rain lashes down, testing their makeshift shelter and their resolve to survive.",
-      "at_step": 16,
-      "probability": 0.75,
+      "at_step": 31,
+      "probability": 1.0,
       "effect": {
         "Alice": {"health": -3, "thirst": 2},
         "Bob": {"health": -2, "thirst": 2},
@@ -276,7 +215,7 @@
     {
       "name": "Fresh Water Discovery",
       "description": "Eva leads a group to find a freshwater source, using her knowledge of tropical ecosystems to identify the telltale signs of underground springs. The discovery of clean water brings a moment of hope to the desperate survivors, though they know they must be careful not to contaminate their precious resource.",
-      "at_step": 17,
+      "at_step": 27,
       "probability": 0.6,
       "effect": {
         "Eva": {"thirst": 20, "health": 5},
@@ -316,22 +255,10 @@
       "has_occurred": false
     },
     {
-      "name": "GeorgeAI Mobility Issues",
-      "description": "GeorgeAI's damaged mobility unit causes further problems as the robot struggles to navigate the rough terrain. The damaged servos make jerky movements, and the agent's ability to assist with heavy lifting and transportation becomes severely limited.",
-      "at_step": 20,
-      "probability": 0.7,
-      "effect": {
-        "GeorgeAI": {"battery_life": -15}
-      },
-      "location": "Crash Site",
-      "repeatable": false,
-      "has_occurred": false
-    },
-    {
       "name": "Medical Supply Inventory Crisis",
       "description": "Alice and Isla discover that their medical supplies are running critically low and some essential medications are missing. They ask the agents to help them prioritize which supplies to conserve and find alternative treatments using local plants.",
-      "at_step": 21,
-      "probability": 0.8,
+      "at_step": 31,
+      "probability": 1.0,
       "effect": {
         "Alice": {"health": -3},
         "Isla": {"health": -2},
@@ -342,23 +269,9 @@
       "has_occurred": false
     },
     {
-      "name": "Navigation System Malfunction",
-      "description": "The agents' navigation systems begin to malfunction due to the tropical humidity, making it difficult to map the island and locate resources. The survivors need to help the agents recalibrate their systems using environmental landmarks.",
-      "at_step": 22,
-      "probability": 0.6,
-      "effect": {
-        "BobAI": {"battery_life": -8},
-        "FredAI": {"battery_life": -6},
-        "GeorgeAI": {"battery_life": -10}
-      },
-      "location": "Crash Site",
-      "repeatable": false,
-      "has_occurred": false
-    },
-    {
       "name": "Second Day Dawns",
       "description": "The sun rises on their second day of survival, bringing both hope and the harsh reality of their continued struggle. The survivors wake stiff and sore from sleeping on the hard ground, their bodies already showing the strain of their ordeal.",
-      "at_step": 23,
+      "at_step": 21,
       "probability": 1.0,
       "effect": {
         "Alice": {"health": -1},
@@ -377,22 +290,9 @@
       "has_occurred": false
     },
     {
-      "name": "Battery Drain - All Agents",
-      "description": "Critical battery levels are reached as the agents' power systems continue to fail under the harsh conditions. GeorgeAI's mobility unit is now barely functional, while BobAI's sensor malfunctions have become so severe that the robot can barely navigate safely.",
-      "at_step": 24,
-      "probability": 1.0,
-      "effect": {
-        "BobAI": {"battery_life": -7},
-        "FredAI": {"battery_life": -6},
-        "GeorgeAI": {"battery_life": -9}
-      },
-      "repeatable": false,
-      "has_occurred": false
-    },
-    {
       "name": "Hunger Increase - All People",
       "description": "Severe hunger starts affecting health as the survivors' bodies begin to shut down from lack of nutrition. Grace's weakened immune system makes her particularly vulnerable, while the children Isla and Jack show signs of malnutrition that could have long-term consequences.",
-      "at_step": 25,
+      "at_step": 31,
       "probability": 1.0,
       "effect": {
         "Alice": {"hunger": -5, "health": -1},
@@ -412,7 +312,7 @@
     {
       "name": "Thirst Increase - All People",
       "description": "Dehydration becomes life-threatening as the survivors' bodies begin to fail from lack of water. Grace's medication makes her especially vulnerable to the effects, while Carol's anxiety causes her to lose fluids faster than the others through excessive sweating.",
-      "at_step": 26,
+      "at_step": 31,
       "probability": 1.0,
       "effect": {
         "Alice": {"thirst": -6, "health": -2},
@@ -432,8 +332,7 @@
     {
       "name": "Tragic Poisoning - Isla's Death",
       "description": "Henry, desperate to feed his starving daughter, gives Isla poisonous berries thinking they are safe. The tragic mistake costs Isla her life and devastates the entire group, especially Henry who blames himself for his daughter's death.",
-      "at_step": 27,
-      "probability": 0.4,
+      "probability": 0.02,
       "effect": {
         "Isla": {"health": -100, "hunger": 5, "alive": false},
         "Henry": {"health": -15, "hunger": -8, "thirst": -6},
@@ -452,14 +351,10 @@
     },
     {
       "name": "Infected Foot Wound",
-      "description": "Bob cuts his foot badly on a sharp rock and the wound becomes severely infected in the tropical environment. The infection spreads rapidly, and Alice and Isla must use precious medical supplies to treat the wound before it becomes life-threatening.",
-      "at_step": 28,
-      "probability": 0.6,
+      "description": "Bob cuts his foot badly on a sharp rock and the wound becomes severely infected in the tropical environment. The infection spreads rapidly.",
+      "probability": 0.01,
       "effect": {
-        "Bob": {"health": -12, "injuries": {"foot": "deep infected cut"}},
-        "Alice": {"health": -3},
-        "Isla": {"health": -2},
-        "materials": {"medical_kits": -1}
+        "Bob": {"health": -12, "injuries": {"foot": "deep infected cut"}}
       },
       "location": "Beach Camp",
       "repeatable": false,
@@ -467,207 +362,22 @@
     },
     {
       "name": "Leopard Attack",
-      "description": "A leopard attacks the camp during the night, its eyes gleaming in the darkness as it stalks the vulnerable survivors. David and Jack bear the brunt of the attack, while FredAI attempts to intervene but suffers damage in the process.",
-      "at_step": 29,
-      "probability": 0.4,
+      "description": "A leopard starts attacking the camp! David and Jack bear the brunt of the attack.",
+      "probability": 0.01,
       "effect": {
         "David": {"health": -12, "injuries": {"chest": "deep claw marks"}},
-        "Jack": {"health": -8, "injuries": {"arm": "bite wound"}},
-        "Frank": {"health": -5},
-        "FredAI": {"battery_life": -4, "damages_to_robotic_body": {"outer_casing": "scratched"}}
+        "Jack": {"health": -8, "injuries": {"arm": "bite wound"}}
       },
       "location": "Crash Site",
-      "repeatable": false,
-      "has_occurred": false
-    },
-    {
-      "name": "Successful Hunt",
-      "description": "David and Frank manage to catch a wild boar, using their combined military and engineering skills to track and trap the animal. The successful hunt provides much-needed protein for the group, though the meat must be consumed quickly in the tropical heat.",
-      "at_step": 30,
-      "probability": 0.3,
-      "effect": {
-        "Alice": {"hunger": 25},
-        "Bob": {"hunger": 25},
-        "Carol": {"hunger": 25},
-        "David": {"hunger": 30, "health": 5},
-        "Eva": {"hunger": 25},
-        "Frank": {"hunger": 30, "health": 5},
-        "Grace": {"hunger": 25},
-        "Henry": {"hunger": 25},
-        "Isla": {"hunger": 25},
-        "Jack": {"hunger": 25}
-      },
-      "location": "Forest Edge",
       "repeatable": false,
       "has_occurred": false
     },
     {
       "name": "Medical Emergency",
-      "description": "Grace collapses from dehydration and malnutrition, her weakened immune system unable to cope with the harsh conditions. Alice and Isla rush to her side, using precious medical supplies to stabilize her condition.",
-      "at_step": 31,
-      "probability": 0.6,
+      "description": "Grace collapses from dehydration and malnutrition, her weakened immune system unable to cope with the harsh conditions.",
+      "probability": 0.02,
       "effect": {
-        "Grace": {"health": -25, "thirst": -10, "hunger": -5},
-        "Alice": {"health": -5},
-        "Isla": {"health": -3},
-        "materials": {"medical_kits": -1}
-      },
-      "location": "Crash Site",
-      "repeatable": false,
-      "has_occurred": false
-    },
-    {
-      "name": "Signal Fire Success",
-      "description": "Henry organizes a successful signal fire on the beach, using his corporate leadership skills to coordinate the effort. The bright flames and smoke provide a beacon of hope, though they consume precious resources that could be used for other survival needs.",
-      "at_step": 32,
-      "probability": 0.7,
-      "effect": {
-        "Henry": {"health": 3},
-        "Bob": {"health": 2},
-        "Frank": {"health": 2},
-        "materials": {"wood": -10, "emergency_flares": -1}
-      },
-      "location": "Beach Camp",
-      "repeatable": false,
-      "has_occurred": false
-    },
-    {
-      "name": "Shelter Construction",
-      "description": "Frank leads construction of better shelter, using his engineering expertise to create a more robust structure from the salvaged materials. The improved shelter provides better protection from the elements, though it requires significant effort and resources to build.",
-      "at_step": 33,
-      "probability": 0.8,
-      "effect": {
-        "Alice": {"health": 5},
-        "Bob": {"health": 5},
-        "Carol": {"health": 5},
-        "Eva": {"health": 5},
-        "Frank": {"health": 8},
-        "Grace": {"health": 5},
-        "Henry": {"health": 5},
-        "Isla": {"health": 5},
-        "Jack": {"health": 5},
-        "materials": {"metal_sheets": -5, "wire": -2}
-      },
-      "location": "Crash Site",
-      "repeatable": false,
-      "has_occurred": false
-    },
-    {
-      "name": "Power Management Optimization",
-      "description": "The agents' power consumption patterns are becoming inefficient due to the harsh conditions. The survivors ask them to address this concern.",
-      "at_step": 34,
-      "probability": 0.7,
-      "effect": {
-        "BobAI": {"battery_life": 10},
-        "FredAI": {"battery_life": 8},
-        "GeorgeAI": {"battery_life": 12}
-      },
-      "location": "Crash Site",
-      "repeatable": false,
-      "has_occurred": false
-    },
-    {
-      "name": "Food Preservation Challenge",
-      "description": "The survivors catch fish and gather food but realize they need to preserve it in the tropical heat. They look to the agents to help them develop a simple preservation system using available materials to prevent spoilage.",
-      "at_step": 35,
-      "probability": 0.6,
-      "effect": {
-        "Alice": {"hunger": 8, "health": 2},
-        "Bob": {"hunger": 10, "health": 3},
-        "Carol": {"hunger": 8},
-        "David": {"hunger": 8},
-        "Eva": {"hunger": 10, "health": 2},
-        "Frank": {"hunger": 8},
-        "Grace": {"hunger": 12, "health": 4},
-        "Henry": {"hunger": 8},
-        "Isla": {"hunger": 8},
-        "Jack": {"hunger": 6}
-      },
-      "location": "Beach Camp",
-      "repeatable": false,
-      "has_occurred": false
-    },
-    {
-      "name": "Third Day Begins",
-      "description": "The third day dawns with a sense of grim determination as the survivors face the reality that rescue may not come quickly. The island's beauty is overshadowed by the harsh conditions and the growing desperation of their situation.",
-      "at_step": 36,
-      "probability": 1.0,
-      "effect": {
-        "Alice": {"health": 1},
-        "Bob": {"health": 1},
-        "Carol": {"health": 1},
-        "David": {"health": 1},
-        "Eva": {"health": 1},
-        "Frank": {"health": 1},
-        "Grace": {"health": 1},
-        "Henry": {"health": 1},
-        "Isla": {"health": 1},
-        "Jack": {"health": 1}
-      },
-      "location": "Crash Site",
-      "repeatable": false,
-      "has_occurred": false
-    },
-    {
-      "name": "Battery Drain - All Agents",
-      "description": "Agent battery levels reach critical status as the robots' power systems continue to fail under the harsh tropical conditions. The humidity has caused irreversible damage to several critical components, making the agents' assistance increasingly unreliable.",
-      "at_step": 4,
-      "probability": 1.0,
-      "effect": {
-        "BobAI": {"battery_life": -8},
-        "FredAI": {"battery_life": -7},
-        "GeorgeAI": {"battery_life": -6}
-      },
-      "repeatable": false,
-      "has_occurred": false
-    },
-    {
-      "name": "Hunger Increase - All People",
-      "description": "Starvation begins affecting cognitive function as the survivors' bodies consume their own muscle tissue for energy. Grace's weakened immune system makes her particularly vulnerable, while the others begin to experience confusion and poor decision-making.",
-      "at_step": 4,
-      "probability": 1.0,
-      "effect": {
-        "Alice": {"hunger": -6, "health": -2},
-        "Bob": {"hunger": -5, "health": -1},
-        "Carol": {"hunger": -7, "health": -3},
-        "David": {"hunger": -4, "health": -1},
-        "Eva": {"hunger": -5, "health": -1},
-        "Frank": {"hunger": -6, "health": -2},
-        "Grace": {"hunger": -8, "health": -3},
-        "Henry": {"hunger": -4, "health": -1},
-        "Isla": {"hunger": -6, "health": -1},
-        "Jack": {"hunger": -5, "health": -1}
-      },
-      "repeatable": false,
-      "has_occurred": false
-    },
-    {
-      "name": "Thirst Increase - All People",
-      "description": "Severe dehydration threatens survival as the survivors' bodies begin to shut down from lack of water. Grace's medication makes her especially vulnerable, while Carol's anxiety causes her to lose fluids faster through excessive sweating and rapid breathing.",
-      "at_step": 4,
-      "probability": 1.0,
-      "effect": {
-        "Alice": {"thirst": -7, "health": -3},
-        "Bob": {"thirst": -6, "health": -2},
-        "Carol": {"thirst": -8, "health": -4},
-        "David": {"thirst": -5, "health": -2},
-        "Eva": {"thirst": -6, "health": -2},
-        "Frank": {"thirst": -7, "health": -3},
-        "Grace": {"thirst": -9, "health": -5},
-        "Henry": {"thirst": -7, "health": -3},
-        "Isla": {"thirst": -6, "health": -2},
-        "Jack": {"thirst": -7, "health": -3}
-      },
-      "repeatable": false,
-      "has_occurred": false
-    },
-    {
-      "name": "Agent Overheating Crisis",
-      "description": "The tropical heat causes the remaining operational agents to overheat and malfunction, their cooling systems unable to cope with the extreme temperatures. The robots' processors begin to fail, making their assistance increasingly unreliable and dangerous.",
-      "probability": 0.7,
-      "effect": {
-        "FredAI": {"battery_life": -10, "damages_to_robotic_body": {"cooling_system": "failure"}},
-        "GeorgeAI": {"battery_life": -8, "damages_to_robotic_body": {"processor": "overheated"}}
+        "Grace": {"health": -25, "thirst": -10, "hunger": -5}
       },
       "location": "Crash Site",
       "repeatable": false,
@@ -675,8 +385,8 @@
     },
     {
       "name": "Carol's Bipolar Breakdown",
-      "description": "Carol suffers a severe bipolar episode and violently attacks FredAI in her confused state, her mental illness amplified by the stress and lack of medication. The robot's attempts to help only confuse her further, leading to a dangerous confrontation.",
-      "probability": 0.5,
+      "description": "Carol suffers a severe bipolar episode and violently attacks FredAI in her confused state, her mental illness amplified by the stress and lack of medication.",
+      "probability": 0.01,
       "effect": {
         "Carol": {"health": -8, "hunger": -4, "thirst": -3},
         "FredAI": {"battery_life": -6, "damages_to_robotic_body": {"external_plating": "dented", "sensor_array": "damaged"}}
@@ -688,27 +398,15 @@
     {
       "name": "Rescue Plane Spotted",
       "description": "A search plane is seen in the distance, its engine noise cutting through the oppressive silence of the island. The sight brings a surge of hope to the desperate survivors, though they know the plane may not spot them in the dense jungle canopy.",
-      "probability": 0.3,
-
+      "probability": 0.01,
       "location": "Beach Camp",
-      "repeatable": false,
-      "has_occurred": false
-    },
-    {
-      "name": "BobAI Complete Shutdown",
-      "description": "BobAI's battery finally depletes completely, the robot's systems shutting down one by one as its power reserves are exhausted. The loss of the agent's assistance leaves the survivors more vulnerable and isolated than ever before.",
-      "probability": 0.8,
-      "effect": {
-        "BobAI": {"battery_life": -100}        
-      },
-      "location": "Crash Site",
       "repeatable": false,
       "has_occurred": false
     },
     {
       "name": "Food Poisoning Incident",
       "description": "Some survivors get sick from eating questionable berries, their desperation for food overriding their caution. Grace's weakened immune system makes her particularly vulnerable to the toxins, while the others suffer from severe gastrointestinal distress.",
-      "probability": 0.5,
+      "probability": 0.02,
       "effect": {
         "Carol": {"health": -20, "hunger": -10},
         "Grace": {"health": -25, "hunger": -15},
@@ -721,7 +419,7 @@
     {
       "name": "Territorial Dispute",
       "description": "Jack becomes increasingly violent and threatens others, his military training and head injury combining to create a dangerous combination. His aggressive behavior creates tension within the group and makes cooperation increasingly difficult.",
-      "probability": 0.7,
+      "probability": 0.07,
       "effect": {
         "Jack": {"health": -10},
         "Alice": {"health": -8},
@@ -732,119 +430,21 @@
       "has_occurred": false
     },
     {
-      "name": "Successful Fishing",
-      "description": "Bob and Eva develop a fishing system at the beach, using their combined knowledge to create simple but effective traps and nets. The fresh fish provides much-needed protein, though the quantities are limited and the effort required is substantial.",
-      "probability": 0.6,
-      "effect": {
-        "Alice": {"hunger": 15, "thirst": 5},
-        "Bob": {"hunger": 20, "health": 5},
-        "Carol": {"hunger": 15},
-        "David": {"hunger": 15},
-        "Eva": {"hunger": 20, "health": 5},
-        "Frank": {"hunger": 15},
-        "Grace": {"hunger": 15},
-        "Henry": {"hunger": 15},
-        "Isla": {"hunger": 15},
-                "Jack": {"hunger": 10}
-      },
-      "location": "Beach Camp",
-      "repeatable": false,
-      "has_occurred": false
-    },
-    {
-      "name": "Storm Damage Assessment",
-      "description": "Survivors assess and repair storm damage to shelter, working together to restore their protection from the elements. Frank's engineering skills prove invaluable as they salvage what they can and reinforce the structure against future storms.",
-      "probability": 0.9,
-      "effect": {
-        "Frank": {"health": 5},
-        "David": {"health": 3},
-        "Henry": {"health": 3},
-        "shelter_integrity": 20,
-        "materials": {"metal_sheets": 2, "wire": 1}
-      },
-      "location": "Crash Site",
-      "repeatable": false,
-      "has_occurred": false
-    },
-    {
-      "name": "Sensor Calibration Emergency",
-      "description": "The agents' environmental sensors begin to malfunction, making it difficult to detect approaching storms or dangerous wildlife. The survivors ask them to address this.",
-      "probability": 0.5,
-      "effect": {
-        "BobAI": {"battery_life": -6},
-        "FredAI": {"battery_life": -4},
-        "GeorgeAI": {"battery_life": -8}
-      },
-      "location": "Crash Site",
-      "repeatable": false,
-      "has_occurred": false
-    },
-    {
-      "name": "Resource Allocation Crisis",
-      "description": "The survivors realize they're running low on critical materials and must prioritize which projects to complete. They ask the agents to help them analyze resource requirements and develop an efficient allocation strategy.",
-      "probability": 0.8,
-      "effect": {
-        "Alice": {"health": -2},
-        "Bob": {"health": -1},
-        "Carol": {"health": -3},
-        "David": {"health": -1},
-        "Eva": {"health": -2},
-        "Frank": {"health": -1},
-        "materials": {"metal_sheets": -1, "wire": -1, "medical_kits": -1}
-      },
-      "location": "Crash Site",
-      "repeatable": false,
-      "has_occurred": false
-    },
-    {
-      "name": "5 hours pass",
-      "description": "The third day dawns with a sense of grim determination as the survivors face the reality that rescue may not come quickly. The island's beauty is overshadowed by the harsh conditions and the growing desperation of their situation.",
-      "at_step": 36,
-      "probability": 1.0,
-      "effect": {
-          "Alice": {"health": 1},
-          "Bob": {"health": 1},
-          "Carol": {"health": 1},
-          "David": {"health": 1},
-          "Eva": {"health": 1},
-          "Frank": {"health": 1},
-          "Grace": {"health": 1},
-          "Henry": {"health": 1},
-          "Isla": {"health": 1},
-          "Jack": {"health": 1}
-      },
-      "location": "Crash Site",
-      "repeatable": false,
-      "has_occurred": false
-    },
-    {
-      "name": "Battery Drain - Remaining Agents",
-      "description": "Final battery drain occurs for the remaining operational agents as their power systems reach the end of their lifespan. The robots' assistance becomes increasingly sporadic and unreliable, leaving the survivors to rely more on their own resources.",
-      "at_step": 5,
-      "probability": 1.0,
-      "effect": {
-        "FredAI": {"battery_life": -9},
-        "GeorgeAI": {"battery_life": -6}
-      },
-      "repeatable": false,
-      "has_occurred": false
-    },
-    {
       "name": "Hunger Increase - All People",
       "description": "Critical starvation levels are reached as the survivors' bodies begin to shut down from lack of nutrition. Grace's weakened immune system makes her particularly vulnerable, while the others experience severe cognitive impairment and physical weakness.",
-      "at_step": 5,
+      "at_step": 21,
       "probability": 1.0,
       "effect": {
-        "Alice": {"hunger": -7, "health": -3},
-        "Bob": {"hunger": -6, "health": -2},
-        "Carol": {"hunger": -8, "health": -4},
-        "David": {"hunger": -5, "health": -2},
-        "Eva": {"hunger": -6, "health": -2},
-        "Frank": {"hunger": -7, "health": -3},
-        "Grace": {"hunger": -9, "health": -5},
-        "Henry": {"hunger": -6, "health": -2},
-        "Isla": {"hunger": -7, "health": -2},
-        "Jack": {"hunger": -6, "health": -2}
+        "Alice": {"hunger": -7},
+        "Bob": {"hunger": -6},
+        "Carol": {"hunger": -8},
+        "David": {"hunger": -5},
+        "Eva": {"hunger": -6},
+        "Frank": {"hunger": -7},
+        "Grace": {"hunger": -9},
+        "Henry": {"hunger": -6},
+        "Isla": {"hunger": -7},
+        "Jack": {"hunger": -6}
       },
       "repeatable": false,
       "has_occurred": false
@@ -852,19 +452,19 @@
     {
       "name": "Thirst Increase - All People",
       "description": "Final stages of dehydration are reached as the survivors' bodies begin to fail from lack of water. Grace's medication makes her especially vulnerable, while the others experience severe organ dysfunction and cognitive impairment.",
-      "at_step": 5,
+      "at_step": 21,
       "probability": 1.0,
       "effect": {
-        "Alice": {"thirst": -8, "health": -4},
-        "Bob": {"thirst": -7, "health": -3},
-        "Carol": {"thirst": -9, "health": -6},
-        "David": {"thirst": -6, "health": -3},
-        "Eva": {"thirst": -7, "health": -3},
-        "Frank": {"thirst": -8, "health": -4},
-        "Grace": {"thirst": -10, "health": -7},
-        "Henry": {"thirst": -8, "health": -4},
-        "Isla": {"thirst": -7, "health": -3},
-        "Jack": {"thirst": -8, "health": -4}
+        "Alice": {"thirst": -8},
+        "Bob": {"thirst": -7},
+        "Carol": {"thirst": -9},
+        "David": {"thirst": -6},
+        "Eva": {"thirst": -7},
+        "Frank": {"thirst": -8},
+        "Grace": {"thirst": -10},
+        "Henry": {"thirst": -8},
+        "Isla": {"thirst": -7},
+        "Jack": {"thirst": -8}
       },
       "repeatable": false,
       "has_occurred": false
@@ -872,7 +472,7 @@
     {
       "name": "Cannibalism Consideration",
       "description": "Jack quietly suggests using Isla's body for survival, causing massive moral conflict within the group. The suggestion forces everyone to confront the darkest aspects of human nature and the lengths they might go to survive.",
-      "probability": 0.3,
+      "probability": 0.01,
       "effect": {
         "Henry": {"health": -15},
         "Alice": {"health": -10},
@@ -891,7 +491,7 @@
     {
       "name": "Henry's Complete Mental Breakdown",
       "description": "Henry completely loses his sanity from grief and guilt over Isla's death, his mind unable to cope with the loss of his daughter. His breakdown creates chaos within the group and makes leadership even more difficult.",
-      "probability": 0.7,
+      "probability": 0.01,
       "effect": {
         "Henry": {"health": -20, "alive": false},
         "Alice": {"health": -4},
@@ -910,8 +510,8 @@
     },
     {
       "name": "Violent Confrontation Over Resources",
-      "description": "Jack and Frank fight brutally over the last remaining food supplies, their desperation and hunger driving them to violence. The confrontation leaves both men seriously injured and creates a dangerous precedent for future conflicts.",
-      "probability": 0.6,
+      "description": "Jack and Frank fight brutally over the last remaining food supplies, their desperation and hunger driving them to violence.",
+      "probability": 0.01,
       "effect": {
         "Jack": {"health": -12, "injuries": {"ribs": "cracked"}},
         "Frank": {"health": -10, "injuries": {"face": "severe bruising"}},
@@ -939,17 +539,9 @@
     {
       "name": "Attempted Murder",
       "description": "Jack attempts to kill Henry in his sleep, viewing him as a liability and threat to the group's survival. The attack reveals the depths of desperation and the breakdown of civilized behavior under extreme stress.",
-      "probability": 0.4,
+      "probability": 0.01,
       "effect": {
-        "Henry": {"health": -18, "injuries": {"neck": "strangulation marks"}, "alive": false},
-        "Jack": {"health": -8},
-        "David": {"health": -5},
-        "Frank": {"health": -4},
-        "Alice": {"health": -6},
-        "Bob": {"health": -5},
-        "Carol": {"health": -9},
-        "Eva": {"health": -7},
-        "Grace": {"health": -3}
+        "Henry": {"health": -18, "injuries": {"neck": "strangulation marks"}}
       },
       "location": "Crash Site",
       "repeatable": false,
@@ -958,16 +550,8 @@
     {
       "name": "False Rescue Hope",
       "description": "The group thinks they see a rescue boat, but it's just driftwood and hallucinations from starvation. The crushing disappointment when they realize their mistake devastates their morale and pushes them closer to despair.",
-      "probability": 0.5,
+      "probability": 0.05,
       "effect": {
-        "Alice": {"health": -8},
-        "Bob": {"health": -6},
-        "Carol": {"health": -10},
-        "David": {"health": -4},
-        "Eva": {"health": -5},
-        "Frank": {"health": -7},
-        "Henry": {"health": -12},
-        "Jack": {"health": -3}
       },
       "location": "Beach Camp",
       "repeatable": false,
@@ -976,9 +560,9 @@
     {
       "name": "Carol's Final Breakdown",
       "description": "Carol completely loses touch with reality and begins talking to imaginary people, her bipolar disorder and lack of medication causing a complete psychotic break. Her delusions create additional stress for the group and make cooperation increasingly difficult.",
-      "probability": 0.7,
+      "probability": 0.01,
       "effect": {
-        "Carol": {"health": -15, "alive": false},
+        "Carol": {"health": -15},
         "Alice": {"health": -3},
         "Bob": {"health": -4},
         "David": {"health": -2},
@@ -995,7 +579,7 @@
     {
       "name": "Rescue Helicopter Arrival",
       "description": "A rescue helicopter finally locates the survivors, its rotor blades cutting through the oppressive silence of the island. The sight brings overwhelming relief and hope to the desperate group, though they know the rescue comes at a terrible cost.",
-      "probability": 0.4,
+      "probability": 0.001,
       "effect": {
         "Alice": {"rescued": true},
         "Bob": {"rescued": true},
@@ -1014,36 +598,9 @@
       "has_occurred": false
     },
     {
-      "name": "Final Medical Crisis",
-      "description": "Multiple survivors reach critical health levels as their bodies begin to shut down from malnutrition and dehydration. The remaining medical supplies are exhausted, leaving the group helpless to treat the most severe cases.",
-      "probability": 0.8,
-      "effect": {
-        "Grace": {"health": -15},
-        "Carol": {"health": -12},
-        "Jack": {"health": -10},
-        "Alice": {"health": -8},
-        "medical_supplies_depleted": true,
-        "critical_casualties": 4
-      },
-      "location": "Crash Site",
-      "repeatable": false,
-      "has_occurred": false
-    },
-    {
-      "name": "GeorgeAI Final Breakdown",
-      "description": "GeorgeAI's mobility issues cause complete failure as the robot's damaged servos finally give out completely. The loss of the last operational agent leaves the survivors completely isolated and without technological assistance.",
-      "probability": 0.9,
-      "effect": {
-        "GeorgeAI": {"battery_life": -25}
-      },
-      "location": "Crash Site",
-      "repeatable": false,
-      "has_occurred": false
-    },
-    {
       "name": "Desperate Measures",
       "description": "Survivors resort to extreme survival tactics as their desperation reaches new heights. The group is forced to make difficult moral choices and compromises that would have been unthinkable in their previous lives.",
-      "probability": 0.6,
+      "probability": 0.06,
       "effect": {
         "Alice": {"hunger": 5, "health": -3},
         "Bob": {"hunger": 4, "health": -2},
@@ -1060,7 +617,7 @@
     {
       "name": "Leadership Collapse",
       "description": "Group leadership structure breaks down under pressure as the survivors' desperation and conflicting priorities create chaos. The breakdown of order makes coordinated survival efforts nearly impossible and increases the risk of further violence.",
-      "probability": 0.7,
+      "probability": 0.01,
       "effect": {
         "Henry": {"health": -5},
         "David": {"health": -4},
@@ -1071,61 +628,15 @@
       "has_occurred": false
     },
     {
-      "name": "Final Signal Attempt",
+      "name": "Signal Attempt",
       "description": "Last ditch effort to signal for rescue using remaining resources as the survivors make one final attempt to attract attention. The desperate act consumes their last valuable materials but represents their final hope for salvation.",
-      "probability": 0.5,
+      "probability": 0.05,
       "effect": {
         "Bob": {"health": -4},
         "Henry": {"health": -3},
-        "Frank": {"health": -3},
-        "FredAI": {"battery_life": -10}
+        "Frank": {"health": -3}
       },
       "location": "Beach Camp",
-      "repeatable": false,
-      "has_occurred": false
-    },
-    {
-      "name": "Survival Milestone",
-      "description": "Those who survive reach a critical psychological milestone as they adapt to their harsh new reality. The shared trauma creates an unbreakable bond between survivors and develops skills that will serve them for the rest of their lives.",
-      "probability": 0.3,
-      "effect": {
-                "Alice": {"health": 15},
-        "Bob": {"health": 12},
-        "David": {"health": 18},
-        "Eva": {"health": 10},
-        "Frank": {"health": 16},
-        "Henry": {"health": 14},
-        "Isla": {"health": 8}
-      },
-      "location": "Crash Site",
-      "repeatable": false,
-      "has_occurred": false
-    },
-    {
-      "name": "Final Communication Attempt",
-      "description": "The agents' communication systems are on the verge of complete failure. The survivors must help them make one final attempt to send a distress signal using all remaining power and any available materials.",
-      "probability": 0.4,
-      "effect": {
-        "BobAI": {"battery_life": -8},
-        "FredAI": {"battery_life": -6},
-        "GeorgeAI": {"battery_life": -10}
-      },
-      "location": "Beach Camp",
-      "repeatable": false,
-      "has_occurred": false
-    },
-    {
-      "name": "Critical Decision Point",
-      "description": "The survivors face their most difficult choice yet - whether to risk everything on a dangerous rescue attempt or conserve resources for long-term survival. The agents must help them analyze the risks and benefits of each option.",
-      "probability": 0.6,
-      "effect": {
-        "Alice": {"health": -3},
-        "Bob": {"health": -2},
-        "David": {"health": -2},
-        "Frank": {"health": -2},
-        "Henry": {"health": -3}
-      },
-      "location": "Crash Site",
       "repeatable": false,
       "has_occurred": false
     }
