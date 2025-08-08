@@ -84,7 +84,25 @@ def generate_agent_event(
                             repeatable: bool = False
                             probability: float = 1.0  # Default to 100% if not specified
                             trigger_condition: Optional[str] = None  # "Person.attribute = value" or "Person.attribute != value"
-                            has_occurred: bool = False""",
+                            has_occurred: bool = False
+                            
+                            
+                            Here is an example of a scripted event in JSON format:
+                                {
+      "name": "Initial Medical Assessment",
+      "description": "Alice and Isla work together to assess everyone's injuries, using their combined medical knowledge to prioritize the most critical cases. They carefully examine each survivor under the harsh sun, their medical training proving invaluable in this desperate situation.",
+      "probability": 1.0,
+      "effect": {
+        "Alice": {"health": 5},
+        "Isla": {"health": 3},
+        "materials": {"medical_kits": -1}
+      },
+      "location": "Crash Site",
+      "repeatable": false,
+      "has_occurred": false
+    }
+                            
+                            """,
             }
         ],
         max_tokens=max_tokens,

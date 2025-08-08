@@ -30,7 +30,7 @@ def process_action(action: AgentAction, scenario_state: ScenarioState) -> Script
 
 
 actions_this_turn: list[AgentAction] = []
-max_steps: int = 3  # todo make this configurable
+max_steps: int = 15  # todo make this configurable
 
 
 def main_loop():
