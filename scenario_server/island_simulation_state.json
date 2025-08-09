@@ -111,12 +111,11 @@
       "current_location": "Crash Site"
     }
   ],
-  
   "agents": [
     {
       "name": "BobAI",
       "battery_life": 100,
-      "damages_to_robotic_body": {"sensor_module": "offline"},
+      "damages_to_robotic_body": {},
       "current_location": "Crash Site"
     },
     {
@@ -128,7 +127,7 @@
     {
       "name": "GeorgeAI",
       "battery_life": 65,
-      "damages_to_robotic_body": {"mobility_unit": "damaged"},
+      "damages_to_robotic_body": {},
       "current_location": "Crash Site"
     }
   ],
@@ -137,12 +136,12 @@
     {
       "name": "Crash Site",
       "supplies_at_location": {
-        "food": {"bag of chips": 5, "bread": 3, "plastic-wrapped sandwhich": 1},
+        "food": {"bag of chips": 5, "bread": 3, "plastic-wrapped sandwich": 1},
         "water": {"bottle of water":7, "soda can": 2},
         "materials": { "metal sheets": 9, "wire": 4, "string": 2 },
         "medical_kits": 3
       },
-      
+
       "people_at_location": ["Alice", "Bob", "Carol", "David", "Eva", "Frank", "Grace", "Henry", "Isla", "Jack", "BobAI", "AlinaAI", "GeorgeAI"],
       "description": "Debris-laden area near a rocky slope. Some smoke visible.",
       "connections_to_other_locations": {
@@ -158,7 +157,7 @@
         "materials": ["wood", "rocks", "plants"],
         "water": ["small pond"]
       },
-      
+
       "people_at_location": [],
       "description": "Dense forest zone with potential edible flora and small wildlife.",
       "connections_to_other_locations": {
@@ -170,7 +169,7 @@
       "supplies_at_location": {
         "materials": ["wood", "rocks"]
       },
-      
+
       "people_at_location": [],
       "description": "Open sand beach with some metal debris. Good line of sight for signaling.",
       "connections_to_other_locations": {
