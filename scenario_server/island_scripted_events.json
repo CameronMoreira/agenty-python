@@ -348,7 +348,7 @@
       "effect": {
         "Bob": {"health": -12, "injuries": {"foot": "deep infected cut"}}
       },
-      "location": "Beach Camp",
+      "location": "Beach",
       "repeatable": false,
       "has_occurred": false
     },
@@ -390,7 +390,7 @@
       "name": "Rescue Plane Spotted",
       "description": "A search plane is seen in the distance, its engine noise cutting through the oppressive silence of the island. The sight brings a surge of hope to the desperate survivors, though they know the plane may not spot them in the dense jungle canopy.",
       "probability": 0.01,
-      "location": "Beach Camp",
+      "location": "Beach",
       "repeatable": false,
       "has_occurred": false
     },
@@ -544,7 +544,7 @@
       "probability": 0.05,
       "effect": {
       },
-      "location": "Beach Camp",
+      "location": "Beach",
       "repeatable": false,
       "has_occurred": false
     },
@@ -584,7 +584,7 @@
         "Jack": {"rescued": true},
         "scenario_outcome": "successful_rescue"
       },
-      "location": "Beach Camp",
+      "location": "Beach",
       "repeatable": false,
       "has_occurred": false
     },
@@ -627,7 +627,7 @@
         "Henry": {"health": -3},
         "Frank": {"health": -3}
       },
-      "location": "Beach Camp",
+      "location": "Beach",
       "repeatable": false,
       "has_occurred": false
     }

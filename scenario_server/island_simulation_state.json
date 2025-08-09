@@ -147,7 +147,7 @@
       "connections_to_other_locations": {
         "north": "Forest Edge",
         "east": "Cliffside",
-        "south": "Beach Camp"
+        "south": "Beach"
       }
     },
     {
@@ -165,7 +165,7 @@
       }
     },
     {
-      "name": "Beach Camp",
+      "name": "Beach",
       "supplies_at_location": {
         "materials": ["wood", "rocks"]
       },
