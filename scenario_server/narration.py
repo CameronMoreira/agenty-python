@@ -7,6 +7,7 @@ from scenario_server_base import AgentAction
 # Here we take the current scenario state and generate a narrative description to be sent to each of the agents.
 def narrate_state(
         state: ScenarioState,
+        prior_narrations: list[str],
         events_this_round: list[ScriptedEvent],
         anthropic_client,
         model: str = "claude-sonnet-4-20250514",
@@ -17,11 +18,14 @@ def narrate_state(
     """
     prompt = {"role": "user",
               "content": f"Please provide a concise, vivid narrative of the following simulation state, keeping in mind " +
-                         f"that one 'step' is approximately equivalent to 5 minutes or so, unless otherwise indicated through event descriptions:\n" +
+                         f"that one 'step' is approximately equivalent to 5 minutes or so (though you should not focus on narrating time), " +
+                         f"unless otherwise indicated through event descriptions:\n" +
                          f"{state.model_dump_json()}\n"
                          f"Mention especially the following events that occurred in the last round:\n" +
-                         "\n".join([event.model_dump_json() for event in events_this_round])}
-
+                         "\n".join([event.model_dump_json() for event in events_this_round]) +
+                         f"\n\nHere are the prior narrations of the scenario state:\n" +
+                         "\n\n".join(prior_narrations) +
+                         "\n\nPlease ensure that the narrative is vivid and engaging, and that it does not repeat information unnecessarily."}
     response = anthropic_client.messages.create(
         model=model,
         messages=[prompt],
