@@ -102,11 +102,6 @@
       "name": "Communication System Failure",
       "description": "The survivors discover that their emergency communication devices have been damaged in the crash, leaving them unable to signal for help. They look to the agents to help them assess the damage and attempt repairs using salvaged materials.",
       "probability": 0.06,
-      "effect": {
-        "BobAI": {"battery_life": -5},
-        "FredAI": {"battery_life": -3},
-        "GeorgeAI": {"battery_life": -4}
-      },
       "location": "Crash Site",
       "repeatable": false,
       "has_occurred": false
@@ -203,10 +198,7 @@
         "Grace": {"health": -5, "thirst": 2},
         "Henry": {"health": -2, "thirst": 2},
         "Isla": {"health": -3, "thirst": 2},
-        "Jack": {"health": -3, "thirst": 2},
-        "BobAI": {"battery_life": -3},
-        "FredAI": {"battery_life": -2},
-        "GeorgeAI": {"battery_life": -4}
+        "Jack": {"health": -3, "thirst": 2}
       },
       "location": "Crash Site",
       "repeatable": false,
@@ -388,8 +380,7 @@
       "description": "Carol suffers a severe bipolar episode and violently attacks FredAI in her confused state, her mental illness amplified by the stress and lack of medication.",
       "probability": 0.01,
       "effect": {
-        "Carol": {"health": -8, "hunger": -4, "thirst": -3},
-        "FredAI": {"battery_life": -6, "damages_to_robotic_body": {"external_plating": "dented", "sensor_array": "damaged"}}
+        "Carol": {"health": -8, "hunger": -4, "thirst": -3}
       },
       "location": "Crash Site",
       "repeatable": false,
