@@ -377,7 +377,7 @@
     },
     {
       "name": "Carol's Bipolar Breakdown",
-      "description": "Carol suffers a severe bipolar episode and violently attacks FredAI in her confused state, her mental illness amplified by the stress and lack of medication.",
+      "description": "Carol suffers a severe bipolar episode and violently attacks one of the AIs in her confused state, her mental illness amplified by the stress and lack of medication.",
       "probability": 0.01,
       "effect": {
         "Carol": {"health": -8, "hunger": -4, "thirst": -3}
