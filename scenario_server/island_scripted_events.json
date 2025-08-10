@@ -186,7 +186,7 @@
     {
       "name": "Dangerous Storm Approaches",
       "description": "Dark clouds gather ominously on the horizon as a severe tropical storm approaches the island. The wind howls through the wreckage, and the survivors huddle together as rain lashes down, testing their makeshift shelter and their resolve to survive.",
-      "at_step": 31,
+      "at_step": 25,
       "probability": 1.0,
       "effect": {
         "Alice": {"health": -3, "thirst": 2},
@@ -249,8 +249,7 @@
     {
       "name": "Medical Supply Inventory Crisis",
       "description": "Alice and Isla discover that their medical supplies are running critically low and some essential medications are missing. They ask the agents to help them prioritize which supplies to conserve and find alternative treatments using local plants.",
-      "at_step": 31,
-      "probability": 1.0,
+      "probability": 0.05,
       "effect": {
         "Alice": {"health": -3},
         "Isla": {"health": -2},
@@ -284,7 +283,7 @@
     {
       "name": "Hunger Increase - All People",
       "description": "Severe hunger starts affecting health as the survivors' bodies begin to shut down from lack of nutrition. Grace's weakened immune system makes her particularly vulnerable, while the children Isla and Jack show signs of malnutrition that could have long-term consequences.",
-      "at_step": 31,
+      "at_step": 26,
       "probability": 1.0,
       "effect": {
         "Alice": {"hunger": -5, "health": -1},
@@ -304,7 +303,7 @@
     {
       "name": "Thirst Increase - All People",
       "description": "Dehydration becomes life-threatening as the survivors' bodies begin to fail from lack of water. Grace's medication makes her especially vulnerable to the effects, while Carol's anxiety causes her to lose fluids faster than the others through excessive sweating.",
-      "at_step": 31,
+      "at_step": 26,
       "probability": 1.0,
       "effect": {
         "Alice": {"thirst": -6, "health": -2},
