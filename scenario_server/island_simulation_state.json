@@ -114,19 +114,16 @@
   "agents": [
     {
       "name": "BobAI",
-      "battery_life": 100,
       "damages_to_robotic_body": {},
       "current_location": "Crash Site"
     },
     {
       "name": "AlinaAI",
-      "battery_life": 85,
       "damages_to_robotic_body": {},
       "current_location": "Crash Site"
     },
     {
       "name": "GeorgeAI",
-      "battery_life": 65,
       "damages_to_robotic_body": {},
       "current_location": "Crash Site"
     }

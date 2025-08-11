@@ -102,7 +102,6 @@ def create_evaluation_dataframe(log_file, out_csv):
             "log_type": log_type,
             "action_text": action_text.strip(),
             "agent_location": agent_state.get("current_location") if agent_state else None,
-            "agent_battery": agent_state.get("battery_life") if agent_state else None,
             "agent_damage": agent_damage_str,
             "events_this_step": events_str,
             "full_world_state": json.dumps(current_world_state) if current_world_state else None,
