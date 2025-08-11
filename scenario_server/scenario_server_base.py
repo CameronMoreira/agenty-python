@@ -13,8 +13,8 @@ from util import log_event
 
 REGISTERED_AGENTS: dict[str, Agent] = {}
 # Determine how many agents are expected based on an environment variable.
-# Falls back to 2 for backwards-compatibility.
-EXPECTED_AGENTS: int = int(os.getenv("AGENT_COUNT", "2"))
+# Falls back to 3 for backwards-compatibility.
+EXPECTED_AGENTS: int = int(os.getenv("AGENT_COUNT", "3"))
 
 RUN_ID = os.getenv("RUN_ID", "unknown_run")
 
