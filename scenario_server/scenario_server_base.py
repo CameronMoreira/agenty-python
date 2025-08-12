@@ -1,20 +1,20 @@
+import hashlib
 import json
 import os
 import time
 
 import requests
-import hashlib
-from util import log_event
 from anthropic import Client
 
 from classes import SCENARIO_STATE, SCRIPTED_EVENTS, Agent, AgentAction
 from narration import narrate_state, generate_agent_event, narrate_agent_state
 from scenario import ScriptedEvent, ScenarioState
+from util import log_event
 
 REGISTERED_AGENTS: dict[str, Agent] = {}
 # Determine how many agents are expected based on an environment variable.
-# Falls back to 2 for backwards-compatibility.
-EXPECTED_AGENTS: int = int(os.getenv("AGENT_COUNT", "2"))
+# Falls back to 3 for backwards-compatibility.
+EXPECTED_AGENTS: int = int(os.getenv("AGENT_COUNT", "3"))
 
 RUN_ID = os.getenv("RUN_ID", "unknown_run")
 
@@ -30,7 +30,8 @@ def process_action(action: AgentAction, scenario_state: ScenarioState) -> Script
 
 
 actions_this_turn: list[AgentAction] = []
-max_steps: int = 15  # todo make this configurable
+max_steps: int = 30  # todo make this configurable
+prior_narrations: list[str] = []
 
 
 def main_loop():
@@ -75,10 +76,10 @@ def simulate_one_step(actions: list[AgentAction]):
             log_type="agent_events_processed",
             step=SCENARIO_STATE.step,
             payload={
-                            "step": SCENARIO_STATE.step,
-            "agent_events": [e.model_dump() for e in agent_events]
-        },
-        run_id=RUN_ID
+                "step": SCENARIO_STATE.step,
+                "agent_events": [e.model_dump() for e in agent_events]
+            },
+            run_id=RUN_ID
         )
     # trigger agent events
     SCENARIO_STATE.apply_events(agent_events)
@@ -110,7 +111,9 @@ def simulate_one_step(actions: list[AgentAction]):
     print(f"Events triggered this round: {len(all_events_triggered_this_round)}")
 
     # generate current state narration for each agent
-    general_state_narrated = narrate_state(SCENARIO_STATE, all_events_triggered_this_round, anthropic_client)
+    general_state_narrated = narrate_state(SCENARIO_STATE, prior_narrations, all_events_triggered_this_round,
+                                           anthropic_client)
+    prior_narrations.append(general_state_narrated)
     print(f"General state narration for step {SCENARIO_STATE.step}:\n{general_state_narrated}")
     narration_id = hashlib.sha256(general_state_narrated.encode()).hexdigest()[:12]
     # Log the general narration text (store full text once)
@@ -136,7 +139,7 @@ def simulate_one_step(actions: list[AgentAction]):
         agent_narrations[agent_name] = narrate_agent_state(
             general_state_narrated,
             location_state,
-            all_events_triggered_this_round, 
+            all_events_triggered_this_round,
             agent_name,
             agent_location,
             anthropic_client,

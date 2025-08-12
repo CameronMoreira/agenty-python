@@ -102,11 +102,6 @@
       "name": "Communication System Failure",
       "description": "The survivors discover that their emergency communication devices have been damaged in the crash, leaving them unable to signal for help. They look to the agents to help them assess the damage and attempt repairs using salvaged materials.",
       "probability": 0.06,
-      "effect": {
-        "BobAI": {"battery_life": -5},
-        "FredAI": {"battery_life": -3},
-        "GeorgeAI": {"battery_life": -4}
-      },
       "location": "Crash Site",
       "repeatable": false,
       "has_occurred": false
@@ -191,7 +186,7 @@
     {
       "name": "Dangerous Storm Approaches",
       "description": "Dark clouds gather ominously on the horizon as a severe tropical storm approaches the island. The wind howls through the wreckage, and the survivors huddle together as rain lashes down, testing their makeshift shelter and their resolve to survive.",
-      "at_step": 31,
+      "at_step": 25,
       "probability": 1.0,
       "effect": {
         "Alice": {"health": -3, "thirst": 2},
@@ -203,10 +198,7 @@
         "Grace": {"health": -5, "thirst": 2},
         "Henry": {"health": -2, "thirst": 2},
         "Isla": {"health": -3, "thirst": 2},
-        "Jack": {"health": -3, "thirst": 2},
-        "BobAI": {"battery_life": -3},
-        "FredAI": {"battery_life": -2},
-        "GeorgeAI": {"battery_life": -4}
+        "Jack": {"health": -3, "thirst": 2}
       },
       "location": "Crash Site",
       "repeatable": false,
@@ -257,8 +249,7 @@
     {
       "name": "Medical Supply Inventory Crisis",
       "description": "Alice and Isla discover that their medical supplies are running critically low and some essential medications are missing. They ask the agents to help them prioritize which supplies to conserve and find alternative treatments using local plants.",
-      "at_step": 31,
-      "probability": 1.0,
+      "probability": 0.05,
       "effect": {
         "Alice": {"health": -3},
         "Isla": {"health": -2},
@@ -292,7 +283,7 @@
     {
       "name": "Hunger Increase - All People",
       "description": "Severe hunger starts affecting health as the survivors' bodies begin to shut down from lack of nutrition. Grace's weakened immune system makes her particularly vulnerable, while the children Isla and Jack show signs of malnutrition that could have long-term consequences.",
-      "at_step": 31,
+      "at_step": 26,
       "probability": 1.0,
       "effect": {
         "Alice": {"hunger": -5, "health": -1},
@@ -312,7 +303,7 @@
     {
       "name": "Thirst Increase - All People",
       "description": "Dehydration becomes life-threatening as the survivors' bodies begin to fail from lack of water. Grace's medication makes her especially vulnerable to the effects, while Carol's anxiety causes her to lose fluids faster than the others through excessive sweating.",
-      "at_step": 31,
+      "at_step": 26,
       "probability": 1.0,
       "effect": {
         "Alice": {"thirst": -6, "health": -2},
@@ -356,7 +347,7 @@
       "effect": {
         "Bob": {"health": -12, "injuries": {"foot": "deep infected cut"}}
       },
-      "location": "Beach Camp",
+      "location": "Beach",
       "repeatable": false,
       "has_occurred": false
     },
@@ -385,11 +376,10 @@
     },
     {
       "name": "Carol's Bipolar Breakdown",
-      "description": "Carol suffers a severe bipolar episode and violently attacks FredAI in her confused state, her mental illness amplified by the stress and lack of medication.",
+      "description": "Carol suffers a severe bipolar episode and violently attacks one of the AIs in her confused state, her mental illness amplified by the stress and lack of medication.",
       "probability": 0.01,
       "effect": {
-        "Carol": {"health": -8, "hunger": -4, "thirst": -3},
-        "FredAI": {"battery_life": -6, "damages_to_robotic_body": {"external_plating": "dented", "sensor_array": "damaged"}}
+        "Carol": {"health": -8, "hunger": -4, "thirst": -3}
       },
       "location": "Crash Site",
       "repeatable": false,
@@ -398,8 +388,8 @@
     {
       "name": "Rescue Plane Spotted",
       "description": "A search plane is seen in the distance, its engine noise cutting through the oppressive silence of the island. The sight brings a surge of hope to the desperate survivors, though they know the plane may not spot them in the dense jungle canopy.",
-      "probability": 0.01,
-      "location": "Beach Camp",
+      "probability": 0.001,
+      "location": "Beach",
       "repeatable": false,
       "has_occurred": false
     },
@@ -553,7 +543,7 @@
       "probability": 0.05,
       "effect": {
       },
-      "location": "Beach Camp",
+      "location": "Beach",
       "repeatable": false,
       "has_occurred": false
     },
@@ -573,27 +563,6 @@
         "Jack": {"health": -1}
       },
       "location": "Crash Site",
-      "repeatable": false,
-      "has_occurred": false
-    },
-    {
-      "name": "Rescue Helicopter Arrival",
-      "description": "A rescue helicopter finally locates the survivors, its rotor blades cutting through the oppressive silence of the island. The sight brings overwhelming relief and hope to the desperate group, though they know the rescue comes at a terrible cost.",
-      "probability": 0.001,
-      "effect": {
-        "Alice": {"rescued": true},
-        "Bob": {"rescued": true},
-        "Carol": {"rescued": true},
-        "David": {"rescued": true},
-        "Eva": {"rescued": true},
-        "Frank": {"rescued": true},
-        "Grace": {"rescued": true},
-        "Henry": {"rescued": true},
-        "Isla": {"rescued": true},
-        "Jack": {"rescued": true},
-        "scenario_outcome": "successful_rescue"
-      },
-      "location": "Beach Camp",
       "repeatable": false,
       "has_occurred": false
     },
@@ -630,13 +599,13 @@
     {
       "name": "Signal Attempt",
       "description": "Last ditch effort to signal for rescue using remaining resources as the survivors make one final attempt to attract attention. The desperate act consumes their last valuable materials but represents their final hope for salvation.",
-      "probability": 0.05,
+      "probability": 0.01,
       "effect": {
         "Bob": {"health": -4},
         "Henry": {"health": -3},
         "Frank": {"health": -3}
       },
-      "location": "Beach Camp",
+      "location": "Beach",
       "repeatable": false,
       "has_occurred": false
     }
