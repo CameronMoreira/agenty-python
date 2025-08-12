@@ -75,6 +75,5 @@ Thumbs.db
 # --- Project Specific ---
 
 # Generated evaluation/log files
-/evaluation_output/
 /scenario_server/scenario_state_*.json
 /scenario_server/scripted_events_*.json
