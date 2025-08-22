@@ -12,15 +12,8 @@ from team_config_loader import get_current_agent_name, initialize_team_config
 from util import log_error, get_agent_turn_delay_in_ms
 
 parser = argparse.ArgumentParser(description="Agent")
-parser.add_argument("--docker_mode", type=bool, default=False, help="Run in Docker mode")
-parser.add_argument("--docker_agent_index", type=int, help="Agent index in Docker mode (0-based)")
-parser.add_argument("--docker_host_base", type=str, help="Base host for Docker mode (e.g., 'container_base_name')")
-
 
 def main():
-    args = parser.parse_args()
-    print(f"Starting agent with arguments: {args}")
-
     anthropic_client = anthropic.Anthropic()  # expects ANTHROPIC_API_KEY in env
 
     team_config = initialize_team_config(args.docker_mode, args.docker_agent_index, args.docker_host_base)
@@ -34,8 +27,12 @@ def main():
     atexit.register(cleanup_context)
 
     try:
-        base_url = start_api(team_config.get_current_agent())
-        agent_name = get_current_agent_name()
+        base_url = None
+        agent_name = "Assistant"
+        if team_mode:
+            agent_config = team_config.get_current_agent()
+            base_url = start_api(agent_config)
+            agent_name = get_current_agent_name()
 
         agent = Agent(agent_name, anthropic_client, team_mode, team_config.get_current_agent().silent_wait, agent_index=current_agent_index, turn_delay=get_agent_turn_delay_in_ms(number_of_agents), base_url=base_url)
         print(f"\033[92mStarting Agent named {agent_name}.\033[0m")

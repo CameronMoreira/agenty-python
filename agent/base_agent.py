@@ -47,16 +47,12 @@ class Agent:
         # Initialize counter for tracking consecutive tool calls without human interaction
         self.consecutive_tool_count = 0
         self.group_chat_messages = []
-        self.last_logged_index = 0  # Last index of the group chat messages that were logged
-        self.last_log_time = datetime.datetime.utcnow().isoformat()  # Last time a log was sent
+        self.last_logged_index = 0
+        self.last_log_time = datetime.datetime.utcnow().isoformat()
         self.turn_delay = turn_delay
-
         self.name = agent_name
-
-        # For work log tracking
         self.steps_since_last_log = 0
-        self.log_every_n_steps = 10  # Default: Send log every 10 steps
-
+        self.log_every_n_steps = 10
         self.token_limit: int = 50_000
         self.conversation_id = str(uuid.uuid4())
         self.turn_id = 0
@@ -64,9 +60,7 @@ class Agent:
         self.run_id = os.getenv("RUN_ID", "unknown_run")
 
     def check_and_send_work_log(self, conversation):
-        """Checks if a work log should be sent and sends it if necessary."""
         if self.steps_since_last_log >= self.log_every_n_steps:
-            # Check if there are new messages since the last log
             new_messages = conversation[self.last_logged_index:]
             first_timestamp = self.last_log_time
             last_timestamp = datetime.datetime.utcnow().isoformat()
@@ -77,12 +71,8 @@ class Agent:
                 self.last_log_time = last_timestamp
 
     def check_group_messages(self):
-        """Checks for new group chat messages and adds them to the message queue.
-        If there are no new messages, nothing happens.
-        """
         new_messages = get_new_messages_from_group_chat(self.group_chat_messages)
         self.group_chat_messages.extend(new_messages)
-        # Add new messages to the queue
         for message in new_messages:
             if message['username'] == self.name:
                 continue  # Skip messages from self
@@ -90,19 +80,13 @@ class Agent:
             add_to_message_queue(formatted_message)
 
     def check_new_summaries(self):
-        """Checks for new summaries from the summary monitor and adds them to the message queue.
-        If there are no new summaries, nothing happens.
-        """
         try:
             new_summaries = get_new_summaries()
             if new_summaries:
                 for summary in new_summaries:
-                    formatted_summary = f"[Summary Monitor] Here is a summary from the group work log: {summary['summary']}"
-                    add_to_message_queue(formatted_summary)
+                    add_to_message_queue(f"[Summary Monitor] Here is a summary from the group work log: {summary['summary']}")
         except Exception as e:
-            # Log the error but don't crash the agent
-            error_msg = f"Error checking new summaries: {str(e)}\n{traceback.format_exc()}"
-            log_error(error_msg)
+            log_error(f"Error checking new summaries: {str(e)}\n{traceback.format_exc()}")
 
     def run(self):
         # register with the robot's external systems
@@ -110,17 +94,11 @@ class Agent:
 
         # Try to load saved conversation context
         conversation = load_conversation()
-
         if conversation:
             print("Restored previous conversation context")
-            # If we're continuing after a restart, add a system message to inform the agent
             conversation.append({
                 "role": "user",
-                "content": [{
-                    "type": "text",
-                    "text": "The program has restarted and is continuing execution automatically. Please continue from where you left off.",
-                    "cache_control": {"type": "ephemeral"}
-                }]
+                "content": [{"type": "text", "text": "The program has restarted...", "cache_control": {"type": "ephemeral"}}]
             })
             self.read_user_input = False
         else:
@@ -146,6 +124,9 @@ class Agent:
             util.RECEIVED_EXTERNAL_SYSTEMS_RESPONSE = False
             
             if self.is_team_mode:
+                while not util.RECEIVED_EXTERNAL_SYSTEMS_RESPONSE:
+                    time.sleep(1)
+                util.RECEIVED_EXTERNAL_SYSTEMS_RESPONSE = False
                 self.check_group_messages()
 
             tool_count_object = [self.consecutive_tool_count]
@@ -177,7 +158,6 @@ class Agent:
             action_type: str = "nothing"
             action: str = "nothing"
 
-            # print assistant text and collect any tool calls
             for block in response_content:
                 if block.type == "text":
                     print(f"\033[93m{self.name}\033[0m: {block.text}")
@@ -207,12 +187,9 @@ class Agent:
             conversation.append({
                 "role": "assistant",
                 "content": [
-                    # for each block LLM returned, mirror it exactly
                     {
                         "type": b.type,
-                        **({
-                               "text": b.text
-                           } if b.type == "text" else {
+                        **({"text": b.text} if b.type == "text" else {
                             "id": b.id,
                             "name": b.name,
                             "input": b.input
@@ -223,7 +200,6 @@ class Agent:
                 ]
             })
 
-            # 3) If there were any tool calls, follow up with tool_results as a user turn
             if tool_results:
                 self.read_user_input = False
                 deal_with_tool_results(
@@ -236,7 +212,7 @@ class Agent:
                     run_id=self.run_id,
                 )
             else:
-                self.read_user_input = False  # we do not want to read user input ever
+                self.read_user_input = not self.is_team_mode
 
             # Count a step
             # self.steps_since_last_log += 1
@@ -247,16 +223,11 @@ class Agent:
 
             # Check if we need to restart due to token limit
             if token_usage >= self.token_limit:
-                print(f"\033[91mToken limit reached ({token_usage:,}/{self.token_limit:,}). Restarting...\033[0m")
-                generate_restart_summary(self.llm_client, conversation,
-                                         self.tools)  # this also adds the summary to the conversation
-                # filter conversation to keep only the last message
+                print(f"Token limit reached. Restarting...")
+                generate_restart_summary(self.llm_client, conversation, self.tools)
                 conversation = conversation[-1:]
                 set_conversation_context(conversation)
-
-                # Save the conversation context and restart
                 save_conv_and_restart(conversation)
 
-            # delay the next turn if configured to prevent running into rate limits
             if self.turn_delay > 0:
                 time.sleep(self.turn_delay / 1000)

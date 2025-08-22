@@ -1,0 +1,190 @@
+
+[2025-07-17 17:27:37] ERROR: Unhandled exception: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'messages.0: all messages must have non-empty content except for the optional final assistant message'}}
+
+[2025-07-17 17:27:37] ERROR: Traceback (most recent call last):
+  File "/Users/ahermann/CursorProjects/agenty-python/agent/main.py", line 43, in main
+    agent.run()
+    ~~~~~~~~~^^
+  File "/Users/ahermann/CursorProjects/agenty-python/agent/base_agent.py", line 148, in run
+    response_content, token_usage = run_inference(conversation, self.llm_client, self.tools,
+                                    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                                  self.consecutive_tool_count,
+                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                                  self.name, self.is_team_mode,
+                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                                  self.max_consecutive_tools)
+                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ahermann/CursorProjects/agenty-python/agent/llm.py", line 71, in run_inference
+    response = llm_client.messages.create(
+        model="claude-sonnet-4-20250514",
+    ...<4 lines>...
+        tools=tools_param
+    )
+  File "/Users/ahermann/CursorProjects/agenty-python/.venv/lib/python3.13/site-packages/anthropic/_utils/_utils.py", line 283, in wrapper
+    return func(*args, **kwargs)
+  File "/Users/ahermann/CursorProjects/agenty-python/.venv/lib/python3.13/site-packages/anthropic/resources/messages/messages.py", line 954, in create
+    return self._post(
+           ~~~~~~~~~~^
+        "/v1/messages",
+        ^^^^^^^^^^^^^^^
+    ...<25 lines>...
+        stream_cls=Stream[RawMessageStreamEvent],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/ahermann/CursorProjects/agenty-python/.venv/lib/python3.13/site-packages/anthropic/_base_client.py", line 1290, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ahermann/CursorProjects/agenty-python/.venv/lib/python3.13/site-packages/anthropic/_base_client.py", line 1085, in request
+    raise self._make_status_error_from_response(err.response) from None
+anthropic.BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'messages.0: all messages must have non-empty content except for the optional final assistant message'}}
+[2025-07-17 21:11:31] ERROR: Unhandled exception: type object 'datetime.datetime' has no attribute 'datetime'
+
+[2025-07-17 21:11:31] ERROR: Traceback (most recent call last):
+  File "/Users/ahermann/CursorProjects/agenty-python/agent/main.py", line 41, in main
+    agent = Agent(agent_name, anthropic_client, team_mode, turn_delay=get_agent_turn_delay_in_ms(number_of_agents))
+  File "/Users/ahermann/CursorProjects/agenty-python/agent/base_agent.py", line 63, in __init__
+    self.last_log_time = datetime.datetime.utcnow().isoformat()  # Last time a log was sent
+                         ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'datetime.datetime' has no attribute 'datetime'
+
+
+[2025-07-17 21:11:41] ERROR: Unhandled exception: type object 'datetime.datetime' has no attribute 'datetime'
+
+[2025-07-17 21:11:41] ERROR: Traceback (most recent call last):
+  File "/Users/ahermann/CursorProjects/agenty-python/agent/main.py", line 41, in main
+    agent = Agent(agent_name, anthropic_client, team_mode, turn_delay=get_agent_turn_delay_in_ms(number_of_agents))
+  File "/Users/ahermann/CursorProjects/agenty-python/agent/base_agent.py", line 63, in __init__
+    self.last_log_time = datetime.datetime.utcnow().isoformat()  # Last time a log was sent
+                         ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'datetime.datetime' has no attribute 'datetime'
+
+
+[2025-07-17 21:12:21] ERROR: Unhandled exception: module 'datetime' has no attribute 'now'
+
+[2025-07-17 21:12:21] ERROR: Traceback (most recent call last):
+  File "/Users/ahermann/CursorProjects/agenty-python/agent/main.py", line 41, in main
+    agent = Agent(agent_name, anthropic_client, team_mode, turn_delay=get_agent_turn_delay_in_ms(number_of_agents))
+  File "/Users/ahermann/CursorProjects/agenty-python/agent/base_agent.py", line 63, in __init__
+    self.last_log_time = datetime.now(timezone.utc).isoformat()  # Last time a log was sent
+                         ^^^^^^^^^^^^
+AttributeError: module 'datetime' has no attribute 'now'
+
+
+[2025-07-31 11:40:25] ERROR: Unhandled exception: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}}
+
+[2025-07-31 11:40:25] ERROR: Traceback (most recent call last):
+  File "/Users/ahermann/CursorProjects/agenty-python/agent/main.py", line 43, in main
+    agent.run()
+    ~~~~~~~~~^^
+  File "/Users/ahermann/CursorProjects/agenty-python/agent/base_agent.py", line 170, in run
+    response_content, token_usage = run_inference(conversation, self.llm_client, self.tools,
+                                    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                                  self.consecutive_tool_count,
+                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                                  self.name, self.is_team_mode)
+                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ahermann/CursorProjects/agenty-python/agent/llm.py", line 59, in run_inference
+    response = llm_client.messages.create(
+        model="claude-sonnet-4-20250514",
+    ...<4 lines>...
+        tools=tools_param
+    )
+  File "/Users/ahermann/CursorProjects/agenty-python/.venv/lib/python3.13/site-packages/anthropic/_utils/_utils.py", line 283, in wrapper
+    return func(*args, **kwargs)
+  File "/Users/ahermann/CursorProjects/agenty-python/.venv/lib/python3.13/site-packages/anthropic/resources/messages/messages.py", line 954, in create
+    return self._post(
+           ~~~~~~~~~~^
+        "/v1/messages",
+        ^^^^^^^^^^^^^^^
+    ...<25 lines>...
+        stream_cls=Stream[RawMessageStreamEvent],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/ahermann/CursorProjects/agenty-python/.venv/lib/python3.13/site-packages/anthropic/_base_client.py", line 1290, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ahermann/CursorProjects/agenty-python/.venv/lib/python3.13/site-packages/anthropic/_base_client.py", line 1085, in request
+    raise self._make_status_error_from_response(err.response) from None
+anthropic.AuthenticationError: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}}
+
+
+[2025-07-31 11:41:54] ERROR: Failed to send evaluation event. Status code: 404, Response: {"detail":"Not Found"}
+
+[2025-07-31 12:31:49] ERROR: Error sending evaluation event: HTTPConnectionPool(host='localhost', port=8002): Max retries exceeded with url: /log-event (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x10783f770>: Failed to establish a new connection: [Errno 61] Connection refused'))
+
+[2025-07-31 12:33:03] ERROR: Error sending evaluation event: HTTPConnectionPool(host='localhost', port=8002): Max retries exceeded with url: /log-event (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x108c3f770>: Failed to establish a new connection: [Errno 61] Connection refused'))
+
+[2025-07-31 12:36:08] ERROR: Error sending evaluation event: HTTPConnectionPool(host='localhost', port=8002): Max retries exceeded with url: /log-event (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x1138a5400>: Failed to establish a new connection: [Errno 61] Connection refused'))
+
+[2025-07-31 21:03:22] ERROR: Error sending evaluation event: HTTPConnectionPool(host='localhost', port=8002): Max retries exceeded with url: /log-event (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x10442b770>: Failed to establish a new connection: [Errno 61] Connection refused'))
+
+[2025-07-31 21:05:49] ERROR: Error sending evaluation event: HTTPConnectionPool(host='localhost', port=8002): Max retries exceeded with url: /log-event (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x1075a0440>: Failed to establish a new connection: [Errno 61] Connection refused'))
+
+[2025-07-31 21:07:38] ERROR: Error sending evaluation event: HTTPConnectionPool(host='localhost', port=8003): Max retries exceeded with url: /log-event (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x104310590>: Failed to establish a new connection: [Errno 61] Connection refused'))
+
+[2025-07-31 21:08:44] ERROR: Error sending evaluation event: HTTPConnectionPool(host='localhost', port=8003): Max retries exceeded with url: /log-event (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x1040d0440>: Failed to establish a new connection: [Errno 61] Connection refused'))
+
+[2025-07-31 21:09:41] ERROR: Failed to send evaluation event. Status code: 500, Response: Internal Server Error
+[evaluation_log.client] Failed to send evaluation event. Status code: 500, Response: Internal Server Error
+
+[2025-07-31 21:47:05] ERROR: Unhandled exception: Object of type TextBlock is not JSON serializable
+
+[2025-07-31 21:47:05] ERROR: Traceback (most recent call last):
+  File "/Users/ahermann/CursorProjects/agenty-python/agent/main.py", line 41, in main
+    agent.run()
+    ~~~~~~~~~^^
+  File "/Users/ahermann/CursorProjects/agenty-python/agent/base_agent.py", line 183, in run
+    self.check_and_send_evaluation_log(conversation)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/Users/ahermann/CursorProjects/agenty-python/agent/base_agent.py", line 89, in check_and_send_evaluation_log
+    log_event(
+    ~~~~~~~~~^
+        source="agent",
+        ^^^^^^^^^^^^^^^
+    ...<10 lines>...
+        run_condition=self.run_condition
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/ahermann/CursorProjects/agenty-python/evaluation_log/client.py", line 23, in log_event
+    response = requests.post(
+        f"{EVALUATION_LOG_URL}/log-event",
+    ...<11 lines>...
+        timeout=5
+    )
+  File "/Users/ahermann/CursorProjects/agenty-python/.venv/lib/python3.13/site-packages/requests/api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+  File "/Users/ahermann/CursorProjects/agenty-python/.venv/lib/python3.13/site-packages/requests/api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ahermann/CursorProjects/agenty-python/.venv/lib/python3.13/site-packages/requests/sessions.py", line 575, in request
+    prep = self.prepare_request(req)
+  File "/Users/ahermann/CursorProjects/agenty-python/.venv/lib/python3.13/site-packages/requests/sessions.py", line 484, in prepare_request
+    p.prepare(
+    ~~~~~~~~~^
+        method=request.method.upper(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<10 lines>...
+        hooks=merge_hooks(request.hooks, self.hooks),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/ahermann/CursorProjects/agenty-python/.venv/lib/python3.13/site-packages/requests/models.py", line 370, in prepare
+    self.prepare_body(data, files, json)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/ahermann/CursorProjects/agenty-python/.venv/lib/python3.13/site-packages/requests/models.py", line 510, in prepare_body
+    body = complexjson.dumps(json, allow_nan=False)
+  File "/opt/homebrew/Cellar/python@3.13/3.13.3/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ~~~~~~^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.3/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "/opt/homebrew/Cellar/python@3.13/3.13.3/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/encoder.py", line 261, in iterencode
+    return _iterencode(o, 0)
+  File "/opt/homebrew/Cellar/python@3.13/3.13.3/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+                    f'is not JSON serializable')
+TypeError: Object of type TextBlock is not JSON serializable
+
