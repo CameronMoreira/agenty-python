@@ -148,8 +148,6 @@ This project was developed as a collaborative research effort by:
 - Andreas Hermann
 - Max Werner
 
-We thank [Person/Org] for guidance/support.
-
 ## Contributing
 
 This is a research project. For questions or collaboration inquiries, please open an issue.
