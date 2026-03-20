@@ -137,6 +137,19 @@ This project inherits the license from the original Agenty project with minor ad
 
 If you use this framework in your research, please cite both this repository and the original Agenty project.
 
+## Acknowledgements
+
+This research was conducted independently and received no ex-
+ternal funding. The simulation framework and analysis code are available at https:
+//github.com/CameronMoreira/agenty-python.
+
+This project was developed as a collaborative research effort by:
+- Cameron Tomé-Moreira
+- Andreas Hermann
+- Max Werner
+
+We thank [Person/Org] for guidance/support.
+
 ## Contributing
 
 This is a research project. For questions or collaboration inquiries, please open an issue.
